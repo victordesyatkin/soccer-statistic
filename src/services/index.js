@@ -32,28 +32,6 @@ class StatisticService {
     const results = await this.getResource("/competitions");
     return results.competitions;
   }
-
-  getPerson(id) {
-    return this.getResource(`/people/${id}/`);
-  }
-
-  async getAllPlanets() {
-    const res = await this.getResource(`/planets/`);
-    return res.results;
-  }
-
-  getPlanet(id) {
-    return this.getResource(`/planets/${id}/`);
-  }
-
-  async getAllStarships() {
-    const res = await this.getResource(`/starships/`);
-    return res.results;
-  }
-
-  getStarship(id) {
-    return this.getResource(`/starships/${id}/`);
-  }
 }
 
 export default StatisticService;
