@@ -1,0 +1,20 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'menu-button';
+
+.#{$parent} {
+  color: $link-text-color-default;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
+  padding: 1rem;
+
+  &:hover {
+    color: $link-text-color-hover;
+  }
+
+  &_opened {
+    transform: rotate(90deg);
+  }
+}

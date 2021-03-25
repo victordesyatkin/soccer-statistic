@@ -1,0 +1,109 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'header';
+
+.#{$parent} {
+  display: flex;
+  flex: 1 1 100%;
+  background-color: $header-background-color;
+  color: red;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding-left: 3.571rem;
+
+  @media (min-width: $md) {
+    justify-content: space-between;
+    padding: 1rem 3rem;
+  }
+
+  @media (min-width: $lg) {
+    padding: 1rem 6rem;
+  }
+
+  &_opened-search {
+    .#{$parent}__search {
+      @media (min-width: $md) {
+        display: initial;
+      }
+    }
+  }
+
+  &_opened-menu {
+    .#{$parent}__nav {
+      display: flex;
+    }
+  }
+
+  &__menu-button {
+    position: absolute;
+    left: 0;
+    @media (min-width: $md) {
+      display: none;
+    }
+  }
+
+  &__nav {
+    flex: 1 1 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 0.5rem;
+    background-color: $body-background-color;
+    display: none;
+    flex-direction: column;
+
+    @media (min-width: $md) {
+      display: flex;
+      padding: initial;
+      position: initial;
+      flex-direction: initial;
+      background-color: initial;
+    }
+  }
+
+  &__nav-search {
+    display: flex;
+    flex: 1 1 100%;
+    @media (min-width: $md) {
+      display: none;
+    }
+  }
+
+  &__search-button {
+    display: none;
+    @media (min-width: $md) {
+      display: initial;
+    }
+  }
+
+  &__search-form,
+  &__search-field {
+    display: flex;
+    flex: 1 1 100%;
+  }
+
+  &__search {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 0.5rem;
+    background-color: $header-background-color;
+    display: none;
+    z-index: 10;
+
+    @media (min-width: $md) {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+
+    @media (min-width: $lg) {
+      padding-left: 15rem;
+      padding-right: 15rem;
+    }
+  }
+}

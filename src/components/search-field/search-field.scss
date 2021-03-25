@@ -1,0 +1,48 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'search-field';
+
+.#{$parent} {
+  width: 100%;
+  display: flex;
+  flex: 1 1 100%;
+  min-width: 0;
+  color: $input-text-color-default;
+  position: relative;
+  background-color: $body-background-color;
+
+  &__text-field {
+    width: 100%;
+    border: 1px solid $input-border-color-default;
+    padding: 0.6rem 0.7rem 0.6rem 2.1rem;
+    outline: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 4px;
+    color: $input-text-color-focus;
+  }
+
+  &__text-field::placeholder {
+    color: $input-text-color-default;
+  }
+
+  &__text-field:hover {
+    border-color: $input-border-color-hover;
+    color: $input-text-color-hover;
+  }
+  &__text-field:focus {
+    border-color: $input-border-color-focus;
+    color: $input-text-color-focus;
+  }
+
+  &__icon {
+    position: absolute;
+    height: 100%;
+    vertical-align: middle;
+    left: 0.7rem;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+  }
+}

@@ -1,0 +1,25 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'link';
+
+.#{$parent} {
+  display: flex;
+  flex: 1 1 100%;
+  color: $link-text-color-default;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: none;
+
+  &_current {
+    color: $link-text-color-current;
+    font-weight: bold;
+  }
+
+  &_uppercase {
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    color: $link-text-color-hover;
+  }
+}

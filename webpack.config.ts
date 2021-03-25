@@ -35,7 +35,6 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
         meta: {
           viewport: 'initial-scale=1.0, width=device-width',
           'msapplication-TileColor': '#da532c',
-          'theme-color': '#ffffff',
         },
         files: {
           manifest: 'assets/favicon/site.webmanifest',
@@ -52,8 +51,8 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
       }),
       isProduction &&
         new MiniCssExtractPlugin({
-          filename: '[name].[contenthash].css',
-          chunkFilename: '[id].[contenthash].css',
+          filename: '[name].css?version=[contenthash]',
+          chunkFilename: '[id].css?version=[contenthash]',
         }),
       isProduction &&
         new ForkTsCheckerWebpackPlugin({
@@ -76,8 +75,8 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
       main: './src/index.tsx',
     },
     output: {
-      filename: '[name].[contenthash].js',
-      chunkFilename: '[id].[contenthash].js',
+      filename: '[name].js?version=[contenthash]',
+      chunkFilename: '[id].[contenthash].js?version=[contenthash]',
       path: path.resolve(__dirname, 'dist'),
     },
     module: {
@@ -119,6 +118,32 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
             'sass-loader',
           ],
         },
+        {
+          test: /\.(ttf|otf|eot|woff|woff2|svg)$/,
+          include: /fonts/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                outputPath: './assets/fonts/',
+                name: '[name].[ext]?version=[contenthash]',
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(png|jpg|jpeg|gif|ico|svg)$/,
+          exclude: /(fonts|favicon)/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                outputPath: './assets/images/',
+                name: '[name].[ext]?version=[contenthash]',
+              },
+            },
+          ],
+        },
       ],
     },
     plugins: getPlugins(),
@@ -131,6 +156,7 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
     },
     target: isDevelopment ? 'web' : 'browserslist',
     resolve: {
+      modules: ['src', 'node_modules'],
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
     },
   };

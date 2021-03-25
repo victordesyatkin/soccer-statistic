@@ -1,3 +1,5 @@
+@import '~assets/theme/variables.scss';
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,4 +10,11 @@ html,
 body,
 #root {
   height: 100%;
+}
+
+body {
+  color: $paragraph-text-color;
+  font-family: $font-family-body;
+  font-size: $font-size-body;
+  font-weight: $font-weight-body;
 }
