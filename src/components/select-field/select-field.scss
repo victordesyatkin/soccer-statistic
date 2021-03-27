@@ -1,0 +1,99 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'select-field';
+@include scrollbar('.select-field__items');
+
+.#{$parent} {
+  display: flex;
+  flex: 1 1 100%;
+  color: $select-field-text-color;
+  outline: none;
+  border: 1px solid $select-field-border-color-default;
+  min-height: 3.214rem;
+  border-radius: 4px;
+  align-items: center;
+  min-width: 0;
+
+  &_opened {
+    border-color: $select-field-border-color-opened;
+
+    .#{$parent}__control {
+      color: $select-field-item-control-text-color-hover;
+    }
+  }
+
+  &__head {
+    display: flex;
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  &__items,
+  &__placeholder {
+    padding: 0.7rem 0 0.7rem 1rem;
+  }
+
+  &__items {
+    display: flex;
+    flex: 1 1 100%;
+    position: relative;
+    min-width: 0;
+    list-style-type: none;
+    overflow-x: auto;
+  }
+
+  &__placeholder {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__item {
+    padding: 0.25rem 1.5rem 0.25rem 1rem;
+    background-color: $select-field-item-background-color;
+    color: $select-field-item-text-color-default;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    margin-right: 0.7rem;
+  }
+
+  &__item:last-child {
+    margin-right: initial;
+  }
+
+  &__item-control {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    color: $select-field-item-control-text-color-default;
+    background: none;
+    border: 2px solid $select-field-item-control-border-color-default;
+    border-radius: 50%;
+    width: 1.429rem;
+    height: 1.429rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__control:hover,
+  &__item-control:hover {
+    color: $select-field-item-control-text-color-hover;
+  }
+
+  &__control {
+    outline: none;
+    border: none;
+    background: none;
+    color: $select-field-item-control-text-color-default;
+    padding: 0 0.7rem;
+    cursor: pointer;
+  }
+}

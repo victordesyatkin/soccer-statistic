@@ -19,6 +19,10 @@ $paragraph-text-color: rgba(31, 32, 65, 0.75);
 $additional-text-color: rgba(31, 32, 65, 0.25);
 $input-text-color-default: rgba(31, 32, 65, 0.25);
 $input-text-color-hover: rgba(31, 32, 65, 0.75);
+$select-field-text-color: rgba(31, 32, 65, 0.75);
+$select-field-item-text-color-default: rgba(31, 32, 65, 0.75);
+$select-field-item-control-text-color-default: #c7c7cf;
+$select-field-item-control-text-color-hover: rgba(31, 32, 65, 0.75);
 $title-label-text-color-status: rgba(31, 32, 65, 0.5);
 $input-text-color-button-default: rgba(31, 32, 65, 0.5);
 $input-text-color-focus: $input-text-color-hover;
@@ -74,7 +78,7 @@ $like-button-text-color-checked: #bc9cff;
 $page-background-color: #fff;
 $body-background-color: #f4f4f6;
 $header-background-color: #f3f3f3;
-
+$select-field-item-background-color: $header-background-color;
 $expandable-background-color: #fff;
 $dropdown-background-color: #fff;
 $card-background-color: #fff;
@@ -175,6 +179,9 @@ $header-box-shadow: 0 0.7142rem 1.4285rem rgba(31, 32, 65, 0.25);
 $comment-filter: drop-shadow(0 0.71rem 1.42rem rgba(31, 32, 65, 0.1));
 
 /***** Border *****/
+$select-field-item-control-border-color-default: #fff;
+$select-field-border-color-default: rgba(31, 32, 65, 0.25);
+$select-field-border-color-opened: rgba(31, 32, 65, 0.5);
 $card-border-color: rgba(0, 0, 0, 0.12);
 $dropdown-border-color-default: rgba(31, 32, 65, 0.25);
 $dropdown-border-color-opened: rgba(31, 32, 65, 0.5);
@@ -324,5 +331,25 @@ $nav-border-color-hover: rgba(31, 32, 65, 0.25);
         @content;
       }
     }
+  }
+}
+
+@mixin scrollbar($property) {
+  #{$property}::-webkit-scrollbar {
+    width: 0.4rem;
+    height: 0.4rem;
+  }
+
+  #{$property}::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+  #{$property}::-webkit-scrollbar-thumb {
+    background-color: #a0a0a0;
+  }
+
+  #{$property}::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background-clip: padding-box;
   }
 }

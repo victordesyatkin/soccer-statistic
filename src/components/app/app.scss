@@ -23,4 +23,12 @@ $parent: 'app';
     flex: 1 1 100%;
     min-width: 0;
   }
+
+  &__wrapper {
+    display: flex;
+    flex: 1 1 100%;
+    align-items: flex-start;
+    padding: 1rem;
+    min-width: 0;
+  }
 }
