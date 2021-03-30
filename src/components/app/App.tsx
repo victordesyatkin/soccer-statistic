@@ -4,9 +4,10 @@ import 'normalize.css';
 import '../../assets/theme/global.scss';
 import Header from '../header';
 import SelectField from '../select-field';
+import Calendar from '../calendar';
 import './app.scss';
 
-function App(): JSX.Element {
+const App: React.FC = () => {
   return (
     <div className="app">
       <div className="app__header">
@@ -62,7 +63,8 @@ function App(): JSX.Element {
       </div>
       <div className="app__main">
         <div className="app__wrapper">
-          <SelectField
+          <Calendar />
+          {/* <SelectField
             placeholder={5}
             value={['dog', 'cat', 'hamster', 'dog1']}
             options={[
@@ -182,12 +184,12 @@ function App(): JSX.Element {
                 id: 45,
               },
             ]}
-          />
+          /> */}
         </div>
       </div>
       <div className="app__footer">Header</div>
     </div>
   );
-}
+};
 
 export default App;

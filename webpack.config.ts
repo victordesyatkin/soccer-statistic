@@ -30,6 +30,10 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
     const plugins = [
       new CleanWebpackPlugin(),
       new webpack.ProgressPlugin(),
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+      }),
       new HtmlWebpackPlugin({
         template: 'public/index.html',
         meta: {

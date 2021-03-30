@@ -1,3 +1,2 @@
-import App from './App';
-
-export default App;
+// eslint-disable-next-line import/prefer-default-export
+export { default as App } from './App';

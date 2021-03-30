@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import classnames from 'classnames';
+import React, { useState } from 'react';
+import cn from 'classnames';
 
 import LogoLink from '../logo-link';
 import type { LogoLinkType } from '../logo-link';
@@ -50,7 +50,7 @@ const Header: React.FC<HeaderType> = ({
   );
   return (
     <header
-      className={classnames(className, {
+      className={cn(className, {
         [`${className}_opened-search`]: isOpenedSearch,
         [`${className}_opened-menu`]: isOpenedMenu,
       })}

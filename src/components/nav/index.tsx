@@ -1,5 +1,4 @@
 import Nav from './Nav';
-import type { NavType } from './Nav';
 
-export type { NavType };
+export type { NavType } from './Nav';
 export default Nav;

@@ -1,5 +1,4 @@
 import SearchButton from './SearchButton';
-import type { SearchButtonType } from './SearchButton';
 
-export type { SearchButtonType };
+export type { SearchButtonType } from './SearchButton';
 export default SearchButton;

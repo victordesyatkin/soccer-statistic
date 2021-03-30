@@ -1,11 +1,12 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import classnames from 'classnames';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
+import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTimesCircle,
   faChevronCircleDown,
 } from '@fortawesome/free-solid-svg-icons';
 
+import { useOutsideClick } from '../../assets/helpers';
 import './select-field.scss';
 
 type SelectFieldOptionType = {
@@ -23,6 +24,7 @@ type SelectFieldType = {
   isMultiple?: boolean;
   isDisabled?: boolean;
   placeholder?: string | number;
+  onChange?: (value?: readonly string[]) => void;
 };
 
 const SelectField: React.FC<SelectFieldType> = ({
@@ -33,15 +35,17 @@ const SelectField: React.FC<SelectFieldType> = ({
   isMultiple,
   isDisabled,
   placeholder,
+  onChange,
 }) => {
-  //         className="select-field__option"
   let isReadyMultiple = isMultiple;
+  const selectFieldRef = useRef(null);
   if (!isReadyMultiple && Array.isArray(value) && value.length) {
     isReadyMultiple = true;
   }
-  const prepareItems = (items?: string | number | readonly string[]) => {
+  const prepareItems = (
+    items?: string | number | readonly string[]
+  ): readonly string[] | undefined => {
     let readyItems;
-    console.log('prepareItems : ');
     if (items) {
       readyItems = [];
       if (Array.isArray(items)) {
@@ -54,6 +58,10 @@ const SelectField: React.FC<SelectFieldType> = ({
   };
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpened, setIsOpened] = useState(false);
+  const closeBody = useCallback(() => {
+    setIsOpened(false);
+  }, []);
+  useOutsideClick({ ref: selectFieldRef, callback: closeBody });
   const renderOption = ({
     value: valueOption,
     content,
@@ -67,15 +75,7 @@ const SelectField: React.FC<SelectFieldType> = ({
     );
   };
   const renderOptions = (optionsForRender?: SelectFieldOptionType[]) => {
-    if (optionsForRender) {
-      return optionsForRender.map(renderOption);
-    }
-    return optionsForRender;
-  };
-  const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = (
-    element
-  ) => {
-    console.log('element : ', element);
+    return optionsForRender?.map(renderOption);
   };
   const onClickItemControl = (index: number) => {
     let copySelectedValue: string | number | string[] | undefined;
@@ -89,9 +89,11 @@ const SelectField: React.FC<SelectFieldType> = ({
       copySelectedValue = undefined;
     }
     setSelectedValue(copySelectedValue);
+    if (onChange) {
+      onChange(copySelectedValue);
+    }
   };
   const renderItem = (item: string, index: number) => {
-    console.log('renderItem : ');
     return (
       <li className="select-field__item" key={`select-field__item_${index}`}>
         <span className="select-field__item-content">{item}</span>
@@ -106,7 +108,6 @@ const SelectField: React.FC<SelectFieldType> = ({
     );
   };
   const renderItems = (items?: readonly string[]) => {
-    console.log('renderItems : ');
     return items?.map(renderItem);
   };
   const memoizedPreparedItems = useMemo(() => prepareItems(selectedValue), [
@@ -128,8 +129,23 @@ const SelectField: React.FC<SelectFieldType> = ({
   const onClickButtonControl = () => {
     setIsOpened(!isOpened);
   };
+  const onClickOption = (optionForRender: SelectFieldOptionType) => {
+    const { isDisabled: isDisableOption, value: valueOption } = optionForRender;
+    if (!isDisableOption && memoizedPreparedItems && valueOption) {
+      const readyItems = memoizedPreparedItems.slice();
+      const index = memoizedPreparedItems.indexOf(String(valueOption));
+      if (index !== -1) {
+        readyItems.splice(index, 1);
+      } else {
+        readyItems.push(String(valueOption));
+      }
+      setSelectedValue(readyItems);
+      if (onChange) {
+        onChange(readyItems);
+      }
+    }
+  };
   const renderOptionBody = (optionForRender?: SelectFieldOptionType) => {
-    console.log('renderOptionBody : ');
     if (optionForRender) {
       const {
         value: valueOption,
@@ -143,11 +159,14 @@ const SelectField: React.FC<SelectFieldType> = ({
       );
       return (
         <button
-          className={classnames(className, {
-            [`${className}__selected`]: isSelected,
+          className={cn(className, {
+            [`${className}_selected`]: isSelected,
+            [`${className}_disabled`]: isDisableOption,
           })}
           type="button"
           disabled={isDisableOption}
+          key={id}
+          onClick={() => onClickOption(optionForRender)}
         >
           {content}
         </button>
@@ -156,24 +175,21 @@ const SelectField: React.FC<SelectFieldType> = ({
     return optionForRender;
   };
   const renderOptionsBody = (optionsForRender?: SelectFieldOptionType[]) => {
-    console.log('renderOptionsBody : ');
-    if (optionsForRender) {
-      return optionsForRender.map(renderOptionBody);
-    }
-    return optionsForRender;
+    return optionsForRender?.map(renderOptionBody);
   };
   const memoizedOptionsBody = useMemo(() => renderOptionsBody(options), [
+    memoizedPreparedItems,
     options,
   ]);
-  console.log('selectedValue : ', selectedValue);
   const className = 'select-field';
   return (
     <article
-      className={classnames(className, { [`${className}_opened`]: isOpened })}
+      className={cn(className, { [`${className}_opened`]: isOpened })}
+      ref={selectFieldRef}
     >
       <div className="select-field__head">
         {selectedValue ? (
-          <ul className="select-field__items">{memoizedItems}</ul>
+          <ul className="select-field__items scrollbar">{memoizedItems}</ul>
         ) : (
           renderPlaceholder(placeholder)
         )}
@@ -185,7 +201,7 @@ const SelectField: React.FC<SelectFieldType> = ({
           <FontAwesomeIcon icon={faChevronCircleDown} />
         </button>
       </div>
-      <div className="select-field__body">{memoizedOptionsBody}</div>
+      <div className="select-field__body scrollbar">{memoizedOptionsBody}</div>
       <select
         name={name}
         defaultValue={selectedValue}

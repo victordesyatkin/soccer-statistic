@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
@@ -40,7 +40,7 @@ const MenuButton: React.FC<MenuButtonType> = ({
         hidden={isHidden}
         onClick={onClick}
         title={title}
-        className={classnames(className, {
+        className={cn(className, {
           [`${className}_opened`]: isOpenedMenu,
         })}
       >
