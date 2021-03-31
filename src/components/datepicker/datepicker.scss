@@ -1,0 +1,74 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'date-picker';
+
+.#{$parent} {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+
+  &_opened {
+    .#{$parent}__header {
+      border-color: $input-border-color-hover;
+    }
+
+    .#{$parent}__button-toggle-calendar {
+      color: $input-text-color-hover;
+    }
+
+    .#{$parent}__body {
+      display: flex;
+    }
+  }
+
+  &_filled {
+    .#{$parent}__header {
+      color: $input-border-color-hover;
+    }
+  }
+
+  &__header,
+  &__summary-wrapper {
+    display: flex;
+    flex: 1 1 100%;
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__header {
+    border: 1px solid $input-border-color-default;
+    border-radius: 4px;
+    background-color: $date-picker-header-background-color;
+    padding: 0.7rem;
+    color: $input-text-color-default;
+  }
+
+  &__summary {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__button-toggle-calendar {
+    outline: none;
+    border: none;
+    margin-left: 0.7rem;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: $input-text-color-button-default;
+    cursor: pointer;
+  }
+
+  &__body {
+    display: none;
+    position: absolute;
+    padding-top: 0.7rem;
+    top: 100%;
+    right: 0;
+    z-index: 10;
+  }
+}

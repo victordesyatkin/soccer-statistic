@@ -5,8 +5,20 @@ import Card from '../card';
 import { value2Date } from '../../assets/helpers';
 import './calendar.scss';
 
+const DEFAULT_OPTIONS = {
+  language: 'en',
+  inline: true,
+  navTitles: {
+    days: 'MM yyyy',
+    months: 'yyyy',
+    years: 'yyyy1 - yyyy2',
+  },
+  clearButton: true,
+};
+
 type CalendarType = {
   name?: string;
+  ariaLabel?: string;
   isDisabled?: boolean;
   isReadOnly?: boolean;
   isHidden?: boolean;
@@ -19,6 +31,7 @@ type CalendarType = {
 
 const Calendar: React.FC<CalendarType> = ({
   name,
+  ariaLabel,
   isDisabled,
   isReadOnly,
   isHidden,
@@ -127,10 +140,14 @@ const Calendar: React.FC<CalendarType> = ({
     }
     return undefined;
   };
-  const onSelectOption = (formattedDate: string, passDate: Date | Date[]) => {
-    const dates: Partial<Date[]> = [];
+  const onSelectForOption = (
+    formattedDate: string,
+    passDate: Date | Date[]
+  ) => {
+    let dates: Partial<Date[]> = [];
     const range = options?.range;
-    if (range) {
+    if (range && Array.isArray(passDate)) {
+      dates = passDate;
       const { length } = dates;
       if (length === 1) {
         const [date] = dates;
@@ -156,9 +173,6 @@ const Calendar: React.FC<CalendarType> = ({
             dates[1] = undefined;
           }
         }
-      } else if (!length) {
-        dates[0] = undefined;
-        dates[1] = undefined;
       } else {
         rangeFromDate = undefined;
         rangeFromDateClasses = '';
@@ -171,15 +185,16 @@ const Calendar: React.FC<CalendarType> = ({
       onSelect(dates);
     }
   };
+
   useEffect(() => {
     if (options && refCalendarTextField?.current) {
       $(refCalendarTextField.current).datepicker({
+        ...DEFAULT_OPTIONS,
         ...options,
         onRenderCell,
-        onSelect: onSelectOption,
+        onSelect: onSelectForOption,
       });
       datePicker = $(refCalendarTextField.current).data('datepicker');
-      console.log('datePicker2 ', datePicker);
     }
   }, [options, refCalendarTextField]);
   useEffect(() => {
@@ -198,6 +213,7 @@ const Calendar: React.FC<CalendarType> = ({
             readOnly={isReadOnly}
             ref={refCalendarTextField}
             hidden={isHidden}
+            aria-label={ariaLabel}
           />
         </article>
       </Card>
@@ -209,14 +225,7 @@ Calendar.defaultProps = {
   isDisabled: true,
   isReadOnly: true,
   isHidden: true,
-  options: {
-    inline: true,
-    navTitles: {
-      days: 'MM yyyy',
-      months: 'yyyy',
-      years: 'yyyy1 - yyyy2',
-    },
-  },
+  options: DEFAULT_OPTIONS,
 };
 
 export type { CalendarType };

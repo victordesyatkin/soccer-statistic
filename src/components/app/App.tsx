@@ -4,8 +4,18 @@ import 'normalize.css';
 import '../../assets/theme/global.scss';
 import Header from '../header';
 import SelectField from '../select-field';
-import Calendar from '../calendar';
+import Datepicker from '../datepicker';
+import type { DatepickerType } from '../datepicker';
 import './app.scss';
+
+const DATEPICKER: DatepickerType = {
+  calendar: {
+    start: new Date('08-08-2021'),
+    options: {
+      range: true,
+    },
+  },
+};
 
 const App: React.FC = () => {
   return (
@@ -63,7 +73,7 @@ const App: React.FC = () => {
       </div>
       <div className="app__main">
         <div className="app__wrapper">
-          <Calendar />
+          <Datepicker {...DATEPICKER} />
           {/* <SelectField
             placeholder={5}
             value={['dog', 'cat', 'hamster', 'dog1']}

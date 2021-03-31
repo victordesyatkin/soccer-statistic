@@ -10,11 +10,13 @@ type SearchFieldType = {
   name?: string;
   value?: string | number;
   placeholder?: string;
+  ariaLabel?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 const SearchField: React.FC<SearchFieldType> = ({
   name,
+  ariaLabel,
   value,
   placeholder,
   isDisabled,
@@ -26,6 +28,7 @@ const SearchField: React.FC<SearchFieldType> = ({
       <input
         type="text"
         name={name}
+        aria-label={ariaLabel}
         value={value}
         placeholder={placeholder}
         disabled={isDisabled}

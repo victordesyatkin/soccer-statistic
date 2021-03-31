@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 type useOutsideClickType = {
   ref?: React.MutableRefObject<null>;
   callback?: () => void;
+  isOpened?: boolean;
 };
 
 function isString(value: unknown): boolean {
@@ -27,7 +28,11 @@ function isFunction(value: unknown): boolean {
   return false;
 }
 
-function useOutsideClick({ ref, callback }: useOutsideClickType): void {
+function useOutsideClick({
+  ref,
+  callback,
+  isOpened,
+}: useOutsideClickType): void {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const node: Node | null = (event?.target || null) as Node | null;
@@ -35,11 +40,20 @@ function useOutsideClick({ ref, callback }: useOutsideClickType): void {
         callback();
       }
     }
+    function handleKeyUp(event: KeyboardEvent) {
+      if (callback && event.key === 'Escape') {
+        callback();
+      }
+    }
+    if (isOpened) {
+      document.addEventListener('keyup', handleKeyUp);
+    }
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [ref, callback]);
+  }, [ref, callback, isOpened]);
 }
 
 function isValidDateByParts({
@@ -58,7 +72,7 @@ function isValidDate(date: Date): boolean {
   return date instanceof Date && !Number.isNaN(date.getTime());
 }
 
-function prepareDate(passDate?: string | number) {
+function prepareDate(passDate?: string | number | Date) {
   let date: Date | undefined;
   if (passDate && isString(passDate)) {
     const [partDay, partMonth, partYear] = passDate.split('.');
@@ -83,5 +97,19 @@ function value2Date(value?: Date | string | number): Date | undefined {
   return date;
 }
 
+function maskedDate(passDate: Date | string): string {
+  const date = new Date(passDate);
+  let day: string | number = date.getDate();
+  let month: string | number = date.getMonth() + 1;
+  if (day < 10) {
+    day = `0${day}`;
+  }
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  const readyDate = `${day}.${month}.${date.getFullYear()}`;
+  return readyDate;
+}
+
 export type { useOutsideClickType };
-export { useOutsideClick, value2Date, isUndefined, isFunction };
+export { useOutsideClick, value2Date, isUndefined, isFunction, maskedDate };

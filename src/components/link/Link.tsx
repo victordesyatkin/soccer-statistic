@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from 'classnames';
+import classnames from 'classnames';
 
 import './link.scss';
 
@@ -35,7 +35,7 @@ const Link: React.FC<LinkType> = ({
   return (
     <a
       href={href}
-      className={cn(className, {
+      className={classnames(className, {
         [`${className}_current`]: isCurrent,
         [`${className}_uppercase`]: isUpperCase,
       })}

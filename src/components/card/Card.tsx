@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from 'classnames';
+import classnames from 'classnames';
 
 import './cards.scss';
 
@@ -20,7 +20,7 @@ const Card: React.FC<CardType> = ({ children, theme }) => {
   const className = 'card';
   return (
     <div
-      className={cn(className, {
+      className={classnames(className, {
         [`${className}_theme_${themeKey}`]: themeValue,
       })}
     >

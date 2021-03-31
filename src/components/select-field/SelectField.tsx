@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
-import cn from 'classnames';
+import classnames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTimesCircle,
@@ -61,7 +61,11 @@ const SelectField: React.FC<SelectFieldType> = ({
   const closeBody = useCallback(() => {
     setIsOpened(false);
   }, []);
-  useOutsideClick({ ref: selectFieldRef, callback: closeBody });
+  useOutsideClick({
+    ref: selectFieldRef,
+    callback: closeBody,
+    isOpened,
+  });
   const renderOption = ({
     value: valueOption,
     content,
@@ -159,7 +163,7 @@ const SelectField: React.FC<SelectFieldType> = ({
       );
       return (
         <button
-          className={cn(className, {
+          className={classnames(className, {
             [`${className}_selected`]: isSelected,
             [`${className}_disabled`]: isDisableOption,
           })}
@@ -184,7 +188,7 @@ const SelectField: React.FC<SelectFieldType> = ({
   const className = 'select-field';
   return (
     <article
-      className={cn(className, { [`${className}_opened`]: isOpened })}
+      className={classnames(className, { [`${className}_opened`]: isOpened })}
       ref={selectFieldRef}
     >
       <div className="select-field__head">
