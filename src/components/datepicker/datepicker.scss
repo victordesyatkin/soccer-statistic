@@ -9,6 +9,7 @@ $parent: 'date-picker';
   min-width: 0;
   position: relative;
 
+  &:hover,
   &_opened {
     .#{$parent}__header {
       border-color: $input-border-color-hover;
@@ -17,7 +18,9 @@ $parent: 'date-picker';
     .#{$parent}__button-toggle-calendar {
       color: $input-text-color-hover;
     }
+  }
 
+  &_opened {
     .#{$parent}__body {
       display: flex;
     }

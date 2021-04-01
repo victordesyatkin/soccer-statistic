@@ -135,9 +135,9 @@ const SelectField: React.FC<SelectFieldType> = ({
   };
   const onClickOption = (optionForRender: SelectFieldOptionType) => {
     const { isDisabled: isDisableOption, value: valueOption } = optionForRender;
-    if (!isDisableOption && memoizedPreparedItems && valueOption) {
-      const readyItems = memoizedPreparedItems.slice();
-      const index = memoizedPreparedItems.indexOf(String(valueOption));
+    if (!isDisableOption && valueOption) {
+      const readyItems = (memoizedPreparedItems || []).slice();
+      const index = readyItems.indexOf(String(valueOption));
       if (index !== -1) {
         readyItems.splice(index, 1);
       } else {

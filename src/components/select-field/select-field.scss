@@ -8,7 +8,6 @@ $parent: 'select-field';
   color: $select-field-text-color;
   outline: none;
   border: 1px solid $select-field-border-color-default;
-  min-height: 3.214rem;
   border-radius: 4px;
   min-width: 0;
   flex-direction: column;
@@ -47,9 +46,8 @@ $parent: 'select-field';
     min-width: 0;
   }
 
-  &__items,
-  &__placeholder {
-    padding: 0.7rem 0 0.7rem 1rem;
+  &__items {
+    padding: 0.4rem 0 0.4rem 0.7rem;
   }
 
   &__items {
@@ -67,10 +65,12 @@ $parent: 'select-field';
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: $select-field-placeholder-text-color-default;
+    padding: 0.7rem 0 0.7rem 0.7rem;
   }
 
   &__item {
-    padding: 0.25rem 1.5rem 0.25rem 1rem;
+    padding: 0.3rem 1.5rem 0.3rem 0.3rem;
     background-color: $select-field-item-background-color;
     color: $select-field-item-text-color-default;
     border-radius: 4px;
@@ -88,12 +88,11 @@ $parent: 'select-field';
     border: none;
     cursor: pointer;
     position: absolute;
-    top: 0;
+    top: 50%;
     right: 0;
-    transform: translate(50%, -50%);
+    transform: translate(0, -50%);
     color: $select-field-item-control-text-color-default;
     background: none;
-    border: 2px solid $select-field-item-control-border-color-default;
     border-radius: 50%;
     width: 1.429rem;
     height: 1.429rem;
@@ -129,6 +128,7 @@ $parent: 'select-field';
     z-index: 10;
     max-height: 14.286rem;
     overflow-y: auto;
+    background-color: $select-field-body-background-color;
   }
 
   &__option {
