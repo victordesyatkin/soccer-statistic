@@ -7,6 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useOutsideClick } from '../../assets/helpers';
+import { withLabel } from '../hoc-helpers';
 import './select-field.scss';
 
 type SelectFieldOptionType = {
@@ -16,16 +17,17 @@ type SelectFieldOptionType = {
   id?: string | number;
 };
 
-type SelectFieldType = {
-  name?: string;
-  value?: string | number | readonly string[];
-  ariaLabel?: string;
-  options?: SelectFieldOptionType[];
-  isMultiple?: boolean;
-  isDisabled?: boolean;
-  placeholder?: string | number;
-  onChange?: (value?: readonly string[]) => void;
-};
+type SelectFieldType = Partial<{
+  name: string;
+  value: string | number | readonly string[];
+  ariaLabel: string;
+  options: SelectFieldOptionType[];
+  isMultiple: boolean;
+  isDisabled: boolean;
+  placeholder: string | number;
+  onChange: (value?: readonly string[]) => void;
+  id: string;
+}>;
 
 const SelectField: React.FC<SelectFieldType> = ({
   name,
@@ -36,6 +38,7 @@ const SelectField: React.FC<SelectFieldType> = ({
   isDisabled,
   placeholder,
   onChange,
+  id,
 }) => {
   let isReadyMultiple = isMultiple;
   const selectFieldRef = useRef(null);
@@ -70,10 +73,10 @@ const SelectField: React.FC<SelectFieldType> = ({
     value: valueOption,
     content,
     isDisabled: isDisableOption,
-    id,
+    id: idOption,
   }: SelectFieldOptionType) => {
     return (
-      <option value={valueOption} disabled={isDisableOption} key={id}>
+      <option value={valueOption} disabled={isDisableOption} key={idOption}>
         {content}
       </option>
     );
@@ -155,7 +158,7 @@ const SelectField: React.FC<SelectFieldType> = ({
         value: valueOption,
         content,
         isDisabled: isDisableOption,
-        id,
+        id: isOption,
       } = optionForRender;
       const className = 'select-field__option';
       const isSelected = memoizedPreparedItems?.some(
@@ -169,7 +172,7 @@ const SelectField: React.FC<SelectFieldType> = ({
           })}
           type="button"
           disabled={isDisableOption}
-          key={id}
+          key={isOption}
           onClick={() => onClickOption(optionForRender)}
         >
           {content}
@@ -208,6 +211,7 @@ const SelectField: React.FC<SelectFieldType> = ({
       <div className="select-field__body scrollbar">{memoizedOptionsBody}</div>
       <select
         name={name}
+        id={id}
         defaultValue={selectedValue}
         disabled={isDisabled}
         aria-label={ariaLabel}
@@ -222,4 +226,4 @@ const SelectField: React.FC<SelectFieldType> = ({
 
 export type { SelectFieldType, SelectFieldOptionType };
 
-export default SelectField;
+export default withLabel(SelectField);

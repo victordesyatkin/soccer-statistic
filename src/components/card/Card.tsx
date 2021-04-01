@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import { getTheme } from '../../assets/helpers/utils';
 import './cards.scss';
 
 type CardType = {
@@ -11,12 +12,7 @@ const Card: React.FC<CardType> = ({ children, theme }) => {
   const themes: Record<string, string> = {
     calendar: 'calendar',
   };
-  let themeKey = '';
-  let themeValue = '';
-  if (theme && themes[theme]) {
-    themeKey = themes[theme];
-    themeValue = themes[theme];
-  }
+  const { key: themeKey, value: themeValue } = getTheme({ theme, themes });
   const className = 'card';
   return (
     <div

@@ -57,7 +57,9 @@ const Header: React.FC<HeaderType> = ({
     >
       <div className="header__menu-button">
         <MenuButton
-          {...{ ...menuButton, onClick: onClickMenuButton, isOpenedMenu }}
+          {...menuButton}
+          onClick={onClickMenuButton}
+          isOpenedMenu={isOpenedMenu}
         />
       </div>
       <div className="header__logo-link">
@@ -68,7 +70,7 @@ const Header: React.FC<HeaderType> = ({
         <Nav {...nav} />
       </div>
       <div className="header__search-button">
-        <SearchButton {...{ ...searchButton, onClick: onClickSearchButton }} />
+        <SearchButton {...searchButton} onClick={onClickSearchButton} />
       </div>
       <div className="header__search">{formSearch}</div>
     </header>

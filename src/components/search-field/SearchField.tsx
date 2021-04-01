@@ -4,17 +4,19 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import './search-field.scss';
 
-type SearchFieldType = {
-  isDisabled?: boolean;
-  isHidden?: boolean;
-  name?: string;
-  value?: string | number;
-  placeholder?: string;
-  ariaLabel?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-};
+type SearchFieldType = Partial<{
+  id: string;
+  isDisabled: boolean;
+  isHidden: boolean;
+  name: string;
+  value: string | number;
+  placeholder: string;
+  ariaLabel: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+}>;
 
 const SearchField: React.FC<SearchFieldType> = ({
+  id,
   name,
   ariaLabel,
   value,
@@ -26,6 +28,7 @@ const SearchField: React.FC<SearchFieldType> = ({
   return (
     <div className="search-field">
       <input
+        id={id}
         type="text"
         name={name}
         aria-label={ariaLabel}

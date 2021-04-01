@@ -22,6 +22,9 @@ const DATEPICKER: DatepickerType = {
 };
 
 const SELECTFIELD: SelectFieldType = {
+  label: {
+    content: 'Name',
+  },
   placeholder: 5,
   value: ['dog', 'cat', 'hamster', 'dog1'],
   options: [

@@ -11,14 +11,14 @@ import Calendar from '../calendar';
 import type { CalendarType } from '../calendar';
 import './datepicker.scss';
 
-type DatepickerType = {
-  placeholder?: string;
-  separator?: string;
-  calendar?: CalendarType;
-  titleButtonToggleCalendar?: string;
-  ariaLabelButtonToggleCalendar?: string;
-  onSelect?: (dates?: Partial<Date[]>) => void;
-};
+type DatepickerType = Partial<{
+  placeholder: string;
+  separator: string;
+  calendar: CalendarType;
+  titleButtonToggleCalendar: string;
+  ariaLabelButtonToggleCalendar: string;
+  onSelect: (dates?: Partial<Date[]>) => void;
+}>;
 
 const Datepicker: React.FC<DatepickerType> = ({
   placeholder,
@@ -82,7 +82,7 @@ const Datepicker: React.FC<DatepickerType> = ({
         </button>
       </div>
       <div className="date-picker__body">
-        <Calendar {...{ ...calendar, onSelect: onSelectForCalendar }} />
+        <Calendar {...calendar} onSelect={onSelectForCalendar} />
       </div>
     </article>
   );

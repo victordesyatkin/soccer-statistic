@@ -1,0 +1,14 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'label';
+
+.#{$parent} {
+  font-weight: bold;
+  cursor: pointer;
+
+  &_theme_default {
+    display: flex;
+    flex: 1 1 100%;
+    margin-bottom: 0.4rem;
+  }
+}

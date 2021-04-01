@@ -16,18 +16,19 @@ const DEFAULT_OPTIONS = {
   clearButton: true,
 };
 
-type CalendarType = {
-  name?: string;
-  ariaLabel?: string;
-  isDisabled?: boolean;
-  isReadOnly?: boolean;
-  isHidden?: boolean;
-  options?: AirDatepickerOptions;
-  today?: Date;
-  start?: Date | number | string;
-  end?: Date | number | string;
-  onSelect?: (dates?: Partial<Date[]>) => void;
-};
+type CalendarType = Partial<{
+  id: string;
+  name: string;
+  ariaLabel: string;
+  isDisabled: boolean;
+  isReadOnly: boolean;
+  isHidden: boolean;
+  options: AirDatepickerOptions;
+  today: Date;
+  start: Date | number | string;
+  end: Date | number | string;
+  onSelect: (dates?: Partial<Date[]>) => void;
+}>;
 
 const Calendar: React.FC<CalendarType> = ({
   name,
@@ -203,7 +204,7 @@ const Calendar: React.FC<CalendarType> = ({
   const className = 'calendar';
   return (
     <>
-      <Card {...{ theme: 'calendar' }}>
+      <Card theme="calendar">
         <article className={className}>
           <input
             name={name}

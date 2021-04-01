@@ -111,5 +111,41 @@ function maskedDate(passDate: Date | string): string {
   return readyDate;
 }
 
+function uuid(): string {
+  return Math.random().toString(16).substr(2);
+}
+
+function prepareDisplayNameComponent(
+  Component: React.ComponentClass | React.FC
+): string {
+  const displayName = Component.displayName || Component.name || 'Component';
+  return `withLabel(${displayName})`;
+}
+
+function getTheme({
+  theme,
+  themes,
+}: Partial<{ theme: string; themes: Record<string, string> }>): {
+  key: string;
+  value: string;
+} {
+  let key = '';
+  let value = '';
+  if (theme && themes && themes[theme]) {
+    key = themes[theme];
+    value = themes[theme];
+  }
+  return { key, value };
+}
+
 export type { useOutsideClickType };
-export { useOutsideClick, value2Date, isUndefined, isFunction, maskedDate };
+export {
+  useOutsideClick,
+  value2Date,
+  isUndefined,
+  isFunction,
+  maskedDate,
+  uuid,
+  prepareDisplayNameComponent,
+  getTheme,
+};
