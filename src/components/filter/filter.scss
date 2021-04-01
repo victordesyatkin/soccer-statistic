@@ -6,13 +6,24 @@ $parent: 'filter';
   display: flex;
   flex: 1 1 100%;
   min-width: 0;
+  position: absolute;
   flex-direction: column;
+  left: -21.428rem;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  min-height: 100vh;
+  min-width: 0;
+  max-width: 21.428rem;
+  background-color: $filter-background-color;
+  z-index: 11;
 
-  &__item {
-    margin-bottom: 0.7rem;
+  &_opened {
+    display: flex;
+    left: 0;
   }
 
-  &__item:last-child {
-    margin-bottom: initial;
+  &__item {
+    padding: 0.7rem;
   }
 }

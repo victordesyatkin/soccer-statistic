@@ -7,6 +7,7 @@ import {
 import classnames from 'classnames';
 
 import { maskedDate, useOutsideClick } from '../../assets/helpers';
+import { withLabel } from '../hoc-helpers';
 import Calendar from '../calendar';
 import type { CalendarType } from '../calendar';
 import './datepicker.scss';
@@ -18,6 +19,7 @@ type DatepickerType = Partial<{
   titleButtonToggleCalendar: string;
   ariaLabelButtonToggleCalendar: string;
   onSelect: (dates?: Partial<Date[]>) => void;
+  id: string;
 }>;
 
 const Datepicker: React.FC<DatepickerType> = ({
@@ -27,6 +29,7 @@ const Datepicker: React.FC<DatepickerType> = ({
   titleButtonToggleCalendar,
   ariaLabelButtonToggleCalendar,
   onSelect,
+  id,
 }) => {
   const datepickerRef = useRef(null);
   const [isOpened, setIsOpened] = useState(false);
@@ -82,7 +85,7 @@ const Datepicker: React.FC<DatepickerType> = ({
         </button>
       </div>
       <div className="date-picker__body">
-        <Calendar {...calendar} onSelect={onSelectForCalendar} />
+        <Calendar {...calendar} onSelect={onSelectForCalendar} id={id} />
       </div>
     </article>
   );
@@ -94,4 +97,4 @@ Datepicker.defaultProps = {
 };
 
 export type { DatepickerType };
-export default Datepicker;
+export default withLabel(Datepicker);

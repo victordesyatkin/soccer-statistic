@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'normalize.css';
 
 import '../../assets/theme/global.scss';
@@ -9,6 +9,7 @@ import type { SearchFieldType } from '../search-field';
 import SelectField from '../select-field';
 import type { SelectFieldType } from '../select-field';
 import Datepicker from '../datepicker';
+import FilterButton from '../filter-button';
 import type { DatepickerType } from '../datepicker';
 import './app.scss';
 
@@ -22,9 +23,6 @@ const DATEPICKER: DatepickerType = {
 };
 
 const SELECTFIELD: SelectFieldType = {
-  label: {
-    content: 'Name',
-  },
   placeholder: 5,
   value: ['dog', 'cat', 'hamster', 'dog1'],
   options: [
@@ -199,6 +197,10 @@ const SEARCHFIELD: SearchFieldType = {
 };
 
 const App: React.FC = () => {
+  const [isOpened, setIsOpened] = useState(false);
+  const onClickFilterButton = () => {
+    setIsOpened(!isOpened);
+  };
   return (
     <div className="app">
       <div className="app__header">
@@ -206,10 +208,56 @@ const App: React.FC = () => {
       </div>
       <div className="app__main">
         <div className="app__wrapper">
-          <Filter>
-            <SearchField {...SEARCHFIELD} />
-            <SelectField {...SELECTFIELD} />
-            <Datepicker {...DATEPICKER} />
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et minus
+            est esse, quaerat vel aliquid cum reprehenderit quisquam nihil
+            explicabo rem aperiam deleniti placeat, commodi ipsa architecto illo
+            exercitationem pariatur? Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Et minus est esse, quaerat vel aliquid cum
+            reprehenderit quisquam nihil explicabo rem aperiam deleniti placeat,
+            commodi ipsa architecto illo exercitationem pariatur?
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et minus
+            est esse, quaerat vel aliquid cum reprehenderit quisquam nihil
+            explicabo rem aperiam deleniti placeat, commodi ipsa architecto illo
+            exercitationem pariatur? Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Et minus est esse, quaerat vel aliquid cum
+            reprehenderit quisquam nihil explicabo rem aperiam deleniti placeat,
+            commodi ipsa architecto illo exercitationem pariatur?
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et minus
+            est esse, quaerat vel aliquid cum reprehenderit quisquam nihil
+            explicabo rem aperiam deleniti placeat, commodi ipsa architecto illo
+            exercitationem pariatur? Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Et minus est esse, quaerat vel aliquid cum
+            reprehenderit quisquam nihil explicabo rem aperiam deleniti placeat,
+            commodi ipsa architecto illo exercitationem pariatur?
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et minus
+            est esse, quaerat vel aliquid cum reprehenderit quisquam nihil
+            explicabo rem aperiam deleniti placeat, commodi ipsa architecto illo
+            exercitationem pariatur? Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Et minus est esse, quaerat vel aliquid cum
+            reprehenderit quisquam nihil explicabo rem aperiam deleniti placeat,
+            commodi ipsa architecto illo exercitationem pariatur?
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et minus
+            est esse, quaerat vel aliquid cum reprehenderit quisquam nihil
+            explicabo rem aperiam deleniti placeat, commodi ipsa architecto illo
+            exercitationem pariatur? Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Et minus est esse, quaerat vel aliquid cum
+            reprehenderit quisquam nihil explicabo rem aperiam deleniti placeat,
+            commodi ipsa architecto illo exercitationem pariatur?
+          </p>
+          <FilterButton onClick={onClickFilterButton} />
+          <Filter isOpened={isOpened}>
+            <SearchField {...SEARCHFIELD} label={{ content: 'Name' }} />
+            <SelectField {...SELECTFIELD} label={{ content: 'Countries' }} />
+            <Datepicker {...DATEPICKER} label={{ content: 'Dates' }} />
           </Filter>
         </div>
       </div>

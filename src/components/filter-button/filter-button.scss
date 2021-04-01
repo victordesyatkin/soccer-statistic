@@ -1,0 +1,9 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'filter-button';
+
+.#{$parent} {
+  background-color: $header-background-color;
+  border-radius: 50%;
+  position: sticky;
+}

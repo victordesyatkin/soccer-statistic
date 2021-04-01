@@ -5,8 +5,8 @@ import LogoLink from '../logo-link';
 import type { LogoLinkType } from '../logo-link';
 import Nav from '../nav';
 import type { NavType } from '../nav';
-import SearchButton from '../search-button';
-import type { SearchButtonType } from '../search-button';
+import IconButton from '../icon-button';
+import type { IconButtonType } from '../icon-button';
 import MenuButton from '../menu-button';
 import type { MenuButtonType } from '../menu-button';
 import SearchField from '../search-field';
@@ -16,7 +16,7 @@ import './header.scss';
 type HeaderType = {
   logoLink?: LogoLinkType;
   nav?: NavType;
-  searchButton?: SearchButtonType;
+  iconButton?: IconButtonType;
   menuButton?: MenuButtonType;
   searchField?: SearchFieldType;
   action?: string;
@@ -26,7 +26,7 @@ type HeaderType = {
 const Header: React.FC<HeaderType> = ({
   logoLink,
   nav,
-  searchButton,
+  iconButton,
   menuButton,
   searchField,
   action,
@@ -70,7 +70,7 @@ const Header: React.FC<HeaderType> = ({
         <Nav {...nav} />
       </div>
       <div className="header__search-button">
-        <SearchButton {...searchButton} onClick={onClickSearchButton} />
+        <IconButton {...iconButton} onClick={onClickSearchButton} />
       </div>
       <div className="header__search">{formSearch}</div>
     </header>

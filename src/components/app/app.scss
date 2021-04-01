@@ -30,5 +30,6 @@ $parent: 'app';
     align-items: flex-start;
     padding: 1rem;
     min-width: 0;
+    flex-direction: column;
   }
 }

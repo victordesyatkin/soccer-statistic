@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
+import { withLabel } from '../hoc-helpers';
 import './search-field.scss';
 
 type SearchFieldType = Partial<{
@@ -48,4 +49,4 @@ const SearchField: React.FC<SearchFieldType> = ({
 
 export type { SearchFieldType };
 
-export default SearchField;
+export default withLabel(SearchField);
