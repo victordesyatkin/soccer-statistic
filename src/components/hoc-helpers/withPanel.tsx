@@ -22,4 +22,26 @@ const withPanelProvider = (
   return WithPanelProvider;
 };
 
-export default withPanelProvider;
+const withPanelConsumer = (
+  Component: React.ComponentClass<PanelProps> | React.FC<PanelProps>
+): React.FC<PanelProps> => {
+  const WithPanelConsumer: React.FC<PanelProps> = (props) => {
+    return (
+      <PanelConsumer>
+        {({ isOpened, setIsOpened }) => {
+          return (
+            <Component
+              {...props}
+              isOpened={isOpened}
+              setIsOpened={setIsOpened}
+            />
+          );
+        }}
+      </PanelConsumer>
+    );
+  };
+  WithPanelConsumer.displayName = prepareDisplayNameComponent(Component);
+  return WithPanelConsumer;
+};
+
+export { withPanelProvider, withPanelConsumer };
