@@ -4,7 +4,7 @@ $parent: 'date-picker';
 
 .#{$parent} {
   display: flex;
-  flex: 1 1 100%;
+  width: 100%;
   flex-direction: column;
   min-width: 0;
   position: relative;
@@ -35,7 +35,7 @@ $parent: 'date-picker';
   &__header,
   &__summary-wrapper {
     display: flex;
-    flex: 1 1 100%;
+    width: 100%;
     align-items: center;
     min-width: 0;
   }

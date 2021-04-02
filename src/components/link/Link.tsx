@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import './link.scss';
 
-type LinkType = {
+type LinkProps = {
   id?: string | number;
   href?: string;
   title?: string;
@@ -16,7 +16,7 @@ type LinkType = {
   theme?: string;
 };
 
-const Link: React.FC<LinkType> = ({
+const Link: React.FC<LinkProps> = ({
   id,
   href,
   title,
@@ -53,5 +53,5 @@ Link.defaultProps = {
   href: '/mock-address/change-me',
 };
 
-export type { LinkType };
+export type { LinkProps };
 export default Link;

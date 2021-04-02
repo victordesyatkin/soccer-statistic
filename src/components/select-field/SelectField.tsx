@@ -17,7 +17,7 @@ type SelectFieldOptionType = {
   id?: string | number;
 };
 
-type SelectFieldType = Partial<{
+type SelectFieldProps = Partial<{
   name: string;
   value: string | number | readonly string[];
   ariaLabel: string;
@@ -29,7 +29,7 @@ type SelectFieldType = Partial<{
   id: string;
 }>;
 
-const SelectField: React.FC<SelectFieldType> = ({
+const SelectField: React.FC<SelectFieldProps> = ({
   name,
   value,
   ariaLabel,
@@ -224,6 +224,6 @@ const SelectField: React.FC<SelectFieldType> = ({
   );
 };
 
-export type { SelectFieldType, SelectFieldOptionType };
+export type { SelectFieldProps, SelectFieldOptionType };
 
 export default withLabel(SelectField);

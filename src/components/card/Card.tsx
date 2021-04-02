@@ -4,11 +4,11 @@ import classnames from 'classnames';
 import { getTheme } from '../../assets/helpers/utils';
 import './cards.scss';
 
-type CardType = {
+type CardProps = {
   theme?: string;
 };
 
-const Card: React.FC<CardType> = ({ children, theme }) => {
+const Card: React.FC<CardProps> = ({ children, theme }) => {
   const themes: Record<string, string> = {
     calendar: 'calendar',
   };
@@ -25,5 +25,5 @@ const Card: React.FC<CardType> = ({ children, theme }) => {
   );
 };
 
-export type { CardType };
+export type { CardProps };
 export default Card;

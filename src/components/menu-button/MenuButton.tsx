@@ -5,7 +5,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import './menu-button.scss';
 
-type MenuButtonType = {
+type MenuButtonProps = {
   isVisible?: boolean;
   isDisabled?: boolean;
   isHidden?: boolean;
@@ -17,7 +17,7 @@ type MenuButtonType = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
-const MenuButton: React.FC<MenuButtonType> = ({
+const MenuButton: React.FC<MenuButtonProps> = ({
   isVisible,
   isDisabled,
   isHidden,
@@ -56,5 +56,5 @@ MenuButton.defaultProps = {
   type: 'button',
 };
 
-export type { MenuButtonType };
+export type { MenuButtonProps };
 export default MenuButton;

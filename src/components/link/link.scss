@@ -4,7 +4,7 @@ $parent: 'link';
 
 .#{$parent} {
   display: flex;
-  flex: 1 1 100%;
+  width: 100%;
   color: $link-text-color-default;
   cursor: pointer;
   text-decoration: none;

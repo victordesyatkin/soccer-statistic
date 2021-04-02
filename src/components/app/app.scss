@@ -33,3 +33,9 @@ $parent: 'app';
     flex-direction: column;
   }
 }
+
+.test {
+  display: flex;
+  flex: 1 1 100%;
+  border: 1px solid red;
+}

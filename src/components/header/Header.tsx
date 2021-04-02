@@ -2,23 +2,23 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import LogoLink from '../logo-link';
-import type { LogoLinkType } from '../logo-link';
+import type { LogoLinkProps } from '../logo-link';
 import Nav from '../nav';
 import type { NavType } from '../nav';
-import IconButton from '../icon-button';
-import type { IconButtonType } from '../icon-button';
+import Button from '../button';
+import type { ButtonProps } from '../button';
 import MenuButton from '../menu-button';
-import type { MenuButtonType } from '../menu-button';
+import type { MenuButtonProps } from '../menu-button';
 import SearchField from '../search-field';
-import type { SearchFieldType } from '../search-field';
+import type { SearchFieldProps } from '../search-field';
 import './header.scss';
 
 type HeaderType = {
-  logoLink?: LogoLinkType;
+  logoLink?: LogoLinkProps;
   nav?: NavType;
-  iconButton?: IconButtonType;
-  menuButton?: MenuButtonType;
-  searchField?: SearchFieldType;
+  iconButton?: ButtonProps;
+  menuButton?: MenuButtonProps;
+  searchField?: SearchFieldProps;
   action?: string;
   method?: string;
 };
@@ -70,7 +70,7 @@ const Header: React.FC<HeaderType> = ({
         <Nav {...nav} />
       </div>
       <div className="header__search-button">
-        <IconButton {...iconButton} onClick={onClickSearchButton} />
+        <Button {...iconButton} onClick={onClickSearchButton} />
       </div>
       <div className="header__search">{formSearch}</div>
     </header>

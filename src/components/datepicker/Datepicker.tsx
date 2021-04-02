@@ -9,13 +9,13 @@ import classnames from 'classnames';
 import { maskedDate, useOutsideClick } from '../../assets/helpers';
 import { withLabel } from '../hoc-helpers';
 import Calendar from '../calendar';
-import type { CalendarType } from '../calendar';
+import type { CalendarProps } from '../calendar';
 import './datepicker.scss';
 
 type DatepickerType = Partial<{
   placeholder: string;
   separator: string;
-  calendar: CalendarType;
+  calendar: CalendarProps;
   titleButtonToggleCalendar: string;
   ariaLabelButtonToggleCalendar: string;
   onSelect: (dates?: Partial<Date[]>) => void;

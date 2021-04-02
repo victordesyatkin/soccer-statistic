@@ -1,22 +1,22 @@
 import React from 'react';
 
 import Link from '../link';
-import type { LinkType } from '../link';
+import type { LinkProps } from '../link';
 import './nav.scss';
 
 type NavType = {
-  links?: LinkType[];
+  links?: LinkProps[];
 };
 
 const Nav: React.FC<NavType> = ({ links }) => {
-  const renderItem = (item: LinkType) => {
+  const renderItem = (item: LinkProps) => {
     return (
       <li className="nav__item" key={item.id}>
         <Link {...item} />
       </li>
     );
   };
-  const renderItems = (items: LinkType[]) => {
+  const renderItems = (items: LinkProps[]) => {
     return <ol className="nav__items">{items.map(renderItem)}</ol>;
   };
 

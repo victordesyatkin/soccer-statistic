@@ -4,7 +4,7 @@ $parent: 'select-field';
 
 .#{$parent} {
   display: flex;
-  flex: 1 1 100%;
+  width: 100%;
   color: $select-field-text-color;
   outline: none;
   border: 1px solid $select-field-border-color-default;
@@ -12,6 +12,7 @@ $parent: 'select-field';
   min-width: 0;
   flex-direction: column;
   position: relative;
+  background-color: $select-field-body-background-color;
 
   &:hover {
     border-color: $select-field-border-color-opened;

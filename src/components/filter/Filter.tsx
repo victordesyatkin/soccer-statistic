@@ -2,13 +2,11 @@ import React from 'react';
 import type { ReactNode } from 'react';
 
 import './filter.scss';
-import classNames from 'classnames';
 
 type FilterType = Partial<{
   method: string;
   action: string;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
-  isOpened: boolean;
 }>;
 
 const Filter: React.FC<FilterType> = ({
@@ -16,7 +14,6 @@ const Filter: React.FC<FilterType> = ({
   method,
   action,
   onSubmit,
-  isOpened,
 }) => {
   const className = 'filter';
   const renderChild = (child?: ReactNode) => {
@@ -24,7 +21,7 @@ const Filter: React.FC<FilterType> = ({
   };
   return (
     <form
-      className={classNames(className, { [`${className}_opened`]: isOpened })}
+      className={className}
       method={method}
       action={action}
       onSubmit={onSubmit}
@@ -32,10 +29,6 @@ const Filter: React.FC<FilterType> = ({
       {React.Children.map(children, renderChild)}
     </form>
   );
-};
-
-Filter.defaultProps = {
-  isOpened: false,
 };
 
 export default Filter;

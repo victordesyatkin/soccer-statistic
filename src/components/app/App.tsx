@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import 'normalize.css';
 
 import '../../assets/theme/global.scss';
+import Panel from '../panel';
 import Header from '../header';
 import Filter from '../filter';
 import SearchField from '../search-field';
-import type { SearchFieldType } from '../search-field';
+import type { SearchFieldProps } from '../search-field';
 import SelectField from '../select-field';
-import type { SelectFieldType } from '../select-field';
+import type { SelectFieldProps } from '../select-field';
 import Datepicker from '../datepicker';
-import FilterButton from '../filter-button';
+import Button from '../button';
 import type { DatepickerType } from '../datepicker';
 import './app.scss';
 
@@ -22,7 +23,7 @@ const DATEPICKER: DatepickerType = {
   },
 };
 
-const SELECTFIELD: SelectFieldType = {
+const SELECTFIELD: SelectFieldProps = {
   placeholder: 5,
   value: ['dog', 'cat', 'hamster', 'dog1'],
   options: [
@@ -192,7 +193,7 @@ const HEADER = {
   },
 };
 
-const SEARCHFIELD: SearchFieldType = {
+const SEARCHFIELD: SearchFieldProps = {
   placeholder: 'Search',
 };
 
@@ -208,7 +209,19 @@ const App: React.FC = () => {
       </div>
       <div className="app__main">
         <div className="app__wrapper">
-          <p>
+          <Button
+            onClick={onClickFilterButton}
+            content="Filters"
+            theme="bold"
+          />
+          <Panel>
+            <Filter>
+              <SearchField {...SEARCHFIELD} label={{ content: 'Name' }} />
+              <SelectField {...SELECTFIELD} label={{ content: 'Countries' }} />
+              <Datepicker {...DATEPICKER} label={{ content: 'Dates' }} />
+            </Filter>
+          </Panel>
+          {/* <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Et minus
             est esse, quaerat vel aliquid cum reprehenderit quisquam nihil
             explicabo rem aperiam deleniti placeat, commodi ipsa architecto illo
@@ -252,13 +265,14 @@ const App: React.FC = () => {
             adipisicing elit. Et minus est esse, quaerat vel aliquid cum
             reprehenderit quisquam nihil explicabo rem aperiam deleniti placeat,
             commodi ipsa architecto illo exercitationem pariatur?
-          </p>
-          <FilterButton onClick={onClickFilterButton} />
-          <Filter isOpened={isOpened}>
-            <SearchField {...SEARCHFIELD} label={{ content: 'Name' }} />
-            <SelectField {...SELECTFIELD} label={{ content: 'Countries' }} />
-            <Datepicker {...DATEPICKER} label={{ content: 'Dates' }} />
-          </Filter>
+          </p> */}
+          {/* <div className="test">
+            <Filter>
+              <SearchField {...SEARCHFIELD} label={{ content: 'Name' }} />
+              <SelectField {...SELECTFIELD} label={{ content: 'Countries' }} />
+              <Datepicker {...DATEPICKER} label={{ content: 'Dates' }} />
+            </Filter>
+          </div> */}
         </div>
       </div>
       <div className="app__footer">Header</div>

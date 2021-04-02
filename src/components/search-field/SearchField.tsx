@@ -5,7 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { withLabel } from '../hoc-helpers';
 import './search-field.scss';
 
-type SearchFieldType = Partial<{
+type SearchFieldProps = Partial<{
   id: string;
   isDisabled: boolean;
   isHidden: boolean;
@@ -16,7 +16,7 @@ type SearchFieldType = Partial<{
   onChange: React.ChangeEventHandler<HTMLInputElement>;
 }>;
 
-const SearchField: React.FC<SearchFieldType> = ({
+const SearchField: React.FC<SearchFieldProps> = ({
   id,
   name,
   ariaLabel,
@@ -47,6 +47,6 @@ const SearchField: React.FC<SearchFieldType> = ({
   );
 };
 
-export type { SearchFieldType };
+export type { SearchFieldProps };
 
 export default withLabel(SearchField);

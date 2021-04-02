@@ -1,6 +1,6 @@
 @import '~assets/theme/variables.scss';
 
-$parent: 'icon-button';
+$parent: 'button';
 
 .#{$parent} {
   color: $link-text-color-default;
@@ -8,9 +8,16 @@ $parent: 'icon-button';
   outline: none;
   border: none;
   background: none;
-  padding: 1rem;
 
   &:hover {
     color: $link-text-color-hover;
+  }
+
+  &_theme_bold {
+    font-weight: bold;
+  }
+
+  &__content {
+    padding-left: 0.6rem;
   }
 }

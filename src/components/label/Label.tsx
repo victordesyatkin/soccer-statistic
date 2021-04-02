@@ -4,13 +4,13 @@ import classNames from 'classnames';
 import { getTheme } from '../../assets/helpers/utils';
 import './label.scss';
 
-type LabelType = Partial<{
+type LabelProps = Partial<{
   content: string;
   htmlFor: string;
   theme: string;
 }>;
 
-const Label: React.FC<LabelType> = ({ content, htmlFor, theme }) => {
+const Label: React.FC<LabelProps> = ({ content, htmlFor, theme }) => {
   const themes: Record<string, string> = {
     default: 'default',
   };
@@ -32,5 +32,5 @@ Label.defaultProps = {
   theme: 'default',
 };
 
-export type { LabelType };
+export type { LabelProps };
 export default Label;

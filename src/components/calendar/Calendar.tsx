@@ -16,7 +16,7 @@ const DEFAULT_OPTIONS = {
   clearButton: true,
 };
 
-type CalendarType = Partial<{
+type CalendarProps = Partial<{
   id: string;
   name: string;
   ariaLabel: string;
@@ -30,7 +30,7 @@ type CalendarType = Partial<{
   onSelect: (dates?: Partial<Date[]>) => void;
 }>;
 
-const Calendar: React.FC<CalendarType> = ({
+const Calendar: React.FC<CalendarProps> = ({
   name,
   ariaLabel,
   isDisabled,
@@ -229,5 +229,5 @@ Calendar.defaultProps = {
   options: DEFAULT_OPTIONS,
 };
 
-export type { CalendarType };
+export type { CalendarProps };
 export default Calendar;
