@@ -1,0 +1,7 @@
+@import '~assets/theme/variables.scss';
+
+$parent: 'error-indicator';
+
+.#{$parent} {
+  color: red;
+}

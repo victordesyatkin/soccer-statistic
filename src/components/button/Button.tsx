@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch,
@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import { getTheme } from '../../assets/helpers';
 import './button.scss';
 
-type ButtonProps = Partial<{
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isVisible: boolean;
   isDisabled: boolean;
   isHidden: boolean;
@@ -23,9 +23,23 @@ type ButtonProps = Partial<{
   iconType: string;
   content: string;
   theme: string;
-}>;
+}
 
-const Button: React.FC<ButtonProps> = ({
+// type ButtonProps = Partial<{
+//   isVisible: boolean;
+//   isDisabled: boolean;
+//   isHidden: boolean;
+//   name: string;
+//   value: string | number;
+//   type: 'button' | 'submit' | 'reset';
+//   title: string;
+//   onClick: React.MouseEventHandler<HTMLButtonElement>;
+//   iconType: string;
+//   content: string;
+//   theme: string;
+// }>;
+
+const Button: React.FC<Partial<ButtonProps>> = ({
   isVisible,
   isDisabled,
   isHidden,

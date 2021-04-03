@@ -11,6 +11,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@types/jquery": "^3.5.5",
+    "@types/react-router-dom": "^5.1.7",
     "air-datepicker": "^2.2.3",
     "bind-decorator": "^1.0.11",
     "bootstrap": "^4.6.0",
@@ -22,7 +23,8 @@
     "react-bootstrap": "^1.4.3",
     "react-calendar": "^3.3.1",
     "react-dom": "^17.0.1",
-    "react-fontawesome": "^1.7.1"
+    "react-fontawesome": "^1.7.1",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.16",

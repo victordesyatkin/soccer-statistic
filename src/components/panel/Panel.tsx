@@ -1,18 +1,23 @@
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 
+import { withPanelConsumer } from '../hoc-helpers';
 import Button from '../button';
 import './panel.scss';
 
 type PanelProps = Partial<{
   isOpened: boolean;
   setIsOpened: (isOpened?: boolean) => void;
+  title: string;
 }>;
 
-const Panel: React.FC<PanelProps> = ({ isOpened, setIsOpened }) => {
+const Panel: React.FC<PanelProps> = ({
+  isOpened,
+  setIsOpened,
+  children,
+  title,
+}) => {
   const className = 'panel';
-  const title = 'Filters';
-  const children: JSX.Element[] | undefined = [];
   const memoizedSetIsOpened = useCallback(() => {
     if (setIsOpened) {
       setIsOpened(false);
@@ -34,4 +39,4 @@ const Panel: React.FC<PanelProps> = ({ isOpened, setIsOpened }) => {
 };
 
 export type { PanelProps };
-export default Panel;
+export default withPanelConsumer(Panel);

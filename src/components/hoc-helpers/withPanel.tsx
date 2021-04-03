@@ -1,31 +1,46 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 
 import { prepareDisplayNameComponent } from '../../assets/helpers/utils';
-import { PanelProps } from '../panel';
 
-const {
-  Provider: PanelProvider,
-  Consumer: PanelConsumer,
-} = React.createContext(false);
+interface PanelContextDefaultValue {
+  isOpened: boolean;
+  setIsOpened: (isOpened?: boolean) => void;
+}
 
-const withPanelProvider = (
-  Component: React.ComponentClass<PanelProps> | React.FC<PanelProps>
-): React.FC<PanelProps> => {
-  const WithPanelProvider: React.FC<PanelProps> = (props) => {
-    return (
-      <PanelProvider value={false}>
-        <Component {...props} />
-      </PanelProvider>
-    );
-  };
-  WithPanelProvider.displayName = prepareDisplayNameComponent(Component);
-  return WithPanelProvider;
+type PanelContextProps = Partial<PanelContextDefaultValue>;
+
+const DEFAULT_VALUE: Partial<PanelContextDefaultValue> = {
+  isOpened: false,
+};
+
+const { Provider, Consumer: PanelConsumer } = React.createContext(
+  DEFAULT_VALUE
+);
+
+const PanelProvider: React.FC = ({ children }) => {
+  const [isOpened, setIsOpened] = useState(false);
+
+  const memoizedSetIsOpened = useCallback(
+    (passIsOpened) => {
+      if (setIsOpened) {
+        setIsOpened(passIsOpened);
+      }
+    },
+    [setIsOpened]
+  );
+  return (
+    <Provider value={{ isOpened, setIsOpened: memoizedSetIsOpened }}>
+      {children}
+    </Provider>
+  );
 };
 
 const withPanelConsumer = (
-  Component: React.ComponentClass<PanelProps> | React.FC<PanelProps>
-): React.FC<PanelProps> => {
-  const WithPanelConsumer: React.FC<PanelProps> = (props) => {
+  Component:
+    | React.ComponentClass<PanelContextProps & Record<string, unknown>>
+    | React.FC<PanelContextProps & Record<string, unknown>>
+): React.FC<PanelContextProps & Record<string, unknown>> => {
+  const WithPanelConsumer: React.FC<PanelContextProps> = (props) => {
     return (
       <PanelConsumer>
         {({ isOpened, setIsOpened }) => {
@@ -44,4 +59,4 @@ const withPanelConsumer = (
   return WithPanelConsumer;
 };
 
-export { withPanelProvider, withPanelConsumer };
+export { withPanelConsumer, PanelProvider, PanelConsumer };
