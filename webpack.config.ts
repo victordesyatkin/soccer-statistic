@@ -82,6 +82,7 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
       filename: '[name].js?version=[contenthash]',
       chunkFilename: '[id].[contenthash].js?version=[contenthash]',
       path: path.resolve(__dirname, 'dist'),
+      publicPath: '/',
     },
     module: {
       rules: [
@@ -157,6 +158,7 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
       compress: true,
       watchContentBase: true,
       contentBase: path.join(__dirname, 'dist'),
+      historyApiFallback: false,
     },
     target: isDevelopment ? 'web' : 'browserslist',
     resolve: {

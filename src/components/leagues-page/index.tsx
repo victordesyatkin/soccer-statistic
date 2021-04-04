@@ -1,3 +1,3 @@
 import LeaguesPage from './LeaguesPage';
 
-export { LeaguesPage };
+export default LeaguesPage;

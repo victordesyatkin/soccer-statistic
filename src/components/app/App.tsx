@@ -1,12 +1,12 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import 'normalize.css';
 
 import '../../assets/theme/global.scss';
 import ErrorBoundary from '../error-boundary';
 import Header from '../header';
 import { PanelProvider } from '../hoc-helpers';
-import { LeaguesPage } from '../pages';
+import LeaguesPage from '../leagues-page';
 import './app.scss';
 
 const HEADER = {
@@ -72,9 +72,7 @@ const App: React.FC = () => {
               <Route path="/leagues">
                 <LeaguesPage />
               </Route>
-              <Route path="/">
-                <LeaguesPage />
-              </Route>
+              <Redirect to="/leagues" />
             </Switch>
           </PanelProvider>
         </div>

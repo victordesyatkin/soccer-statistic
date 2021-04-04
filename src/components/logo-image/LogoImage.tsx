@@ -1,6 +1,6 @@
 import React from 'react';
 
-import srcDefault from './images/logo.png';
+import LogoImageSrcDefault from './images/logo-image.png';
 import './logo-image.scss';
 
 type LogoImageProps = {
@@ -10,7 +10,7 @@ type LogoImageProps = {
 };
 
 const LogoImage: React.FC<LogoImageProps> = ({ alt, title, src }) => {
-  const readySrc = src || srcDefault;
+  const readySrc = src || LogoImageSrcDefault;
   return <img className="logo-image" alt={alt} title={title} src={readySrc} />;
 };
 

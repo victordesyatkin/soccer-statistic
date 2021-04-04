@@ -14,7 +14,7 @@ class ErrorBoundary extends React.PureComponent<
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      isError: true,
+      isError: false,
     };
   }
 

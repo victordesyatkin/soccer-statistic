@@ -9,6 +9,8 @@ import SelectField from '../select-field';
 import type { SelectFieldProps } from '../select-field';
 import Datepicker from '../datepicker';
 import type { DatepickerType } from '../datepicker';
+import './leagues-page.scss';
+import HeaderSection from '../header-section';
 
 const DATEPICKER: DatepickerType = {
   calendar: {
@@ -148,9 +150,13 @@ const SEARCHFIELD: SearchFieldProps = {
 const LeaguesPage: React.FC = () => {
   const className = 'leagues-page';
   return (
-    <div className={className}>
-      <h1>Leagues page</h1>
-      <FilterButton />
+    <section className={className}>
+      <div className={`${className}__header`}>
+        <HeaderSection content="Leagues" />
+      </div>
+      <div className={`${className}__control`}>
+        <FilterButton />
+      </div>
       <Panel title="Filter">
         <Filter>
           <SearchField {...SEARCHFIELD} label={{ content: 'Name' }} />
@@ -158,7 +164,7 @@ const LeaguesPage: React.FC = () => {
           <Datepicker {...DATEPICKER} label={{ content: 'Dates' }} />
         </Filter>
       </Panel>
-    </div>
+    </section>
   );
 };
 
