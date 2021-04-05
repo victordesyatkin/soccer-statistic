@@ -7,7 +7,6 @@ $parent: 'leagues-page';
   flex: 1 1 100%;
   width: 100%;
   flex-direction: column;
-  padding: 0rem 6rem;
 
   &__control,
   &__header {
@@ -16,5 +15,13 @@ $parent: 'leagues-page';
 
   &__control {
     display: flex;
+
+    @media (min-width: $md) {
+      display: none;
+    }
+  }
+
+  &__panel {
+    max-width: 21.428rem;
   }
 }

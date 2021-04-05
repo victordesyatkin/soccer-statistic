@@ -10,7 +10,7 @@ import type { SelectFieldProps } from '../select-field';
 import Datepicker from '../datepicker';
 import type { DatepickerType } from '../datepicker';
 import './leagues-page.scss';
-import HeaderSection from '../header-section';
+import Breadcrumbs from '../breadcrumbs';
 
 const DATEPICKER: DatepickerType = {
   calendar: {
@@ -152,18 +152,20 @@ const LeaguesPage: React.FC = () => {
   return (
     <section className={className}>
       <div className={`${className}__header`}>
-        <HeaderSection content="Leagues" />
+        <Breadcrumbs content="Breadcrumbs" />
       </div>
       <div className={`${className}__control`}>
         <FilterButton />
       </div>
-      <Panel title="Filter">
-        <Filter>
-          <SearchField {...SEARCHFIELD} label={{ content: 'Name' }} />
-          <SelectField {...SELECTFIELD} label={{ content: 'Countries' }} />
-          <Datepicker {...DATEPICKER} label={{ content: 'Dates' }} />
-        </Filter>
-      </Panel>
+      <div className={`${className}__panel`}>
+        <Panel title="Filter">
+          <Filter>
+            <SearchField {...SEARCHFIELD} label={{ content: 'Name' }} />
+            <SelectField {...SELECTFIELD} label={{ content: 'Countries' }} />
+            <Datepicker {...DATEPICKER} label={{ content: 'Dates' }} />
+          </Filter>
+        </Panel>
+      </div>
     </section>
   );
 };
