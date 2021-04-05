@@ -1,4 +1,4 @@
 import Datepicker from './Datepicker';
 
 export default Datepicker;
-export type { DatepickerType } from './Datepicker';
+export type { DatepickerProps } from './Datepicker';

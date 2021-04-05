@@ -1,4 +1,4 @@
 import Filter from './Filter';
 
-export type { FilterType } from './Filter';
+export type { FilterProps } from './Filter';
 export default Filter;

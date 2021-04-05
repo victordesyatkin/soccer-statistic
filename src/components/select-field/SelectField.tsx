@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useOutsideClick } from '../../assets/helpers';
-import { withLabel } from '../hoc-helpers';
+import { withLabel, WithLabelProps } from '../hoc-helpers';
 import './select-field.scss';
 
 type SelectFieldOptionType = {
@@ -27,7 +27,8 @@ type SelectFieldProps = Partial<{
   placeholder: string | number;
   onChange: (value?: readonly string[]) => void;
   id: string;
-}>;
+}> &
+  WithLabelProps;
 
 const SelectField: React.FC<SelectFieldProps> = ({
   name,

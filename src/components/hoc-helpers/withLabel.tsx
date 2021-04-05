@@ -25,4 +25,5 @@ const withLabel = (
   return WithLabel;
 };
 
+export type { WithLabelProps };
 export default withLabel;

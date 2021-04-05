@@ -13,7 +13,7 @@ import SearchField from '../search-field';
 import type { SearchFieldProps } from '../search-field';
 import './header.scss';
 
-type HeaderType = {
+type HeaderProps = {
   logoLink?: LogoLinkProps;
   nav?: NavType;
   iconButton?: ButtonProps;
@@ -23,7 +23,7 @@ type HeaderType = {
   method?: string;
 };
 
-const Header: React.FC<HeaderType> = ({
+const Header: React.FC<HeaderProps> = ({
   logoLink,
   nav,
   iconButton,
@@ -77,5 +77,5 @@ const Header: React.FC<HeaderType> = ({
   );
 };
 
-export type { HeaderType };
+export type { HeaderProps };
 export default Header;

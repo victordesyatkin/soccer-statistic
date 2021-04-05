@@ -114,6 +114,7 @@ $parent: 'select-field';
     color: $select-field-item-control-text-color-default;
     padding: 0 0.7rem;
     cursor: pointer;
+    margin-left: auto;
   }
 
   &__body {

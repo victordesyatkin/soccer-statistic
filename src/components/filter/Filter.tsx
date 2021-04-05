@@ -3,13 +3,13 @@ import type { ReactNode } from 'react';
 
 import './filter.scss';
 
-type FilterType = Partial<{
+type FilterProps = Partial<{
   method: string;
   action: string;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
 }>;
 
-const Filter: React.FC<FilterType> = ({
+const Filter: React.FC<FilterProps> = ({
   children,
   method,
   action,
@@ -33,4 +33,4 @@ const Filter: React.FC<FilterType> = ({
 
 export default Filter;
 
-export type { FilterType };
+export type { FilterProps };
