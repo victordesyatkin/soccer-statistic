@@ -1,13 +1,30 @@
-const reducer = (state = 0, action) => {
+import { ActionType } from '../actions';
+import { LeaguesProps } from '../services';
+
+type initialStateProps = Record<string, unknown>;
+
+type LeagueReducerProps = LeaguesProps & initialStateProps;
+
+const initialLeagueState: LeagueReducerProps = {
+  leagues: [],
+  isLoading: false,
+};
+const LeagueReducer = (
+  state = initialLeagueState,
+  action: ActionType
+): initialStateProps => {
   switch (action.type) {
-    case 'INC': {
-      return state + 1;
+    case 'LEAGUES_REQUESTED': {
+      return {
+        ...state,
+        isLoading: true,
+      };
     }
-    case 'DEC': {
-      return state - 1;
-    }
-    case 'RND': {
-      return state + action.payload;
+    case 'LEAGUES_LOADED': {
+      return {
+        leagues: action?.payload || [],
+        isLoading: false,
+      };
     }
     default: {
       return state;
@@ -15,4 +32,5 @@ const reducer = (state = 0, action) => {
   }
 };
 
-export default reducer;
+export type { initialStateProps };
+export default LeagueReducer;

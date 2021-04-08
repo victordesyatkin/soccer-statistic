@@ -39,4 +39,4 @@ const Panel: React.FC<PanelProps> = ({
 };
 
 export type { PanelProps };
-export default withPanelConsumer(Panel);
+export default withPanelConsumer()(Panel);

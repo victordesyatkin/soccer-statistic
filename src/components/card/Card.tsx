@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { getTheme } from '../../assets/helpers/utils';
+import { getTheme } from '../../helpers/utils';
 import './cards.scss';
 
 type CardProps = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { getTheme } from '../../assets/helpers/utils';
+import { getTheme } from '../../helpers/utils';
 import './label.scss';
 
 type LabelProps = Partial<{

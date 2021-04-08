@@ -8,7 +8,7 @@ import {
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
 
-import { getTheme } from '../../assets/helpers';
+import { getTheme } from '../../helpers';
 import './button.scss';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

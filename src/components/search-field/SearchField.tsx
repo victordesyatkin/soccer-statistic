@@ -50,4 +50,4 @@ const SearchField: React.FC<SearchFieldProps> = ({
 
 export type { SearchFieldProps };
 
-export default withLabel(SearchField);
+export default withLabel()(SearchField);

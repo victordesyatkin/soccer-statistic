@@ -6,7 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames';
 
-import { maskedDate, useOutsideClick } from '../../assets/helpers';
+import { maskedDate, useOutsideClick } from '../../helpers';
 import { withLabel } from '../hoc-helpers';
 import type { WithLabelProps } from '../hoc-helpers';
 import Calendar from '../calendar';
@@ -99,4 +99,4 @@ Datepicker.defaultProps = {
 };
 
 export type { DatepickerProps };
-export default withLabel(Datepicker);
+export default withLabel()(Datepicker);

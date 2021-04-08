@@ -6,7 +6,7 @@ import {
   faChevronCircleDown,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { useOutsideClick } from '../../assets/helpers';
+import { useOutsideClick } from '../../helpers';
 import { withLabel, WithLabelProps } from '../hoc-helpers';
 import './select-field.scss';
 
@@ -227,4 +227,4 @@ const SelectField: React.FC<SelectFieldProps> = ({
 
 export type { SelectFieldProps, SelectFieldOptionType };
 
-export default withLabel(SelectField);
+export default withLabel()(SelectField);

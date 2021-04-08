@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 
-import { prepareDisplayNameComponent } from '../../assets/helpers/utils';
+import { prepareDisplayNameComponent } from '../../helpers/utils';
 
 interface PanelContextDefaultValue {
   isOpened: boolean;
@@ -35,12 +35,14 @@ const PanelProvider: React.FC = ({ children }) => {
   );
 };
 
-const withPanelConsumer = (
+const withPanelConsumer = () => (
   Component:
     | React.ComponentClass<PanelContextProps & Record<string, unknown>>
     | React.FC<PanelContextProps & Record<string, unknown>>
 ): React.FC<PanelContextProps & Record<string, unknown>> => {
-  const WithPanelConsumer: React.FC<PanelContextProps> = (props) => {
+  const WithPanelConsumer: React.FC<
+    PanelContextProps & Record<string, unknown>
+  > = (props) => {
     return (
       <PanelConsumer>
         {({ isOpened, setIsOpened }) => {

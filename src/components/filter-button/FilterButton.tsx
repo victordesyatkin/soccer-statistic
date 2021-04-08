@@ -23,4 +23,4 @@ const FilterButton: React.FC<Partial<FilterButtonProps>> = ({
   );
 };
 
-export default withPanelConsumer(FilterButton);
+export default withPanelConsumer()(FilterButton);

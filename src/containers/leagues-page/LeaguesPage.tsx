@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect, MapStateToPropsParam } from 'react-redux';
 
 import LeaguesPage, { LeaguesPageProps } from '../../components/leagues-page';
 
@@ -149,9 +150,27 @@ const props: LeaguesPageProps = {
   },
 };
 
-const LeaguesPageContainer: React.FC = () => {
-  console.log('props : ', props);
-  return <LeaguesPage {...props} />;
+type LeaguesPageContainerProps = {};
+
+const LeaguesPageContainer: React.FC<LeaguesPageContainerProps> = ({
+  counter,
+}) => {
+  console.log('counter : ', counter);
+  return <LeaguesPage {...props} counter={counter} />;
 };
 
-export default LeaguesPageContainer;
+const mapStateToProps: MapStateToPropsParam<
+  Record<string, unknown>,
+  LeaguesPageContainerProps
+> = (state) => {
+  console.log('state : ', state);
+  return {
+    counter: state,
+  };
+};
+const mapDispatchToProps = (dispacth) => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LeaguesPageContainer);

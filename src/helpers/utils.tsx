@@ -1,4 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { useDispatch } from 'react-redux';
+
+import { ActionType } from '../actions';
 
 type useOutsideClickType = {
   ref?: React.MutableRefObject<null>;
@@ -116,10 +120,12 @@ function uuid(): string {
 }
 
 function prepareDisplayNameComponent(
-  Component: React.ComponentClass | React.FC
+  Component:
+    | React.ComponentClass<Record<string, unknown>>
+    | React.FC<Record<string, unknown>>
 ): string {
   const displayName = Component.displayName || Component.name || 'Component';
-  return `withLabel(${displayName})`;
+  return `with(${displayName})`;
 }
 
 function getTheme({
@@ -138,6 +144,15 @@ function getTheme({
   return { key, value };
 }
 
+function useActions(
+  actions: ActionCreatorsMapObject<ActionType>
+): ActionCreatorsMapObject<ActionType> {
+  const dispatch = useDispatch();
+  return useMemo(() => {
+    return bindActionCreators(actions, dispatch);
+  }, [dispatch]);
+}
+
 export type { useOutsideClickType };
 export {
   useOutsideClick,
@@ -148,4 +163,5 @@ export {
   uuid,
   prepareDisplayNameComponent,
   getTheme,
+  useActions,
 };

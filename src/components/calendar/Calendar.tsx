@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 import '../air-datepicker';
 import Card from '../card';
-import { value2Date } from '../../assets/helpers';
+import { value2Date } from '../../helpers';
 import './calendar.scss';
 
 const DEFAULT_OPTIONS = {

@@ -4,7 +4,7 @@ import ErrorIndicator from '../error-indicator';
 import './error-boundary.scss';
 
 type ErrorBoundaryState = Readonly<{
-  isError: boolean;
+  hasError: boolean;
 }>;
 
 class ErrorBoundary extends React.PureComponent<
@@ -14,20 +14,22 @@ class ErrorBoundary extends React.PureComponent<
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = {
-      isError: false,
+      hasError: false,
     };
   }
 
   componentDidCatch(): void {
-    this.setState({ isError: true });
+    this.setState({ hasError: true });
   }
 
   render(): JSX.Element {
     const { children } = this.props;
-    const { isError } = this.state;
+    const { hasError } = this.state;
     const className = 'error-boundary';
     return (
-      <div className={className}>{isError ? <ErrorIndicator /> : children}</div>
+      <div className={className}>
+        {hasError ? <ErrorIndicator /> : children}
+      </div>
     );
   }
 }

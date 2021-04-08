@@ -1,9 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import { HashRouter } from 'react-router-dom';
 
-import reducer from '../../reducers';
+import store from '../../store';
+import ErrorBoundary from '../../components/error-boundary';
 import App from '../../components/app';
 
 const header = {
@@ -56,14 +56,14 @@ const header = {
   },
 };
 
-const store = createStore(reducer);
-
 const AppContainer: React.FC = () => {
   return (
     <Provider store={store}>
-      <HashRouter>
-        <App header={header} />
-      </HashRouter>
+      <ErrorBoundary>
+        <HashRouter>
+          <App header={header} />
+        </HashRouter>
+      </ErrorBoundary>
     </Provider>
   );
 };
