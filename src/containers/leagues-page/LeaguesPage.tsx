@@ -152,25 +152,8 @@ const props: LeaguesPageProps = {
 
 type LeaguesPageContainerProps = {};
 
-const LeaguesPageContainer: React.FC<LeaguesPageContainerProps> = ({
-  counter,
-}) => {
-  console.log('counter : ', counter);
-  return <LeaguesPage {...props} counter={counter} />;
+const LeaguesPageContainer: React.FC<LeaguesPageContainerProps> = () => {
+  return <LeaguesPage />;
 };
 
-const mapStateToProps: MapStateToPropsParam<
-  Record<string, unknown>,
-  LeaguesPageContainerProps
-> = (state) => {
-  console.log('state : ', state);
-  return {
-    counter: state,
-  };
-};
-const mapDispatchToProps = (dispacth) => ({});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LeaguesPageContainer);
+export default LeaguesPageContainer;

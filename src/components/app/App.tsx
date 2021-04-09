@@ -16,6 +16,8 @@ type AppProps = Partial<{
 
 const LeaguesPage = lazy(() => import('../../containers/leagues-page'));
 
+const TeamList = lazy(() => import('../../containers/team-list'));
+
 const App: React.FC<AppProps> = ({ header }) => {
   return (
     <div className="app">
@@ -28,6 +30,9 @@ const App: React.FC<AppProps> = ({ header }) => {
             <Switch>
               <Route path="/leagues">
                 <LeaguesPage />
+              </Route>
+              <Route path="/teams">
+                <TeamList />
               </Route>
               <Redirect to="/leagues" />
             </Switch>

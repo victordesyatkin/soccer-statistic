@@ -1,11 +1,11 @@
 import React from 'react';
 
-import './league-list-item.scss';
-import { LeagueProps } from '../../modules/types';
+import './team-list-item.scss';
+import { TeamProps } from '../../modules/types';
 
-const LeagueListItem: React.FC<Partial<LeagueProps>> = (props) => {
+const LeagueListItem: React.FC<Partial<TeamProps>> = (props) => {
   const { logoPath, name, countryId } = props;
-  const className = 'league-list-item';
+  const className = 'team-list-item';
   return (
     <article className={className}>
       <div className={`${className}__logo`}>

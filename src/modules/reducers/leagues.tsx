@@ -5,21 +5,23 @@ import {
   FETCH_LEAGUES_REQUEST,
   FETCH_LEAGUES_FAILURE,
 } from '../actions';
-import { LeaguesProps } from '../services';
+import { LeagueProps } from '../types';
 
-type initialStateProps = Partial<{
+type initialLeaguesStateProps = Partial<{
+  items: LeagueProps[];
   isLoading: boolean;
   error: Error | null;
 }>;
 
-type LeagueReducerProps = LeaguesProps & initialStateProps;
+type LeagueReducerProps = initialLeaguesStateProps;
 
 const initialLeagueState: LeagueReducerProps = {
-  leagues: [],
+  items: [],
   isLoading: false,
   error: null,
 };
-const LeagueReducer = (
+
+const reducer = (
   state = initialLeagueState,
   action: AnyAction
 ): LeagueReducerProps => {
@@ -32,7 +34,7 @@ const LeagueReducer = (
     }
     case FETCH_LEAGUES_SUCCESS: {
       return {
-        leagues: action?.payload || [],
+        items: action?.payload || [],
         isLoading: false,
       };
     }
@@ -49,5 +51,5 @@ const LeagueReducer = (
   }
 };
 
-export type { initialStateProps };
-export default LeagueReducer;
+export type { initialLeaguesStateProps };
+export default reducer;

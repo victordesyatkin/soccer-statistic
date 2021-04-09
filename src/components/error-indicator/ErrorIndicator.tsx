@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { initialStateProps } from '../../reducers';
+import { initialStateProps } from '../../modules/reducers';
 import './error-indicator.scss';
 import ErrorIndicatorImageSrcDefault from './images/error-indicator.png';
 

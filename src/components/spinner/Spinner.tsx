@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import classnames from 'classnames';
 
-import { initialStateProps } from '../../reducers';
+import { initialStateProps } from '../../modules/reducers';
 import { getTheme } from '../../helpers';
 import './spinner.scss';
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
-import { bindActionCreators, ActionCreatorsMapObject, AnyAction } from 'redux';
+import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 
-import { ActionType } from '../actions';
+import { ActionType } from '../modules/types';
 
 type useOutsideClickType = {
   ref?: React.MutableRefObject<null>;

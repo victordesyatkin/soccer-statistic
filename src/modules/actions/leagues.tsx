@@ -1,9 +1,7 @@
 import { ActionCreator, Dispatch } from 'redux';
 
-import { IStatisticService, LeagueProps } from '../services';
-
-type ActionType = { type: string } & Record<string, unknown>;
-type ActionCreatorType = (payload?: unknown) => ActionType;
+import { IStatisticService } from '../../services';
+import { ActionType, ActionCreatorType, LeagueProps } from '../types';
 
 const FETCH_LEAGUES_SUCCESS = 'FETCH_LEAGUES_SUCCESS';
 const fetchLeaguesSuccess: ActionCreator<
@@ -40,7 +38,6 @@ const fetchLeagues = ({
     .catch((error) => dispatch(fetchLeaguesFailure(error)));
 };
 
-export type { ActionType, ActionCreatorType };
 export {
   FETCH_LEAGUES_SUCCESS,
   FETCH_LEAGUES_REQUEST,
