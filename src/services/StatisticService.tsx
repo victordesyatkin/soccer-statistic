@@ -26,24 +26,25 @@ class StatisticService implements IStatisticService {
     if (this.apiBase || this.apiKey) {
       return Promise.reject(new Error('failed'));
     }
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve([
-          {
-            id: 501,
-            name: 'Premiership',
-            logoPath:
-              'https://cdn.sportmonks.com/images/soccer/leagues/501.png',
-            countryId: 1161,
-          },
-          {
-            id: 271,
-            name: 'Superliga',
-            logoPath:
-              'https://cdn.sportmonks.com/images/soccer/leagues/271.png',
-            countryId: 320,
-          },
-        ]);
+        // resolve([
+        //   {
+        //     id: 501,
+        //     name: 'Premiership',
+        //     logoPath:
+        //       'https://cdn.sportmonks.com/images/soccer/leagues/501.png',
+        //     countryId: 1161,
+        //   },
+        //   {
+        //     id: 271,
+        //     name: 'Superliga',
+        //     logoPath:
+        //       'https://cdn.sportmonks.com/images/soccer/leagues/271.png',
+        //     countryId: 320,
+        //   },
+        // ]);
+        reject(new Error('failed'));
       }, 3000);
     });
   }

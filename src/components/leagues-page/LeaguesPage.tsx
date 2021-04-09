@@ -8,7 +8,7 @@ import SearchField, { SearchFieldProps } from '../search-field';
 import SelectField, { SelectFieldProps } from '../select-field';
 import Datepicker, { DatepickerProps } from '../datepicker';
 import Breadcrumbs from '../breadcrumbs';
-import LeagueList from '../league-list';
+import LeagueList from '../../containers/league-list';
 import './leagues-page.scss';
 
 type LeaguesPageProps = Partial<{

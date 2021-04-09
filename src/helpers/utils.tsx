@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
+import { bindActionCreators, ActionCreatorsMapObject, AnyAction } from 'redux';
 import { useDispatch } from 'react-redux';
 
 import { ActionType } from '../actions';

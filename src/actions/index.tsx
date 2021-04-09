@@ -1,19 +1,52 @@
-import { ActionCreator } from 'redux';
-import { LeaguesProps } from '../services';
+import { ActionCreator, Dispatch } from 'redux';
+
+import { IStatisticService, LeagueProps } from '../services';
 
 type ActionType = { type: string } & Record<string, unknown>;
-type ActionCreatorType = (payload?: Record<string, unknown>) => ActionType;
+type ActionCreatorType = (payload?: unknown) => ActionType;
 
-const LEAGUES_LOADED = 'LEAGUES_LOADED';
-const leaguesLoaded: ActionCreator<ActionType> = (payload?: LeaguesProps) => ({
-  type: LEAGUES_LOADED,
+const FETCH_LEAGUES_SUCCESS = 'FETCH_LEAGUES_SUCCESS';
+const fetchLeaguesSuccess: ActionCreator<
+  ActionType & { payload: LeagueProps[] }
+> = (payload: LeagueProps[]) => ({
+  type: FETCH_LEAGUES_SUCCESS,
   payload,
 });
 
-const LEAGUES_REQUESTED = 'LEAGUES_REQUESTED';
-const leaguesRequested: ActionCreatorType = () => ({
-  type: LEAGUES_REQUESTED,
+const FETCH_LEAGUES_REQUEST = 'FETCH_LEAGUES_REQUEST';
+const fetchLeaguesRequest: ActionCreatorType = () => ({
+  type: FETCH_LEAGUES_REQUEST,
 });
 
+const FETCH_LEAGUES_FAILURE = 'FETCH_LEAGUES_FAILURE';
+const fetchLeaguesFailure: ActionCreator<ActionType & { payload: Error }> = (
+  payload: Error
+) => ({
+  type: FETCH_LEAGUES_FAILURE,
+  payload,
+});
+
+const fetchLeagues = ({
+  serviceStatistic,
+  dispatch,
+}: {
+  serviceStatistic?: IStatisticService;
+  dispatch: Dispatch;
+}): void => {
+  dispatch(fetchLeaguesRequest());
+  serviceStatistic
+    ?.getLeagues()
+    .then((payload) => dispatch(fetchLeaguesSuccess(payload)))
+    .catch((error) => dispatch(fetchLeaguesFailure(error)));
+};
+
 export type { ActionType, ActionCreatorType };
-export { leaguesLoaded, LEAGUES_LOADED, leaguesRequested, LEAGUES_REQUESTED };
+export {
+  FETCH_LEAGUES_SUCCESS,
+  FETCH_LEAGUES_REQUEST,
+  FETCH_LEAGUES_FAILURE,
+  fetchLeaguesSuccess,
+  fetchLeaguesRequest,
+  fetchLeaguesFailure,
+  fetchLeagues,
+};
