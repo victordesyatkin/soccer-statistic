@@ -2,6 +2,36 @@ type ActionType = { type: string } & Record<string, unknown>;
 
 type ActionCreatorType = (payload?: unknown) => ActionType;
 
+type initialRootStateProps = {
+  error: Error | null;
+  isLoading: boolean;
+};
+
+type rootReducerProps = initialRootStateProps;
+
+type initialLeaguesStateProps = {
+  items: LeagueProps[];
+  isLoading: boolean;
+  error: Error | null;
+};
+
+type LeagueReducerProps = initialLeaguesStateProps;
+
+type initialTeamStateProps = {
+  items: TeamProps[];
+  isLoading: boolean;
+  error: Error | null;
+};
+
+type TeamReducerProps = initialTeamStateProps;
+
+type ReducerProps = {
+  leagues: LeaguesProps;
+  teams: TeamsProps;
+} & rootReducerProps;
+
+type initialStateProps = ReducerProps;
+
 type LeagueProps = Partial<{
   id: number;
   name: string;
@@ -31,4 +61,12 @@ export type {
   TeamProps,
   LeaguesProps,
   LeagueProps,
+  ReducerProps,
+  LeagueReducerProps,
+  TeamReducerProps,
+  rootReducerProps,
+  initialStateProps,
+  initialTeamStateProps,
+  initialLeaguesStateProps,
+  initialRootStateProps,
 };

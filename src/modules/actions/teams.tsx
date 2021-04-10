@@ -2,6 +2,7 @@ import { ActionCreator, Dispatch } from 'redux';
 
 import { IStatisticService } from '../../services';
 import { ActionType, ActionCreatorType, LeagueProps } from '../types';
+import { fetchRequest, fetchSuccess, fetchFailure } from './root';
 
 const FETCH_TEAMS_SUCCESS = 'FETCH_TEAMS_SUCCESS';
 const fetchTeamsSuccess: ActionCreator<
@@ -32,10 +33,17 @@ const fetchTeams = ({
   dispatch: Dispatch;
 }): void => {
   dispatch(fetchTeamsRequest());
+  dispatch(fetchRequest());
   serviceStatistic
     ?.getTeams()
-    .then((payload) => dispatch(fetchTeamsSuccess(payload)))
-    .catch((error) => dispatch(fetchTeamsFailure(error)));
+    .then((payload) => {
+      dispatch(fetchTeamsSuccess(payload));
+      dispatch(fetchSuccess());
+    })
+    .catch((error) => {
+      dispatch(fetchTeamsFailure(error));
+      dispatch(fetchFailure(error));
+    });
 };
 
 export {

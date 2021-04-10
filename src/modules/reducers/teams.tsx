@@ -1,42 +1,35 @@
 import { AnyAction } from 'redux';
 
-import {
-  FETCH_TEAMS_SUCCESS,
-  FETCH_TEAMS_REQUEST,
-  FETCH_TEAMS_FAILURE,
-} from '../actions';
-import { TeamProps } from '../types';
-
-type initialTeamStateProps = Partial<{
-  iteams: TeamProps[];
-  isLoading: boolean;
-  error: Error | null;
-}>;
-
-type TeamReducerProps = initialTeamStateProps;
+import * as actions from '../actions/teams';
+import { TeamReducerProps } from '../types';
 
 const initialLeagueState: TeamReducerProps = {
-  iteams: [],
+  items: [],
   isLoading: false,
   error: null,
 };
+
 const reducer = (
   state = initialLeagueState,
   action: AnyAction
 ): TeamReducerProps => {
   switch (action.type) {
-    case FETCH_TEAMS_REQUEST: {
+    case actions.FETCH_TEAMS_REQUEST: {
       return {
+        ...state,
         isLoading: true,
+        error: null,
       };
     }
-    case FETCH_TEAMS_SUCCESS: {
+    case actions.FETCH_TEAMS_SUCCESS: {
       return {
-        iteams: action?.payload || [],
+        ...state,
+        items: action?.payload || [],
+        error: null,
         isLoading: false,
       };
     }
-    case FETCH_TEAMS_FAILURE: {
+    case actions.FETCH_TEAMS_FAILURE: {
       return {
         ...state,
         error: action?.payload || null,
@@ -49,5 +42,4 @@ const reducer = (
   }
 };
 
-export type { initialTeamStateProps };
 export default reducer;

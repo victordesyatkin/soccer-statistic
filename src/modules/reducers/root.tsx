@@ -1,35 +1,33 @@
 import { AnyAction } from 'redux';
 
-import * as actions from '../actions/leagues';
-import { LeagueReducerProps } from '../types';
+import * as actions from '../actions/root';
+import { initialRootStateProps, rootReducerProps } from '../types';
 
-const initialLeagueState: LeagueReducerProps = {
-  items: [],
-  isLoading: false,
+const initialRootState: initialRootStateProps = {
   error: null,
+  isLoading: false,
 };
 
 const reducer = (
-  state = initialLeagueState,
+  state: initialRootStateProps = initialRootState,
   action: AnyAction
-): LeagueReducerProps => {
+): rootReducerProps => {
   switch (action.type) {
-    case actions.FETCH_LEAGUES_REQUEST: {
+    case actions.FETCH_REQUEST: {
       return {
         ...state,
         isLoading: true,
         error: null,
       };
     }
-    case actions.FETCH_LEAGUES_SUCCESS: {
+    case actions.FETCH_SUCCESS: {
       return {
         ...state,
-        items: action?.payload || [],
-        isLoading: false,
         error: null,
+        isLoading: false,
       };
     }
-    case actions.FETCH_LEAGUES_FAILURE: {
+    case actions.FETCH_FAILURE: {
       return {
         ...state,
         error: action?.payload || null,
@@ -42,4 +40,5 @@ const reducer = (
   }
 };
 
+export type { initialRootState };
 export default reducer;

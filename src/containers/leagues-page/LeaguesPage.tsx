@@ -150,10 +150,11 @@ const props: LeaguesPageProps = {
   },
 };
 
-type LeaguesPageContainerProps = {};
+// type LeaguesPageContainerProps = {};
+// <LeaguesPageContainerProps>
 
-const LeaguesPageContainer: React.FC<LeaguesPageContainerProps> = () => {
-  return <LeaguesPage />;
+const LeaguesPageContainer: React.FC = () => {
+  return <LeaguesPage {...props} />;
 };
 
 export default LeaguesPageContainer;

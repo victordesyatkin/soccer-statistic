@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import TeamList from '../../components/team-list';
 import { fetchLeagues } from '../../modules/actions';
-import { LeaguesProps } from '../../services';
+import { initialStateProps } from '../../modules/types';
 import {
   withStatisticService,
   WithStatisticServiceProps,
@@ -14,12 +14,12 @@ const TeamListContainer: FC<WithStatisticServiceProps> = ({
 }) => {
   const dispatch = useDispatch();
   useEffect(() => {
-    fetchLeagues({ serviceStatistic, dispatch });
+    dispatch(fetchLeagues({ serviceStatistic }));
   }, []);
-  const teams = useSelector((state: Partial<LeaguesProps>) => {
-    return state?.leagues;
+  const items = useSelector((state: Partial<initialStateProps>) => {
+    return state?.teams?.items;
   });
-  return <TeamList teams={teams} />;
+  return <TeamList items={items} />;
 };
 
 export default withStatisticService()(TeamListContainer);
