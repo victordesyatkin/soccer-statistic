@@ -54,6 +54,8 @@ type TeamsProps = Partial<{
   items: TeamProps[];
 }>;
 
+type StatisticServiceProps = Partial<{ apiKey: string; apiBase: string }>;
+
 export type {
   ActionType,
   ActionCreatorType,
@@ -69,4 +71,5 @@ export type {
   initialTeamStateProps,
   initialLeaguesStateProps,
   initialRootStateProps,
+  StatisticServiceProps,
 };
