@@ -5,30 +5,13 @@ import {
   faTimesCircle,
   faChevronCircleDown,
 } from '@fortawesome/free-solid-svg-icons';
+import { Waypoint } from 'react-waypoint';
 
 import { useOutsideClick } from '../../helpers';
-import { withLabel, WithLabelProps } from '../hoc-helpers';
+import { SelectFieldProps, SelectFieldOptionType } from '../../modules/types';
+import { withLabel } from '../hoc-helpers';
+import Nodata from '../no-data';
 import './select-field.scss';
-
-type SelectFieldOptionType = {
-  value?: string | number;
-  content?: string;
-  isDisabled?: boolean;
-  id?: string | number;
-};
-
-type SelectFieldProps = Partial<{
-  name: string;
-  value: string | number | readonly string[];
-  ariaLabel: string;
-  options: SelectFieldOptionType[];
-  isMultiple: boolean;
-  isDisabled: boolean;
-  placeholder: string | number;
-  onChange: (value?: readonly string[]) => void;
-  id: string;
-}> &
-  WithLabelProps;
 
 const SelectField: React.FC<SelectFieldProps> = ({
   name,
@@ -40,6 +23,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
   placeholder,
   onChange,
   id,
+  onEnter,
+  onLeave,
 }) => {
   let isReadyMultiple = isMultiple;
   const selectFieldRef = useRef(null);
@@ -101,19 +86,26 @@ const SelectField: React.FC<SelectFieldProps> = ({
       onChange(copySelectedValue);
     }
   };
-  const renderItem = (item: string, index: number) => {
-    return (
-      <li className="select-field__item" key={`select-field__item_${index}`}>
-        <span className="select-field__item-content">{item}</span>
-        <button
-          className="select-field__item-control"
-          type="button"
-          onClick={() => onClickItemControl(index)}
-        >
-          <FontAwesomeIcon icon={faTimesCircle} />
-        </button>
-      </li>
+  const renderItem = (passId: string, index: number) => {
+    const item = options?.find(
+      (passItem) => String(passItem?.id) === String(passId)
     );
+    if (item) {
+      const { content } = item;
+      return (
+        <li className="select-field__item" key={`select-field__item_${index}`}>
+          <span className="select-field__item-content">{content}</span>
+          <button
+            className="select-field__item-control"
+            type="button"
+            onClick={() => onClickItemControl(index)}
+          >
+            <FontAwesomeIcon icon={faTimesCircle} />
+          </button>
+        </li>
+      );
+    }
+    return undefined;
   };
   const renderItems = (items?: readonly string[]) => {
     return items?.map(renderItem);
@@ -140,11 +132,14 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const onClickOption = (optionForRender: SelectFieldOptionType) => {
     const { isDisabled: isDisableOption, value: valueOption } = optionForRender;
     if (!isDisableOption && valueOption) {
-      const readyItems = (memoizedPreparedItems || []).slice();
+      let readyItems = memoizedPreparedItems?.slice() || [];
       const index = readyItems.indexOf(String(valueOption));
       if (index !== -1) {
         readyItems.splice(index, 1);
       } else {
+        if (!isReadyMultiple) {
+          readyItems = [];
+        }
         readyItems.push(String(valueOption));
       }
       setSelectedValue(readyItems);
@@ -185,10 +180,27 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const renderOptionsBody = (optionsForRender?: SelectFieldOptionType[]) => {
     return optionsForRender?.map(renderOptionBody);
   };
-  const memoizedOptionsBody = useMemo(() => renderOptionsBody(options), [
+  let memoizedOptionsBody:
+    | JSX.Element
+    | (JSX.Element | undefined)[]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    | undefined = useMemo(() => renderOptionsBody(options), [
     memoizedPreparedItems,
     options,
   ]);
+  if (!memoizedOptionsBody || !memoizedOptionsBody.length) {
+    memoizedOptionsBody = <Nodata />;
+  }
+  const handleWaypointEnter = () => {
+    if (onEnter) {
+      onEnter();
+    }
+  };
+  const handleWaypointLeave = useCallback(() => {
+    if (onLeave) {
+      onLeave();
+    }
+  }, [onLeave]);
   const className = 'select-field';
   return (
     <article
@@ -209,7 +221,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
           <FontAwesomeIcon icon={faChevronCircleDown} />
         </button>
       </div>
-      <div className="select-field__body scrollbar">{memoizedOptionsBody}</div>
+      <div className="select-field__body scrollbar">
+        {memoizedOptionsBody}
+        <Waypoint onEnter={handleWaypointEnter} onLeave={handleWaypointLeave} />
+      </div>
       <select
         name={name}
         id={id}
@@ -224,7 +239,5 @@ const SelectField: React.FC<SelectFieldProps> = ({
     </article>
   );
 };
-
-export type { SelectFieldProps, SelectFieldOptionType };
 
 export default withLabel()(SelectField);

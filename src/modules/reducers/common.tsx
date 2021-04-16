@@ -1,17 +1,17 @@
 import { AnyAction } from 'redux';
 
 import * as actions from '../actions/root';
-import { initialRootStateProps, rootReducerProps } from '../types';
+import { initialCommonStateProps, commonReducerProps } from '../types';
 
-const initialRootState: initialRootStateProps = {
+const initialCommonState: initialCommonStateProps = {
   error: null,
   isLoading: false,
 };
 
 const reducer = (
-  state: initialRootStateProps = initialRootState,
+  state: initialCommonStateProps = initialCommonState,
   action: AnyAction
-): rootReducerProps => {
+): commonReducerProps => {
   switch (action.type) {
     case actions.FETCH_REQUEST: {
       return {
@@ -40,5 +40,5 @@ const reducer = (
   }
 };
 
-export type { initialRootState };
+export type { initialCommonState };
 export default reducer;

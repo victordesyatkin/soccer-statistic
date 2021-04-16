@@ -2,12 +2,7 @@ import React, { useMemo } from 'react';
 
 import { uuid, prepareDisplayNameComponent } from '../../helpers/utils';
 import Label from '../label';
-import type { LabelProps } from '../label';
-
-type WithLabelProps = Partial<{
-  label: LabelProps;
-  id: string;
-}>;
+import type { WithLabelProps } from '../../modules/types';
 
 const withLabel = () => (
   Component: React.ComponentClass<WithLabelProps> | React.FC<WithLabelProps>
@@ -25,5 +20,4 @@ const withLabel = () => (
   return WithLabel;
 };
 
-export type { WithLabelProps };
 export default withLabel;

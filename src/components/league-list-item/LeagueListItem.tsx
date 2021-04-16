@@ -3,16 +3,22 @@ import React from 'react';
 import './league-list-item.scss';
 import { LeagueProps } from '../../modules/types';
 
-const LeagueListItem: React.FC<Partial<LeagueProps>> = (props) => {
-  const { logoPath, name, countryId } = props;
+const LeagueListItem: React.FC<LeagueProps> = (props) => {
+  const { logo, name, area } = props;
+  const { id } = area;
   const className = 'league-list-item';
   return (
     <article className={className}>
       <div className={`${className}__logo`}>
-        <img src={logoPath} alt={name} title={name} />
+        <img
+          className={`${className}__image`}
+          src={logo}
+          alt={name}
+          title={name}
+        />
       </div>
       <p className={`${className}__name`}>{name}</p>
-      <div className={`${className}__country`}>{countryId}</div>
+      <div className={`${className}__country`}>{id}</div>
     </article>
   );
 };

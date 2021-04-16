@@ -12,9 +12,9 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 module.exports = (env: unknown, args: { mode?: string } = {}) => {
   const { mode } = args;
-
   const isProduction = mode === 'production';
   const isDevelopment = mode === 'development';
+  process.env.CURRENT_MODE = mode;
   console.log('isProduction : ', isProduction);
   console.log('isDevelopment : ', isDevelopment);
   console.log('mode : ', mode);
@@ -66,7 +66,6 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
         new ESLintPlugin({
           extensions: ['js', 'jsx', 'ts', 'tsx'],
         }),
-      // isDevelopment && new webpack.HotModuleReplacementPlugin(),
       isDevelopment && new ReactRefreshWebpackPlugin(),
     ].filter(Boolean);
     return plugins.filter(Boolean);
@@ -120,7 +119,17 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
                 },
               },
             },
-            'sass-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: isDevelopment,
+                prependData: '@import "assets/theme/variables.scss";',
+                sassOptions: {
+                  includePaths: [path.join(__dirname, 'src')],
+                  outputStyle: isDevelopment ? 'expanded' : 'compressed',
+                },
+              },
+            },
           ],
         },
         {

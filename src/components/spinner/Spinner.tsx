@@ -12,7 +12,9 @@ type SpinnerProps = Partial<{
 }>;
 
 const Spinner: FC<SpinnerProps> = ({ isEnforce, theme }) => {
-  const isLoading = useSelector((state: initialStateProps) => state.isLoading);
+  const isLoading = useSelector(
+    (state: initialStateProps) => state?.common?.isLoading
+  );
   if (isEnforce || isLoading) {
     const themes: Record<string, string> = {
       common: 'common',

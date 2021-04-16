@@ -1,11 +1,8 @@
 import React, { createContext } from 'react';
 
 import { prepareDisplayNameComponent } from '../../helpers/utils';
+import { WithStatisticServiceProps } from '../../modules/types';
 import StatisticService, { IStatisticService } from '../../services';
-
-type WithStatisticServiceProps = Partial<{
-  serviceStatistic: IStatisticService;
-}>;
 
 const statisticService: IStatisticService = new StatisticService();
 

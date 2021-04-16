@@ -2,13 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { getTheme } from '../../helpers/utils';
+import { LabelProps } from '../../modules/types';
 import './label.scss';
-
-type LabelProps = Partial<{
-  content: string;
-  htmlFor: string;
-  theme: string;
-}>;
 
 const Label: React.FC<LabelProps> = ({ content, htmlFor, theme }) => {
   const themes: Record<string, string> = {

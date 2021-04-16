@@ -30,7 +30,6 @@ const fetchLeagues = ({
 }: {
   serviceStatistic?: IStatisticService;
 }): (() => (dispatch: Dispatch) => void) => () => (dispatch) => {
-  dispatch(fetchLeaguesRequest());
   dispatch(fetchRequest());
   serviceStatistic
     ?.getLeagues()
@@ -40,7 +39,6 @@ const fetchLeagues = ({
     })
     .catch((error) => {
       dispatch(fetchFailure(error));
-      dispatch(fetchLeaguesFailure(error));
     });
 };
 

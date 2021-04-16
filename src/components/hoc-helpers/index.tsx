@@ -7,7 +7,6 @@ import {
 } from './withStatisticService';
 
 export type { WithStatisticServiceProps } from './withStatisticService';
-export type { WithLabelProps } from './withLabel';
 export {
   withLabel,
   PanelProvider,

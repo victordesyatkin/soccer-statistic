@@ -5,7 +5,8 @@ import type { PanelProps } from '../panel';
 import Filter, { FilterProps } from '../filter';
 import FilterButton from '../filter-button';
 import SearchField, { SearchFieldProps } from '../search-field';
-import SelectField, { SelectFieldProps } from '../select-field';
+import SelectField from '../select-field';
+import { SelectFieldProps } from '../../modules/types';
 import Datepicker, { DatepickerProps } from '../datepicker';
 import Breadcrumbs from '../breadcrumbs';
 import LeagueList from '../../containers/league-list';
@@ -28,6 +29,7 @@ const LeaguesPage: React.FC<LeaguesPageProps> = ({
   datepicker,
 }) => {
   const className = 'leagues-page';
+  console.log('selectField : ', selectField);
   return (
     <section className={className}>
       <div className={`${className}__header`}>
@@ -36,17 +38,19 @@ const LeaguesPage: React.FC<LeaguesPageProps> = ({
       <div className={`${className}__control`}>
         <FilterButton {...filter} />
       </div>
-      <div className={`${className}__panel`}>
-        <Panel {...panel}>
-          <Filter {...filter}>
-            <SearchField {...searchField} />
-            <SelectField {...selectField} />
-            <Datepicker {...datepicker} />
-          </Filter>
-        </Panel>
-      </div>
-      <div className={`${className}__list`}>
-        <LeagueList />
+      <div className={`${className}__body`}>
+        <div className={`${className}__panel`}>
+          <Panel {...panel}>
+            <Filter {...filter}>
+              <SearchField {...searchField} />
+              <SelectField {...selectField} />
+              <Datepicker {...datepicker} />
+            </Filter>
+          </Panel>
+        </div>
+        <div className={`${className}__list`}>
+          <LeagueList />
+        </div>
       </div>
     </section>
   );

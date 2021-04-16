@@ -2,13 +2,48 @@ import React, { useEffect, useMemo } from 'react';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 
-import { ActionType } from '../modules/types';
+import logo1 from '../assets/images/logos/1.png';
+import logo2 from '../assets/images/logos/2.png';
+import logo3 from '../assets/images/logos/3.png';
+import logo4 from '../assets/images/logos/4.png';
+import logo5 from '../assets/images/logos/5.png';
+import logo6 from '../assets/images/logos/6.png';
+import logo7 from '../assets/images/logos/7.png';
+import logo8 from '../assets/images/logos/8.png';
+import logo9 from '../assets/images/logos/9.png';
+import logo10 from '../assets/images/logos/10.png';
+import logo11 from '../assets/images/logos/11.svg';
+
+import {
+  ActionType,
+  LeagueProps,
+  LeagueResponseProps,
+  LeaguesResponseProps,
+  CountryResponseProps,
+  CountryProps,
+  SelectFieldOptionType,
+  CountriesResponseProps,
+} from '../modules/types';
 
 type useOutsideClickType = {
   ref?: React.MutableRefObject<null>;
   callback?: () => void;
   isOpened?: boolean;
 };
+
+const logos = [
+  logo1,
+  logo2,
+  logo3,
+  logo4,
+  logo5,
+  logo6,
+  logo7,
+  logo8,
+  logo9,
+  logo10,
+  logo11,
+];
 
 function isString(value: unknown): boolean {
   if (
@@ -150,7 +185,56 @@ function useActions(
   const dispatch = useDispatch();
   return useMemo(() => {
     return bindActionCreators(actions, dispatch);
-  }, [dispatch]);
+  }, [dispatch, actions]);
+}
+
+function transformLeagues(data: LeaguesResponseProps): LeagueResponseProps[] {
+  return data?.competitions || [];
+}
+
+function prepareLogo({ min = 0, max = 10 } = {}) {
+  const random = min + Math.random() * (max + 1 - min);
+  return logos[Math.floor(random)];
+}
+
+function transformLeague(item: LeagueResponseProps): LeagueProps {
+  return {
+    ...item,
+    logo: prepareLogo(),
+  };
+}
+
+function transformCountries(
+  data: CountriesResponseProps
+): CountryResponseProps[] {
+  return data?.areas || [];
+}
+
+function transformCountry(item: CountryResponseProps): CountryProps {
+  return {
+    ...item,
+  };
+}
+
+function isDevelopment(): boolean {
+  return process.env.CURRENT_MODE === process.env.DEVELOPMENT_MODE;
+}
+
+function isProduction(): boolean {
+  return process.env.CURRENT_MODE === process.env.PRODUCTION_MODE;
+}
+
+function countryToOption(item: CountryProps): SelectFieldOptionType {
+  const { id, name } = item;
+  return {
+    value: id,
+    content: name,
+    id,
+  };
+}
+
+function countriesToOptions(items: CountryProps[]): SelectFieldOptionType[] {
+  return items.map(countryToOption);
 }
 
 export type { useOutsideClickType };
@@ -164,4 +248,11 @@ export {
   prepareDisplayNameComponent,
   getTheme,
   useActions,
+  transformLeague,
+  transformCountry,
+  isProduction,
+  isDevelopment,
+  countriesToOptions,
+  transformLeagues,
+  transformCountries,
 };

@@ -1,7 +1,11 @@
-import React from 'react';
-import { connect, MapStateToPropsParam } from 'react-redux';
+import React, { useCallback, useMemo, FC } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { fetchCountries } from '../../modules/actions/countries';
 import LeaguesPage, { LeaguesPageProps } from '../../components/leagues-page';
+import { ReducerProps, WithStatisticServiceProps } from '../../modules/types';
+import { countriesToOptions } from '../../helpers';
+import { withStatisticService } from '../../components/hoc-helpers';
 
 const props: LeaguesPageProps = {
   searchField: {
@@ -153,8 +157,29 @@ const props: LeaguesPageProps = {
 // type LeaguesPageContainerProps = {};
 // <LeaguesPageContainerProps>
 
-const LeaguesPageContainer: React.FC = () => {
-  return <LeaguesPage {...props} />;
+const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
+  serviceStatistic,
+}) => {
+  const countries = useSelector(
+    (state: ReducerProps) => state?.countries.items
+  );
+  const dispatch = useDispatch();
+  const onEnter = useCallback(() => {
+    console.log('onEnter : ');
+    dispatch(fetchCountries({ serviceStatistic })());
+  }, [serviceStatistic, dispatch]);
+  const memorizedSelectField = useMemo(
+    () => ({
+      placeholder: 'Please select countries',
+      label: {
+        content: 'Countries',
+      },
+      options: countriesToOptions(countries),
+      onEnter,
+    }),
+    [countries, onEnter]
+  );
+  return <LeaguesPage {...props} selectField={memorizedSelectField} />;
 };
 
-export default LeaguesPageContainer;
+export default withStatisticService()(LeaguesPageContainer);

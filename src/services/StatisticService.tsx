@@ -1,59 +1,53 @@
-import bind from 'bind-decorator';
-
 import {
   LeagueProps,
+  LeaguesResponseProps,
   TeamProps,
   StatisticServiceProps,
+  Endpoints,
+  CountryProps,
+  CountriesResponseProps,
+  IStatisticService,
 } from '../modules/types';
 
-interface IStatisticService {
-  getLeagues: () => Promise<LeagueProps[]>;
-  getTeams: () => Promise<TeamProps[]>;
-}
+import {
+  transformLeague,
+  transformLeagues,
+  transformCountry,
+  isProduction,
+  transformCountries,
+} from '../helpers';
+import { endpoints } from '../configuration';
 
 class StatisticService implements IStatisticService {
-  private apiBase?: string;
+  private apiBase = '';
 
-  private apiKey?: string;
+  private apiKey = '';
+
+  private endpoints: Endpoints;
 
   private hasErrorAuthenticationData?: Error;
 
-  constructor(options: StatisticServiceProps) {
-    const { apiBase, apiKey } = options || {
-      apiKey: process.env.API_KEY,
-      apiBase: process.env.API_BASE,
-    };
-    this.apiBase = apiBase;
-    this.apiKey = apiKey;
-    this.checkHasErrorAuthenticationData();
+  constructor(options?: StatisticServiceProps) {
+    this.endpoints = isProduction()
+      ? endpoints.production
+      : endpoints.development;
+    this.init(options);
   }
 
-  getLeagues(): Promise<LeagueProps[]> {
-    return this.getResource<LeagueProps[]>({
-      url: '/leagues/search/u',
+  async getLeagues(params?: Record<string, string>): Promise<LeagueProps[]> {
+    const items = await this.getResource<LeaguesResponseProps>({
+      url: this.endpoints.fetchLeagues,
+      params,
     });
-    // return new Promise((resolve, reject) => {
-    //   return fetch(`${this.apiBase}/continents`);
-    //   //     setTimeout(() => {
-    //   //   resolve([
-    //   //     {
-    //   //       id: 501,
-    //   //       name: 'Premiership',
-    //   //       logoPath:
-    //   //         'https://cdn.sportmonks.com/images/soccer/leagues/501.png',
-    //   //       countryId: 1161,
-    //   //     },
-    //   //     {
-    //   //       id: 271,
-    //   //       name: 'Superliga',
-    //   //       logoPath:
-    //   //         'https://cdn.sportmonks.com/images/soccer/leagues/271.png',
-    //   //       countryId: 320,
-    //   //     },
-    //   //   ]);
-    //   //   reject(new Error('failed'));
-    //   // }, 3000);
-    // });
+    return transformLeagues(items).map(transformLeague);
+  }
+
+  async getCountries(params?: Record<string, string>): Promise<CountryProps[]> {
+    const items = await this.getResource<CountriesResponseProps>({
+      url: this.endpoints.fetchCountries,
+      params,
+    });
+    return transformCountries(items).map(transformCountry);
   }
 
   getTeams(): Promise<TeamProps[]> {
@@ -83,6 +77,16 @@ class StatisticService implements IStatisticService {
     });
   }
 
+  private init(options?: StatisticServiceProps) {
+    const { apiBase = '', apiKey = '' } = options || {
+      apiKey: process.env.API_KEY,
+      apiBase: process.env.API_BASE,
+    };
+    this.apiBase = apiBase;
+    this.apiKey = apiKey;
+    this.checkHasErrorAuthenticationData();
+  }
+
   private async getResource<T>({
     url,
     params,
@@ -100,14 +104,13 @@ class StatisticService implements IStatisticService {
     const response = await fetch(
       `${this.apiBase}${url}?api_token=${this.apiKey}${readyParams}`,
       {
-        method: 'GET',
-        redirect: 'follow',
+        headers: { 'X-Auth-Token': this.apiKey },
       }
     );
     if (!response.ok) {
       throw new Error(`${response.status}`);
     }
-    const results = StatisticService.transformResults<T>(await response.json());
+    const results = await response.json();
     return results;
   }
 

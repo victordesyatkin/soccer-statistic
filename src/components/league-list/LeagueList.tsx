@@ -6,6 +6,7 @@ import LeagueListItem from '../league-list-item';
 import './league-list.scss';
 
 const LeagueList: React.FC<LeaguesProps> = ({ items }) => {
+  console.log('items : ', items);
   const className = 'league-list';
   const renderItem = (props: LeagueProps) => {
     const { id } = props;
