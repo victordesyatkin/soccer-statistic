@@ -1,23 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
 import classnames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
+import { MenuButtonProps } from '../../modules/types';
 import './menu-button.scss';
 
-type MenuButtonProps = {
-  isVisible?: boolean;
-  isDisabled?: boolean;
-  isHidden?: boolean;
-  isOpenedMenu?: boolean;
-  name?: string;
-  value?: string | number;
-  type?: 'button' | 'submit' | 'reset';
-  title?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-};
-
-const MenuButton: React.FC<MenuButtonProps> = ({
+const MenuButton: FC<MenuButtonProps> = ({
   isVisible,
   isDisabled,
   isHidden,

@@ -8,21 +8,9 @@ import classnames from 'classnames';
 
 import { maskedDate, useOutsideClick } from '../../helpers';
 import { withLabel } from '../hoc-helpers';
-import type { WithLabelProps } from '../hoc-helpers';
+import type { DatepickerProps } from '../../modules/types';
 import Calendar from '../calendar';
-import type { CalendarProps } from '../calendar';
 import './datepicker.scss';
-
-type DatepickerProps = Partial<{
-  placeholder: string;
-  separator: string;
-  calendar: CalendarProps;
-  titleButtonToggleCalendar: string;
-  ariaLabelButtonToggleCalendar: string;
-  onSelect: (dates?: Partial<Date[]>) => void;
-  id: string;
-}> &
-  WithLabelProps;
 
 const Datepicker: React.FC<DatepickerProps> = ({
   placeholder,
@@ -98,5 +86,4 @@ Datepicker.defaultProps = {
   separator: ' - ',
 };
 
-export type { DatepickerProps };
 export default withLabel()(Datepicker);

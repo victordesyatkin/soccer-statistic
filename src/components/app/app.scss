@@ -24,11 +24,11 @@ $parent: 'app';
     padding-right: 1rem;
     @media (min-width: $sm) {
       padding-left: 3rem;
-      padding-left: 3rem;
+      padding-right: 3rem;
     }
     @media (min-width: $lg) {
       padding-left: 6rem;
-      padding-left: 6rem;
+      padding-right: 6rem;
     }
   }
 }

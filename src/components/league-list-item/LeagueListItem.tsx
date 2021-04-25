@@ -5,7 +5,7 @@ import { LeagueProps } from '../../modules/types';
 
 const LeagueListItem: React.FC<LeagueProps> = (props) => {
   const { logo, name, area } = props;
-  const { id } = area;
+  const { name: countryName } = area;
   const className = 'league-list-item';
   return (
     <article className={className}>
@@ -18,7 +18,7 @@ const LeagueListItem: React.FC<LeagueProps> = (props) => {
         />
       </div>
       <p className={`${className}__name`}>{name}</p>
-      <div className={`${className}__country`}>{id}</div>
+      <div className={`${className}__country`}>{countryName}</div>
     </article>
   );
 };

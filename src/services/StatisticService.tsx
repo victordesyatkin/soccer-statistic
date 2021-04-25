@@ -1,80 +1,75 @@
 import {
-  LeagueProps,
+  LeagueResponseProps,
   LeaguesResponseProps,
-  TeamProps,
+  TeamResponseProps,
   StatisticServiceProps,
-  Endpoints,
+  EndpointsType,
   CountryProps,
   CountriesResponseProps,
   IStatisticService,
+  getTeamsProps,
+  getLeaguesProps,
+  TeamsResponseProps,
 } from '../modules/types';
 
 import {
-  transformLeague,
   transformLeagues,
   transformCountry,
-  isProduction,
   transformCountries,
+  transformTeams,
+  getEndpoints,
 } from '../helpers';
-import { endpoints } from '../configuration';
 
 class StatisticService implements IStatisticService {
   private apiBase = '';
 
   private apiKey = '';
 
-  private endpoints: Endpoints;
+  private endpoints: EndpointsType;
 
   private hasErrorAuthenticationData?: Error;
 
   constructor(options?: StatisticServiceProps) {
-    this.endpoints = isProduction()
-      ? endpoints.production
-      : endpoints.development;
+    this.endpoints = getEndpoints();
     this.init(options);
   }
 
-  async getLeagues(params?: Record<string, string>): Promise<LeagueProps[]> {
+  async getLeagues(options?: getLeaguesProps): Promise<LeagueResponseProps[]> {
+    const { leagueId, params } = options || {};
+    const readyLeagueId = leagueId?.trim();
+    let url = this.endpoints.FETCH_LEAGUES;
+    if (readyLeagueId) {
+      url += `/${readyLeagueId}`;
+      const item = await this.getResource<LeagueResponseProps>({
+        url,
+        params,
+      });
+      return [item];
+    }
     const items = await this.getResource<LeaguesResponseProps>({
-      url: this.endpoints.fetchLeagues,
+      url,
       params,
     });
-    return transformLeagues(items).map(transformLeague);
+    return transformLeagues(items);
   }
 
   async getCountries(params?: Record<string, string>): Promise<CountryProps[]> {
     const items = await this.getResource<CountriesResponseProps>({
-      url: this.endpoints.fetchCountries,
+      url: this.endpoints.FETCH_COUNTRIES,
       params,
     });
     return transformCountries(items).map(transformCountry);
   }
 
-  getTeams(): Promise<TeamProps[]> {
-    if (this.apiBase || this.apiKey) {
-      return Promise.reject(new Error('failed'));
-    }
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve([
-          {
-            id: 501,
-            name: 'Premiership',
-            logoPath:
-              'https://cdn.sportmonks.com/images/soccer/leagues/501.png',
-            countryId: 1161,
-          },
-          {
-            id: 271,
-            name: 'Superliga',
-            logoPath:
-              'https://cdn.sportmonks.com/images/soccer/leagues/271.png',
-            countryId: 320,
-          },
-        ]);
-        reject(new Error('failed'));
-      }, 3000);
+  async getTeams({
+    params,
+    leagueId,
+  }: getTeamsProps): Promise<TeamResponseProps[]> {
+    const items = await this.getResource<TeamsResponseProps>({
+      url: `${this.endpoints.FETCH_LEAGUES}/${leagueId}/teams`,
+      params,
     });
+    return transformTeams(items);
   }
 
   private init(options?: StatisticServiceProps) {

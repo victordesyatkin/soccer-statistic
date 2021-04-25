@@ -1,11 +1,12 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useMemo } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import 'normalize.css';
 
 import '../../assets/theme/global.scss';
+import { getRoutes } from '../../helpers';
 import Header from '../header';
-import type { HeaderProps } from '../header';
+import { HeaderProps } from '../../modules/types';
 import { PanelProvider } from '../hoc-helpers';
 import Spinner from '../spinner';
 import './app.scss';
@@ -16,9 +17,11 @@ type AppProps = Partial<{
 
 const LeaguesPage = lazy(() => import('../../containers/leagues-page'));
 
-const TeamList = lazy(() => import('../../containers/team-list'));
+const TeamsPage = lazy(() => import('../../containers/teams-page'));
 
 const App: React.FC<AppProps> = ({ header }) => {
+  const routes = useMemo(() => getRoutes(), []);
+  console.log('routes : ', routes);
   return (
     <div className="app">
       <div className="app__header">
@@ -28,13 +31,13 @@ const App: React.FC<AppProps> = ({ header }) => {
         <PanelProvider>
           <Suspense fallback={<Spinner isEnforce />}>
             <Switch>
-              <Route path="/leagues">
+              <Route path={routes.LEAGUES}>
                 <LeaguesPage />
               </Route>
-              <Route path="/teams">
-                <TeamList />
+              <Route path={routes.TEAMS}>
+                <TeamsPage />
               </Route>
-              <Redirect to="/leagues" />
+              <Redirect to={routes.LEAGUES} />
             </Switch>
           </Suspense>
         </PanelProvider>

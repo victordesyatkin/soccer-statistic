@@ -1,7 +1,7 @@
 import { ActionCreator, Dispatch } from 'redux';
 
 import { ActionType, CountryProps, IStatisticService } from '../types';
-import { fetchRequest, fetchSuccess, fetchFailure } from './root';
+import { fetchRequest, fetchSuccess, fetchFailure } from './common';
 
 const FETCH_COUNTRIES_SUCCESS = 'FETCH_COUNTRIES_SUCCESS';
 
@@ -40,18 +40,20 @@ const fetchCountries = ({
 }: {
   serviceStatistic?: IStatisticService;
 }): (() => (dispatch: Dispatch) => void) => () => (dispatch) => {
-  dispatch(fetchCountriesRequest());
-  dispatch(fetchRequest());
-  serviceStatistic
-    ?.getCountries()
-    .then((payload: CountryProps[]) => {
-      dispatch(fetchSuccess());
-      dispatch(fetchCountriesSuccess(payload));
-    })
-    .catch((error: Error) => {
-      dispatch(fetchFailure(error));
-      dispatch(fetchCountriesFailure(error));
-    });
+  if (serviceStatistic) {
+    dispatch(fetchCountriesRequest());
+    dispatch(fetchRequest());
+    serviceStatistic
+      .getCountries()
+      .then((payload: CountryProps[]) => {
+        dispatch(fetchSuccess());
+        dispatch(fetchCountriesSuccess(payload));
+      })
+      .catch((error: Error) => {
+        dispatch(fetchFailure(error));
+        dispatch(fetchCountriesFailure(error));
+      });
+  }
 };
 export {
   fetchCountriesSuccess,

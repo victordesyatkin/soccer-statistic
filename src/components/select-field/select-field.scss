@@ -76,6 +76,7 @@ $parent: 'select-field';
     position: relative;
     display: flex;
     margin-right: 0.7rem;
+    white-space: nowrap;
   }
 
   &__item:last-child {

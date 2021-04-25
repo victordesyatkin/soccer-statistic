@@ -1,7 +1,10 @@
 import React, { createContext } from 'react';
 
 import { prepareDisplayNameComponent } from '../../helpers/utils';
-import { WithStatisticServiceProps } from '../../modules/types';
+import {
+  WithStatisticServicePropsFill,
+  WithStatisticServiceProps,
+} from '../../modules/types';
 import StatisticService, { IStatisticService } from '../../services';
 
 const statisticService: IStatisticService = new StatisticService();
@@ -14,27 +17,27 @@ const StatisticServiceProvider: React.FC = ({ children }) => {
   return <Provider value={statisticService}>{children}</Provider>;
 };
 
-const withStatisticService = () => (
-  Component:
-    | React.ComponentClass<WithStatisticServiceProps & Record<string, unknown>>
-    | React.FC<WithStatisticServiceProps & Record<string, unknown>>
-): React.FC<WithStatisticServiceProps & Record<string, unknown>> => {
-  const WithStatisticService: React.FC<
-    WithStatisticServiceProps & Record<string, unknown>
-  > = (props) => {
-    return (
-      <StatisticServiceConsumer>
-        {(serviceStatistic) => {
-          return <Component {...props} serviceStatistic={serviceStatistic} />;
-        }}
-      </StatisticServiceConsumer>
-    );
+function withStatisticService<T>(): WithStatisticServicePropsFill<T> {
+  const auxiliary: WithStatisticServicePropsFill<T> = (Component) => {
+    const WithStatisticService: React.FC<WithStatisticServiceProps & T> = (
+      props
+    ) => {
+      return (
+        <StatisticServiceConsumer>
+          {(serviceStatistic) => {
+            return <Component {...props} serviceStatistic={serviceStatistic} />;
+          }}
+        </StatisticServiceConsumer>
+      );
+    };
+    WithStatisticService.displayName = prepareDisplayNameComponent<
+      WithStatisticServiceProps & T
+    >(Component);
+    return WithStatisticService;
   };
-  WithStatisticService.displayName = prepareDisplayNameComponent(Component);
-  return WithStatisticService;
-};
+  return auxiliary;
+}
 
-export type { WithStatisticServiceProps };
 export {
   withStatisticService,
   StatisticServiceProvider,

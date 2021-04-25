@@ -1,23 +1,11 @@
-import React from 'react';
+import React, { FC } from 'react';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 
+import { LinkProps } from '../../modules/types';
 import './link.scss';
 
-type LinkProps = Partial<{
-  id: string | number;
-  href: string;
-  title: string;
-  target: string;
-  rel: string;
-  children: JSX.Element[] | JSX.Element | string;
-  content: string;
-  isUpperCase: boolean;
-  theme: string;
-  to: string;
-}>;
-
-const Link: React.FC<LinkProps> = ({
+const Link: FC<LinkProps> = ({
   id,
   title,
   target,
@@ -28,9 +16,10 @@ const Link: React.FC<LinkProps> = ({
   to,
 }) => {
   const className = 'link';
-  let readyRel = rel ? `${rel} ` : '';
+  let readyRel = rel;
   if (target === '_blank') {
-    readyRel += 'noopener noreferrer';
+    const extraRelContent = 'noopener noreferrer';
+    readyRel = readyRel ? `${rel} ${extraRelContent}` : extraRelContent;
   }
   const readyTo = to || '/mock-address/change-me';
   return (
@@ -50,5 +39,4 @@ const Link: React.FC<LinkProps> = ({
   );
 };
 
-export type { LinkProps };
 export default Link;

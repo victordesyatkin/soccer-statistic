@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, FC } from 'react';
 
 import '../air-datepicker';
 import Card from '../card';
 import { value2Date } from '../../helpers';
+import { CalendarProps } from '../../modules/types';
 import './calendar.scss';
 
 const DEFAULT_OPTIONS = {
@@ -16,21 +17,7 @@ const DEFAULT_OPTIONS = {
   clearButton: true,
 };
 
-type CalendarProps = Partial<{
-  id: string;
-  name: string;
-  ariaLabel: string;
-  isDisabled: boolean;
-  isReadOnly: boolean;
-  isHidden: boolean;
-  options: AirDatepickerOptions;
-  today: Date;
-  start: Date | number | string;
-  end: Date | number | string;
-  onSelect: (dates?: Partial<Date[]>) => void;
-}>;
-
-const Calendar: React.FC<CalendarProps> = ({
+const Calendar: FC<CalendarProps> = ({
   name,
   ariaLabel,
   isDisabled,
@@ -179,7 +166,7 @@ const Calendar: React.FC<CalendarProps> = ({
         rangeFromDateClasses = '';
         selectType = '';
       }
-    } else if (!Array.isArray(passDate)) {
+    } else if (passDate && !Array.isArray(passDate)) {
       dates.push(passDate);
     }
     if (onSelect) {
@@ -229,5 +216,4 @@ Calendar.defaultProps = {
   options: DEFAULT_OPTIONS,
 };
 
-export type { CalendarProps };
 export default Calendar;

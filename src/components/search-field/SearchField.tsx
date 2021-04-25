@@ -2,20 +2,9 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-import { withLabel, WithLabelProps } from '../hoc-helpers';
+import { withLabel } from '../hoc-helpers';
+import { SearchFieldProps } from '../../modules/types';
 import './search-field.scss';
-
-type SearchFieldProps = Partial<{
-  id: string;
-  isDisabled: boolean;
-  isHidden: boolean;
-  name: string;
-  value: string | number;
-  placeholder: string;
-  ariaLabel: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-}> &
-  WithLabelProps;
 
 const SearchField: React.FC<SearchFieldProps> = ({
   id,
@@ -47,7 +36,5 @@ const SearchField: React.FC<SearchFieldProps> = ({
     </div>
   );
 };
-
-export type { SearchFieldProps };
 
 export default withLabel()(SearchField);

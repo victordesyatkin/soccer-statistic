@@ -1,173 +1,66 @@
-import React, { useCallback, useMemo, FC } from 'react';
+import React, { useCallback, useMemo, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchCountries } from '../../modules/actions/countries';
-import LeaguesPage, { LeaguesPageProps } from '../../components/leagues-page';
+import { fetchLeagues } from '../../modules/actions/leagues';
+import LeaguesPage from '../../components/leagues-page';
 import { ReducerProps, WithStatisticServiceProps } from '../../modules/types';
-import { countriesToOptions } from '../../helpers';
+import { countriesToOptions, filterLeagues } from '../../helpers';
 import { withStatisticService } from '../../components/hoc-helpers';
-
-const props: LeaguesPageProps = {
-  searchField: {
-    placeholder: 'Search',
-    label: {
-      content: 'Name',
-    },
-  },
-  selectField: {
-    placeholder: 5,
-    value: ['dog', 'cat', 'hamster', 'dog1'],
-    options: [
-      { value: 'dog', content: 'Dog', id: 1 },
-      { value: 'cat', content: 'Cat', id: 2 },
-      { value: 'hamster', content: 'Hamster', isDisabled: true, id: 3 },
-      { value: 'dog1', content: 'Dog', id: 4 },
-      { value: 'cat1', content: 'Cat', id: 5 },
-      {
-        value: 'hamster1',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 6,
-      },
-      { value: 'dog2', content: 'Dog', id: 7 },
-      { value: 'cat2', content: 'Cat', id: 8 },
-      {
-        value: 'hamster2',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 9,
-      },
-      { value: 'dog3', content: 'Dog', id: 10 },
-      { value: 'cat3', content: 'Cat', id: 11 },
-      {
-        value: 'hamster3',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 12,
-      },
-      { value: 'dog4', content: 'Dog', id: 13 },
-      { value: 'cat4', content: 'Cat', id: 14 },
-      {
-        value: 'hamster4',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 15,
-      },
-      { value: 'dog5', content: 'Dog', id: 16 },
-      { value: 'cat5', content: 'Cat', id: 17 },
-      {
-        value: 'hamster5',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 18,
-      },
-      { value: 'dog6', content: 'Dog', id: 19 },
-      { value: 'cat6', content: 'Cat', id: 20 },
-      {
-        value: 'hamster6',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 21,
-      },
-      { value: 'dog7', content: 'Dog', id: 22 },
-      { value: 'cat7', content: 'Cat', id: 23 },
-      {
-        value: 'hamster7',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 24,
-      },
-      { value: 'dog8', content: 'Dog', id: 25 },
-      { value: 'cat8', content: 'Cat', id: 26 },
-      {
-        value: 'hamster8',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 27,
-      },
-      { value: 'dog9', content: 'Dog', id: 28 },
-      { value: 'cat9', content: 'Cat', id: 29 },
-      {
-        value: 'hamster9',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 30,
-      },
-      { value: 'dog10', content: 'Dog', id: 31 },
-      { value: 'cat10', content: 'Cat', id: 32 },
-      {
-        value: 'hamster10',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 33,
-      },
-      { value: 'dog11', content: 'Dog', id: 34 },
-      { value: 'cat11', content: 'Cat', id: 35 },
-      {
-        value: 'hamster11',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 36,
-      },
-      { value: 'dog12', content: 'Dog', id: 37 },
-      { value: 'cat12', content: 'Cat', id: 38 },
-      {
-        value: 'hamster13',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 39,
-      },
-      { value: 'dog14', content: 'Dog', id: 40 },
-      { value: 'cat', content: 'Cat', id: 41 },
-      {
-        value: 'hamster15',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 42,
-      },
-      { value: 'dog16', content: 'Dog', id: 43 },
-      { value: 'cat16', content: 'Cat', id: 44 },
-      {
-        value: 'hamster17',
-        content: 'Hamster',
-        isDisabled: true,
-        id: 45,
-      },
-    ],
-    label: {
-      content: 'Countries',
-    },
-  },
-  datepicker: {
-    calendar: {
-      start: new Date('08-08-2021'),
-      options: {
-        range: true,
-      },
-    },
-    label: {
-      content: 'Dates',
-    },
-  },
-  panel: {
-    title: 'Filter',
-  },
-};
-
-// type LeaguesPageContainerProps = {};
-// <LeaguesPageContainerProps>
 
 const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
   serviceStatistic,
 }) => {
-  const countries = useSelector(
-    (state: ReducerProps) => state?.countries.items
-  );
+  const [countryIds, setCountryIds] = useState([]);
+  const [leagueName, setLeagueName] = useState('');
+  const [dates, setDates] = useState([]);
+  const readyState = useSelector((state: ReducerProps): ReducerProps => state);
+  const {
+    countries: { items: countries = [] } = {},
+    leagues: { items: leagues = [] } = {},
+  } = readyState;
   const dispatch = useDispatch();
-  const onEnter = useCallback(() => {
-    console.log('onEnter : ');
-    dispatch(fetchCountries({ serviceStatistic })());
-  }, [serviceStatistic, dispatch]);
+  const onEnterSelectFieldCountries = useCallback(() => {
+    if (!countries?.length) {
+      dispatch(fetchCountries({ serviceStatistic })());
+    }
+  }, [countries, serviceStatistic, dispatch]);
+  const onChangeSelectField = useCallback(
+    (value) => {
+      setCountryIds(value);
+    },
+    [setCountryIds]
+  );
+  const onSelectDatePicker = useCallback(
+    (value) => {
+      setDates(value);
+    },
+    [setDates]
+  );
+  const onChangeSearchField = useCallback(
+    (event) => {
+      const { target: { value = '' } = {} } = event;
+      setLeagueName(value);
+    },
+    [setLeagueName]
+  );
+  const readyLeagues = useMemo(
+    () =>
+      filterLeagues({
+        leagues,
+        filters: {
+          countryIds,
+          leagueName,
+          dates,
+        },
+      }),
+    [leagues, countryIds, leagueName, dates]
+  );
+  useEffect(() => {
+    if (!leagues?.length) {
+      dispatch(fetchLeagues({ serviceStatistic })());
+    }
+  }, [leagues, serviceStatistic, dispatch]);
   const memorizedSelectField = useMemo(
     () => ({
       placeholder: 'Please select countries',
@@ -175,11 +68,54 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
         content: 'Countries',
       },
       options: countriesToOptions(countries),
-      onEnter,
+      onEnter: onEnterSelectFieldCountries,
+      onChange: onChangeSelectField,
+      isMultiple: true,
     }),
-    [countries, onEnter]
+    [countries, onEnterSelectFieldCountries, onChangeSelectField]
   );
-  return <LeaguesPage {...props} selectField={memorizedSelectField} />;
+  const memorizedSearchField = useMemo(
+    () => ({
+      placeholder: 'Search',
+      label: {
+        content: 'Name',
+      },
+      value: leagueName,
+      onChange: onChangeSearchField,
+    }),
+    [leagueName, onChangeSearchField]
+  );
+  const memorizedDatePicker = useMemo(
+    () => ({
+      calendar: {
+        options: {
+          range: true,
+        },
+      },
+      onSelect: onSelectDatePicker,
+      label: {
+        content: 'Dates',
+      },
+    }),
+    [onSelectDatePicker]
+  );
+  const memorizedPanel = useMemo(
+    () => ({
+      title: 'Filter',
+    }),
+    []
+  );
+  return (
+    <LeaguesPage
+      panel={memorizedPanel}
+      datepicker={memorizedDatePicker}
+      searchField={memorizedSearchField}
+      selectField={memorizedSelectField}
+      items={readyLeagues}
+    />
+  );
 };
 
-export default withStatisticService()(LeaguesPageContainer);
+export default withStatisticService<WithStatisticServiceProps>()(
+  LeaguesPageContainer
+);

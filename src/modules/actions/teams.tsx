@@ -1,13 +1,19 @@
 import { ActionCreator, Dispatch } from 'redux';
 
+import { transformResponseFetchTeams } from '../../helpers';
 import { IStatisticService } from '../../services';
-import { ActionType, ActionCreatorType, LeagueProps } from '../types';
-import { fetchRequest, fetchSuccess, fetchFailure } from './root';
+import {
+  ActionType,
+  ActionCreatorType,
+  TeamProps,
+  TeamResponseProps,
+} from '../types';
+import { fetchRequest, fetchSuccess, fetchFailure } from './common';
 
 const FETCH_TEAMS_SUCCESS = 'FETCH_TEAMS_SUCCESS';
 const fetchTeamsSuccess: ActionCreator<
-  ActionType & { payload: LeagueProps[] }
-> = (payload: LeagueProps[]) => ({
+  ActionType & { payload: TeamProps[] }
+> = (payload: TeamProps[]) => ({
   type: FETCH_TEAMS_SUCCESS,
   payload,
 });
@@ -27,23 +33,35 @@ const fetchTeamsFailure: ActionCreator<ActionType & { payload: Error }> = (
 
 const fetchTeams = ({
   serviceStatistic,
-  dispatch,
 }: {
   serviceStatistic?: IStatisticService;
-  dispatch: Dispatch;
-}): void => {
-  dispatch(fetchTeamsRequest());
-  dispatch(fetchRequest());
-  serviceStatistic
-    ?.getTeams()
-    .then((payload) => {
-      dispatch(fetchTeamsSuccess(payload));
-      dispatch(fetchSuccess());
-    })
-    .catch((error) => {
-      dispatch(fetchTeamsFailure(error));
-      dispatch(fetchFailure(error));
-    });
+}): ((leagueIds?: string[]) => (dispatch: Dispatch) => void) => (leagueIds) => (
+  dispatch
+) => {
+  console.log('fetchTeams : ', leagueIds);
+  if (leagueIds?.length && serviceStatistic) {
+    dispatch(fetchTeamsRequest());
+    dispatch(fetchRequest());
+    const requests = leagueIds.map((leagueId) =>
+      serviceStatistic.getTeams({ leagueId })
+    );
+    Promise.allSettled<Promise<TeamResponseProps[]>[]>(requests)
+      .then((payload) => {
+        console.log('payload : ', payload);
+        const readyPayload = transformResponseFetchTeams({
+          payload,
+          leagueIds,
+        });
+        console.log('readyPayload : ', readyPayload);
+        dispatch(fetchTeamsSuccess(readyPayload));
+        dispatch(fetchSuccess());
+      })
+      .catch((error) => {
+        console.log('error : ', error);
+        dispatch(fetchTeamsFailure(error));
+        dispatch(fetchFailure(error));
+      });
+  }
 };
 
 export {

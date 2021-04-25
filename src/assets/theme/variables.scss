@@ -1,6 +1,6 @@
 @import '~assets/fonts/montserrat/fonts.scss';
 
-/***** Variables *****/
+/* Variables */
 $xxs: 320px;
 $xs: 576px;
 $sm: 768px;
@@ -8,12 +8,14 @@ $md: 992px;
 $lg: 1200px;
 $xl: 1440px;
 
-/***** Font *****/
+/** Font **/
 $font-size-body: 14px;
 $font-family-body: montserrat, arial, helvetica, sans-serif;
 $font-weight-body: 400;
 
-/***** Text *****/
+/** Color **/
+$color-grey: #808488;
+$league-name-color: $color-grey;
 $header-text-color: rgba(31, 32, 65, 1);
 $paragraph-text-color: rgba(31, 32, 65, 0.75);
 $additional-text-color: rgba(31, 32, 65, 0.25);
@@ -177,6 +179,7 @@ $like-button-background-color-checked: linear-gradient(
   #bc9cff 0%,
   #8ba4f9 100%
 );
+$league-item-background-color: #ffff;
 
 /***** Shadow *****/
 $calendar-box-shadow: 0 0.7142rem 1.4285rem rgba(31, 32, 65, 0.05);
@@ -222,6 +225,9 @@ $link-border-color-default: rgba(31, 32, 65, 0.05);
 $nav-border-color-default: rgba(31, 32, 65, 0.25);
 $nav-border-color-hover: rgba(31, 32, 65, 0.25);
 
+$league-border-color-item: #ddd;
+$league-border-color-item-bottom: #536591;
+
 /***** Mixin *****/
 
 @mixin background-button-hover {
@@ -234,10 +240,6 @@ $nav-border-color-hover: rgba(31, 32, 65, 0.25);
 
 @mixin user-select-none {
   -webkit-touch-callout: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
-  user-select: none;
   user-select: none;
 }
 
@@ -256,7 +258,13 @@ $nav-border-color-hover: rgba(31, 32, 65, 0.25);
 @mixin reset-button {
   background: none;
   border: inherit;
-  outline: none;
+
+  &,
+  & > *,
+  &:hover,
+  &:focus {
+    outline: none;
+  }
 }
 
 @mixin linear-gradient($degrees, $top-color, $bottom-color, $opacity) {

@@ -25,6 +25,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   id,
   onEnter,
   onLeave,
+  customRenderOption,
 }) => {
   let isReadyMultiple = isMultiple;
   const selectFieldRef = useRef(null);
@@ -45,6 +46,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
     }
     return readyItems;
   };
+  console.log('SelectField : value', value);
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpened, setIsOpened] = useState(false);
   const closeBody = useCallback(() => {
@@ -70,52 +72,72 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const renderOptions = (optionsForRender?: SelectFieldOptionType[]) => {
     return optionsForRender?.map(renderOption);
   };
-  const onClickItemControl = (index: number) => {
-    let copySelectedValue: string | number | string[] | undefined;
-    if (Array.isArray(selectedValue)) {
-      copySelectedValue = Array.from(selectedValue);
-      copySelectedValue.splice(index, 1);
-      if (!copySelectedValue.length) {
+  const onClickItemControl = useCallback(
+    (index: number) => {
+      let copySelectedValue: string | number | string[] | undefined;
+      if (Array.isArray(selectedValue)) {
+        copySelectedValue = Array.from(selectedValue);
+        copySelectedValue.splice(index, 1);
+        if (!copySelectedValue.length) {
+          copySelectedValue = undefined;
+        }
+      } else {
         copySelectedValue = undefined;
       }
-    } else {
-      copySelectedValue = undefined;
-    }
-    setSelectedValue(copySelectedValue);
-    if (onChange) {
-      onChange(copySelectedValue);
+      setSelectedValue(copySelectedValue);
+      if (onChange) {
+        onChange(copySelectedValue);
+      }
+    },
+    [selectedValue, onChange]
+  );
+  const handleWaypointEnter = () => {
+    if (onEnter) {
+      onEnter();
     }
   };
-  const renderItem = (passId: string, index: number) => {
-    const item = options?.find(
-      (passItem) => String(passItem?.id) === String(passId)
-    );
-    if (item) {
-      const { content } = item;
-      return (
-        <li className="select-field__item" key={`select-field__item_${index}`}>
-          <span className="select-field__item-content">{content}</span>
-          <button
-            className="select-field__item-control"
-            type="button"
-            onClick={() => onClickItemControl(index)}
-          >
-            <FontAwesomeIcon icon={faTimesCircle} />
-          </button>
-        </li>
+  const renderItem = useCallback(
+    (passId: string, index: number) => {
+      const item = options?.find(
+        (passItem) => String(passItem?.id) === String(passId)
       );
-    }
-    return undefined;
-  };
-  const renderItems = (items?: readonly string[]) => {
-    return items?.map(renderItem);
-  };
+      if (item) {
+        const { content } = item;
+        return (
+          <li
+            className="select-field__item"
+            key={`select-field__item_${index}`}
+          >
+            <span className="select-field__item-content">{content}</span>
+            <button
+              className="select-field__item-control"
+              type="button"
+              onClick={() => onClickItemControl(index)}
+            >
+              <FontAwesomeIcon icon={faTimesCircle} />
+            </button>
+          </li>
+        );
+      }
+      return undefined;
+    },
+    [options, onClickItemControl]
+  );
+  const renderItems = useCallback(
+    (items?: readonly string[]) => {
+      return items?.map(renderItem);
+    },
+    [renderItem]
+  );
   const memoizedPreparedItems = useMemo(() => prepareItems(selectedValue), [
     selectedValue,
   ]);
   const memoizedItems = useMemo(() => renderItems(memoizedPreparedItems), [
     memoizedPreparedItems,
+    renderItems,
   ]);
+  console.log('memoizedPreparedItems : ', memoizedPreparedItems);
+  console.log('memoizedItems : ', memoizedItems);
   const renderPlaceholder = (placeholderForRender?: string | number) => {
     if (placeholderForRender) {
       return (
@@ -148,6 +170,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
       }
     }
   };
+  const onKeyPressOption = (): void => {
+    return undefined;
+  };
   const renderOptionBody = (optionForRender?: SelectFieldOptionType) => {
     if (optionForRender) {
       const {
@@ -160,19 +185,25 @@ const SelectField: React.FC<SelectFieldProps> = ({
       const isSelected = memoizedPreparedItems?.some(
         (item) => String(item) === String(valueOption)
       );
+      let readyContent: string | undefined | JSX.Element | number = content;
+      if (customRenderOption) {
+        readyContent = customRenderOption(optionForRender);
+      }
       return (
-        <button
+        <div
+          tabIndex={0}
+          role="button"
+          aria-pressed="mixed"
           className={classnames(className, {
             [`${className}_selected`]: isSelected,
             [`${className}_disabled`]: isDisableOption,
           })}
-          type="button"
-          disabled={isDisableOption}
           key={isOption}
           onClick={() => onClickOption(optionForRender)}
+          onKeyPress={onKeyPressOption}
         >
-          {content}
-        </button>
+          {readyContent}
+        </div>
       );
     }
     return optionForRender;
@@ -191,16 +222,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
   if (!memoizedOptionsBody || !memoizedOptionsBody.length) {
     memoizedOptionsBody = <Nodata />;
   }
-  const handleWaypointEnter = () => {
-    if (onEnter) {
-      onEnter();
-    }
-  };
-  const handleWaypointLeave = useCallback(() => {
+  const handleWaypointLeave = () => {
     if (onLeave) {
       onLeave();
     }
-  }, [onLeave]);
+  };
   const className = 'select-field';
   return (
     <article

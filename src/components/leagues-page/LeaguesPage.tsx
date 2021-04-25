@@ -1,25 +1,15 @@
 import React from 'react';
 
+import { LeaguesPageProps } from '../../modules/types';
 import Panel from '../panel';
-import type { PanelProps } from '../panel';
-import Filter, { FilterProps } from '../filter';
+import Filter from '../filter';
 import FilterButton from '../filter-button';
-import SearchField, { SearchFieldProps } from '../search-field';
+import SearchField from '../search-field';
 import SelectField from '../select-field';
-import { SelectFieldProps } from '../../modules/types';
-import Datepicker, { DatepickerProps } from '../datepicker';
+import Datepicker from '../datepicker';
 import Breadcrumbs from '../breadcrumbs';
-import LeagueList from '../../containers/league-list';
+import LeagueList from '../league-list';
 import './leagues-page.scss';
-
-type LeaguesPageProps = Partial<{
-  panel: PanelProps;
-  filter: FilterProps;
-  searchField: SearchFieldProps;
-  selectField: SelectFieldProps;
-  datepicker: DatepickerProps;
-  counter: number;
-}>;
 
 const LeaguesPage: React.FC<LeaguesPageProps> = ({
   panel,
@@ -27,9 +17,9 @@ const LeaguesPage: React.FC<LeaguesPageProps> = ({
   searchField,
   selectField,
   datepicker,
+  items,
 }) => {
   const className = 'leagues-page';
-  console.log('selectField : ', selectField);
   return (
     <section className={className}>
       <div className={`${className}__header`}>
@@ -49,7 +39,7 @@ const LeaguesPage: React.FC<LeaguesPageProps> = ({
           </Panel>
         </div>
         <div className={`${className}__list`}>
-          <LeagueList />
+          <LeagueList items={items} />
         </div>
       </div>
     </section>

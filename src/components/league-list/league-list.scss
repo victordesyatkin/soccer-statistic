@@ -5,12 +5,12 @@ $parent: 'league-list';
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
 
   &__item {
-    margin-left: 2rem;
-  }
-
-  &__item:first-child {
-    margin-left: initial;
+    padding: 1em;
+    cursor: pointer;
   }
 }

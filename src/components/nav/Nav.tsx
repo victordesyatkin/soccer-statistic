@@ -1,14 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import Link from '../link';
-import type { LinkProps } from '../link';
+import type { LinkProps, NavProps } from '../../modules/types';
 import './nav.scss';
 
-type NavType = {
-  links?: LinkProps[];
-};
-
-const Nav: React.FC<NavType> = ({ links }) => {
+const Nav: FC<NavProps> = ({ links }) => {
   const renderItem = (item: LinkProps) => {
     return (
       <li className="nav__item" key={item.id}>
@@ -22,7 +18,5 @@ const Nav: React.FC<NavType> = ({ links }) => {
 
   return <nav className="nav">{links && renderItems(links)}</nav>;
 };
-
-export type { NavType };
 
 export default Nav;

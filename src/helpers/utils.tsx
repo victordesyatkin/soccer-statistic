@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
+import sorteduniq from 'lodash.sorteduniq';
+import difference from 'lodash.difference';
 
 import logo1 from '../assets/images/logos/1.png';
 import logo2 from '../assets/images/logos/2.png';
@@ -23,13 +25,20 @@ import {
   CountryProps,
   SelectFieldOptionType,
   CountriesResponseProps,
+  EndpointsType,
+  RoutesType,
+  TeamsResponseProps,
+  transformTeamProps,
+  TeamResponseProps,
+  FilterLeaguesProps,
+  FilterTeamsProps,
+  useOutsideClickType,
+  ItemsTeamProps,
+  TeamProps,
+  ItemsLeagueProps,
 } from '../modules/types';
 
-type useOutsideClickType = {
-  ref?: React.MutableRefObject<null>;
-  callback?: () => void;
-  isOpened?: boolean;
-};
+import { endpoints, routes } from '../configuration';
 
 const logos = [
   logo1,
@@ -154,10 +163,8 @@ function uuid(): string {
   return Math.random().toString(16).substr(2);
 }
 
-function prepareDisplayNameComponent(
-  Component:
-    | React.ComponentClass<Record<string, unknown>>
-    | React.FC<Record<string, unknown>>
+function prepareDisplayNameComponent<T>(
+  Component: React.ComponentClass<T> | React.FC<T>
 ): string {
   const displayName = Component.displayName || Component.name || 'Component';
   return `with(${displayName})`;
@@ -237,7 +244,300 @@ function countriesToOptions(items: CountryProps[]): SelectFieldOptionType[] {
   return items.map(countryToOption);
 }
 
-export type { useOutsideClickType };
+function leagueToOption(item: LeagueProps): SelectFieldOptionType {
+  const { id, name } = item;
+  return {
+    value: id,
+    content: name,
+    id,
+  };
+}
+
+function leaguesToOptions(items: LeagueProps[]): SelectFieldOptionType[] {
+  return items.map(leagueToOption);
+}
+
+function getEndpoints(): EndpointsType {
+  const readyEndpoints = endpoints.common;
+  return isProduction()
+    ? Object.assign(readyEndpoints, endpoints.production)
+    : Object.assign(readyEndpoints, endpoints.development);
+}
+
+function getRoutes(): RoutesType {
+  const readyRoutes = routes.common;
+  return isProduction()
+    ? Object.assign(readyRoutes, routes.production)
+    : Object.assign(readyRoutes, routes.development);
+}
+
+type FilterByDatesProps = (
+  filterDates?: Date[]
+) => (dates?: (string | undefined)[]) => boolean;
+
+const filterByDates: FilterByDatesProps = (filterDates) => (dates) => {
+  if (dates?.length && filterDates?.length) {
+    const [startDate = '', endDate = ''] = dates;
+    if (startDate || endDate) {
+      const [startFilterDate, endFilterDate] = filterDates;
+      const readyStartDate = new Date(startDate);
+      const readyEndDate = new Date(endDate);
+      const readyStartFilterDate = new Date(startFilterDate);
+      const readyEndFilterDate = new Date(endFilterDate);
+      let flag = false;
+      if (isValidDate(readyStartDate) && isValidDate(readyStartFilterDate)) {
+        flag = readyStartFilterDate <= readyStartDate;
+        if (
+          flag &&
+          isValidDate(readyEndDate) &&
+          isValidDate(readyEndFilterDate)
+        ) {
+          flag = readyEndDate <= readyEndFilterDate;
+        }
+      }
+      return flag;
+    }
+    return false;
+  }
+  return true;
+};
+
+type FilterByNameProps = (filterName?: string) => (name?: string) => boolean;
+const filterByName: FilterByNameProps = (filterName) => (name) => {
+  if (filterName) {
+    const readyName = name?.trim().toLocaleLowerCase();
+    if (filterName && readyName) {
+      return readyName.indexOf(filterName) !== -1;
+    }
+  }
+  return true;
+};
+
+type FilterByCountryIdsProps = (
+  countryIds?: string[]
+) => (countryId?: number) => boolean;
+
+const filterByCountryIds: FilterByCountryIdsProps = (countryIds) => (
+  countryId
+) => {
+  if (countryIds?.length && countryId) {
+    return countryIds.indexOf(String(countryId)) !== -1;
+  }
+  return true;
+};
+
+const filterLeagues: FilterLeaguesProps = ({ leagues = [], filters = {} }) => {
+  const { leagueName, countryIds, dates } = filters;
+  const readyLeagueName = leagueName?.trim()?.toLocaleLowerCase();
+  const hasFilter =
+    Boolean(Object.keys(filters).length) &&
+    (readyLeagueName || countryIds?.length || dates?.length);
+  if (hasFilter) {
+    const checkers = {
+      leagueName: filterByName(readyLeagueName),
+      dates: filterByDates(dates),
+      countryIds: filterByCountryIds(countryIds),
+    };
+    return leagues.filter((league) => {
+      const { name, area, currentSeason } = league;
+      const { startDate, endDate } = currentSeason || {};
+      const { id } = area || {};
+      return (
+        checkers.leagueName(name) &&
+        checkers.countryIds(id) &&
+        checkers.dates([startDate, endDate])
+      );
+    });
+  }
+  return leagues;
+};
+
+type FilterByLeagueIdsProps = (
+  leagueIds?: string[]
+) => (leagueId?: string) => boolean;
+
+const filterByLeagueIds: FilterByLeagueIdsProps = (leagueIds) => (leagueId) => {
+  if (leagueIds?.length && leagueId) {
+    return leagueIds.indexOf(String(leagueId)) !== -1;
+  }
+  return true;
+};
+
+const filterTeams: FilterTeamsProps = ({ teams = [], filters = {} }) => {
+  const { teamName, countryIds, leagueIds } = filters;
+  const readyTeamName = teamName?.trim()?.toLocaleLowerCase();
+  const hasFilter =
+    Boolean(Object.keys(filters).length) &&
+    (readyTeamName || countryIds?.length || leagueIds?.length);
+  if (hasFilter) {
+    const checkers = {
+      teamName: filterByName(readyTeamName),
+      countryIds: filterByCountryIds(countryIds),
+      leagueIds: filterByLeagueIds(leagueIds),
+    };
+    return teams.filter((team) => {
+      const { name, area, leagueId } = team;
+      const { id } = area || {};
+      return (
+        checkers.teamName(name) &&
+        checkers.countryIds(id) &&
+        checkers.leagueIds(leagueId)
+      );
+    });
+  }
+  return teams;
+};
+
+const transformTeams = (data: TeamsResponseProps): TeamResponseProps[] => {
+  const { teams } = data;
+  return teams;
+};
+
+const transformTeam: transformTeamProps = (leagueId) => (team) => {
+  const { id, name, shortName, area, crestUrl } = team;
+  return {
+    id,
+    name,
+    shortName,
+    area,
+    logo: crestUrl,
+    leagueId,
+  };
+};
+interface IterableIterator<T> extends Iterator<T> {
+  [Symbol.iterator](): IterableIterator<T>;
+}
+
+function paramsToObject(
+  entries: IterableIterator<[string, string]>
+): Record<string, string> {
+  const result: Record<string, string> = {};
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [key, value] of entries) {
+    result[key] = value;
+  }
+  return result;
+}
+
+function searchString(search?: string): Record<string, string> | void {
+  const readySearch = search?.trim();
+  if (readySearch) {
+    const urlParams = new URLSearchParams(readySearch);
+    const entries = urlParams.entries();
+    return paramsToObject(entries);
+  }
+  return undefined;
+}
+
+function checkNeededLoadTeams({
+  teams,
+  leagueIds,
+}: {
+  teams: TeamProps[];
+  leagueIds?: string[];
+}): string[] {
+  console.log('checkNeededLoadTeams teams : ', teams);
+  console.log('checkNeededLoadTeams leagueIds : ', leagueIds);
+  if (leagueIds?.length) {
+    if (!teams.length) {
+      return leagueIds;
+    }
+    const teamLeagueIds: Record<string, boolean> = {};
+    teams.forEach((team) => {
+      teamLeagueIds[team.leagueId] = true;
+    });
+    const readyTeamLeagueIds = sorteduniq(Object.keys(teamLeagueIds));
+    const readyLeagueIds = sorteduniq(leagueIds);
+    return difference(readyTeamLeagueIds, readyLeagueIds);
+  }
+  return [];
+}
+
+type TransformArrayToObjectByIdProps = { id: number };
+
+function transformArrayToObjectById<T>(
+  data: (T & TransformArrayToObjectByIdProps)[]
+) {
+  const result: Record<string, T & TransformArrayToObjectByIdProps> = {};
+  data.forEach((item: T & TransformArrayToObjectByIdProps) => {
+    const { id } = item;
+    result[String(id)] = item;
+  });
+  return result;
+}
+
+function transformResponseFetchTeams({
+  payload: responses,
+  leagueIds,
+}: {
+  payload: PromiseSettledResult<TeamResponseProps[]>[];
+  leagueIds: string[];
+}): ItemsTeamProps {
+  const payload: TeamProps[] = [];
+  let error: Error | undefined;
+  responses.forEach((response, index) => {
+    const { status } = response;
+    if (status && status === 'fulfilled') {
+      if ('value' in response) {
+        const { value } = response;
+        if (value) {
+          const teams = value.map(transformTeam(leagueIds[index]));
+          payload.push(...teams);
+        }
+      }
+    } else if (status === 'rejected') {
+      if ('reason' in response) {
+        const { reason } = response;
+        error = reason;
+      }
+    }
+  });
+  if (error && !payload.length) {
+    throw error;
+  }
+  return transformArrayToObjectById<TeamProps>(payload);
+}
+
+function checkNeededLoadLeagues({
+  leagues,
+  leagueIds = [],
+}: {
+  leagues?: ItemsLeagueProps;
+  leagueIds?: string[];
+}): string[] {
+  const readyLeagues = Object.keys(leagues || {});
+  if (readyLeagues.length) {
+    return difference(readyLeagues, leagueIds);
+  }
+  return leagueIds;
+}
+
+function transformResponseFetchLeagues(
+  responses: PromiseSettledResult<LeagueResponseProps[]>[]
+): ItemsLeagueProps {
+  const payload: LeagueProps[] = [];
+  let error: Error | undefined;
+  responses.forEach((response) => {
+    const { status } = response;
+    if (status === 'fulfilled') {
+      if ('value' in response) {
+        const { value } = response;
+        const leagues = value.map(transformLeague);
+        payload.push(...leagues);
+      }
+    } else if (status === 'rejected') {
+      if ('reason' in response) {
+        const { reason } = response;
+        error = reason;
+      }
+    }
+  });
+  if (!payload.length && error) {
+    throw error;
+  }
+  return transformArrayToObjectById(payload);
+}
+
 export {
   useOutsideClick,
   value2Date,
@@ -255,4 +555,17 @@ export {
   countriesToOptions,
   transformLeagues,
   transformCountries,
+  getEndpoints,
+  filterLeagues,
+  transformTeams,
+  transformTeam,
+  filterTeams,
+  leaguesToOptions,
+  getRoutes,
+  paramsToObject,
+  searchString,
+  checkNeededLoadTeams,
+  transformResponseFetchTeams,
+  checkNeededLoadLeagues,
+  transformResponseFetchLeagues,
 };

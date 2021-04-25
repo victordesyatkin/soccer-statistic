@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch,
@@ -8,38 +8,11 @@ import {
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import classNames from 'classnames';
 
+import { ButtonProps } from '../../modules/types';
 import { getTheme } from '../../helpers';
 import './button.scss';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  isVisible: boolean;
-  isDisabled: boolean;
-  isHidden: boolean;
-  name: string;
-  value: string | number;
-  type: 'button' | 'submit' | 'reset';
-  title: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
-  iconType: string;
-  content: string;
-  theme: string;
-}
-
-// type ButtonProps = Partial<{
-//   isVisible: boolean;
-//   isDisabled: boolean;
-//   isHidden: boolean;
-//   name: string;
-//   value: string | number;
-//   type: 'button' | 'submit' | 'reset';
-//   title: string;
-//   onClick: React.MouseEventHandler<HTMLButtonElement>;
-//   iconType: string;
-//   content: string;
-//   theme: string;
-// }>;
-
-const Button: React.FC<Partial<ButtonProps>> = ({
+const Button: FC<Partial<ButtonProps>> = ({
   isVisible,
   isDisabled,
   isHidden,
@@ -99,5 +72,4 @@ Button.defaultProps = {
   iconType: 'search',
 };
 
-export type { ButtonProps };
 export default Button;

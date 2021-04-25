@@ -1,22 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, FC } from 'react';
 import classNames from 'classnames';
 
+import { PanelProps } from '../../modules/types';
 import { withPanelConsumer } from '../hoc-helpers';
 import Button from '../button';
 import './panel.scss';
 
-type PanelProps = Partial<{
-  isOpened: boolean;
-  setIsOpened: (isOpened?: boolean) => void;
-  title: string;
-}>;
-
-const Panel: React.FC<PanelProps> = ({
-  isOpened,
-  setIsOpened,
-  children,
-  title,
-}) => {
+const Panel: FC<PanelProps> = ({ isOpened, setIsOpened, children, title }) => {
   const className = 'panel';
   const memoizedSetIsOpened = useCallback(() => {
     if (setIsOpened) {
@@ -38,5 +28,4 @@ const Panel: React.FC<PanelProps> = ({
   );
 };
 
-export type { PanelProps };
 export default withPanelConsumer()(Panel);

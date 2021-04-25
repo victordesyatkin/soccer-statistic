@@ -1,20 +1,10 @@
-import React from 'react';
+import React, { FC, Children } from 'react';
 import type { ReactNode } from 'react';
 
+import { FilterProps } from '../../modules/types';
 import './filter.scss';
 
-type FilterProps = Partial<{
-  method: string;
-  action: string;
-  onSubmit: React.FormEventHandler<HTMLFormElement>;
-}>;
-
-const Filter: React.FC<FilterProps> = ({
-  children,
-  method,
-  action,
-  onSubmit,
-}) => {
+const Filter: FC<FilterProps> = ({ children, method, action, onSubmit }) => {
   const className = 'filter';
   const renderChild = (child?: ReactNode) => {
     return <div className={`${className}__item`}>{child}</div>;
@@ -26,7 +16,7 @@ const Filter: React.FC<FilterProps> = ({
       action={action}
       onSubmit={onSubmit}
     >
-      {React.Children.map(children, renderChild)}
+      {Children.map(children, renderChild)}
     </form>
   );
 };

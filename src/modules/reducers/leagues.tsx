@@ -4,7 +4,7 @@ import * as actions from '../actions/leagues';
 import { LeagueReducerProps } from '../types';
 
 const initialLeagueState: LeagueReducerProps = {
-  items: [],
+  items: {},
   isLoading: false,
   error: null,
 };
@@ -24,7 +24,10 @@ const reducer = (
     case actions.FETCH_LEAGUES_SUCCESS: {
       return {
         ...state,
-        items: action?.payload || [],
+        items: {
+          ...state.items,
+          ...action.payload,
+        },
         isLoading: false,
         error: null,
       };

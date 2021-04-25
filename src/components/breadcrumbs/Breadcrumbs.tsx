@@ -1,15 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
 
+import { BreadcrumbsProps } from '../../modules/types';
 import './breadcrumbs.scss';
 
-type BreadcrumbsProps = Partial<{
-  content: string;
-}>;
-
-const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ content }) => {
-  const className = 'breadcrumbs';
-  return <div className={className}>{content}</div>;
+const Breadcrumbs: FC<BreadcrumbsProps> = ({ className, content }) => {
+  let readyClassName = `breadcrumbs`;
+  readyClassName += className ? ` ${className}` : '';
+  return <div className={readyClassName}>{content}</div>;
 };
 
-export type { BreadcrumbsProps };
 export default Breadcrumbs;

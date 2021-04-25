@@ -1,29 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import classnames from 'classnames';
 
+import { HeaderProps } from '../../modules/types';
 import LogoLink from '../logo-link';
-import type { LogoLinkProps } from '../logo-link';
 import Nav from '../nav';
-import type { NavType } from '../nav';
 import Button from '../button';
-import type { ButtonProps } from '../button';
 import MenuButton from '../menu-button';
-import type { MenuButtonProps } from '../menu-button';
 import SearchField from '../search-field';
-import type { SearchFieldProps } from '../search-field';
 import './header.scss';
 
-type HeaderProps = {
-  logoLink?: LogoLinkProps;
-  nav?: NavType;
-  iconButton?: ButtonProps;
-  menuButton?: MenuButtonProps;
-  searchField?: SearchFieldProps;
-  action?: string;
-  method?: string;
-};
-
-const Header: React.FC<HeaderProps> = ({
+const Header: FC<HeaderProps> = ({
   logoLink,
   nav,
   iconButton,

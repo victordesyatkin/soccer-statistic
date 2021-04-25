@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 
-import * as actions from '../actions/root';
+import * as actions from '../actions/common';
 import { initialCommonStateProps, commonReducerProps } from '../types';
 
 const initialCommonState: initialCommonStateProps = {
