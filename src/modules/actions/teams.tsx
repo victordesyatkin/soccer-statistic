@@ -1,19 +1,24 @@
 import { ActionCreator, Dispatch } from 'redux';
 
-import { transformResponseFetchTeams } from '../../helpers';
+import { transformResponseFetchTeams, transformTeamFull } from '../../helpers';
 import { IStatisticService } from '../../services';
 import {
   ActionType,
   ActionCreatorType,
-  TeamProps,
-  TeamResponseProps,
+  TeamsResponseProps,
+  TeamFullResponseProps,
+  ItemsTeamProps,
 } from '../types';
 import { fetchRequest, fetchSuccess, fetchFailure } from './common';
 
+import { fetchSeasonsSuccess } from './seasons';
+import { fetchMapSeasonTeamsSuccess } from './mapSeasonTeams';
+import { fetchMapCompetitionSeasonsSuccess } from './mapCompetitionSeasons';
+
 const FETCH_TEAMS_SUCCESS = 'FETCH_TEAMS_SUCCESS';
 const fetchTeamsSuccess: ActionCreator<
-  ActionType & { payload: TeamProps[] }
-> = (payload: TeamProps[]) => ({
+  ActionType & { payload: ItemsTeamProps }
+> = (payload: ItemsTeamProps) => ({
   type: FETCH_TEAMS_SUCCESS,
   payload,
 });
@@ -38,25 +43,59 @@ const fetchTeams = ({
 }): ((leagueIds?: string[]) => (dispatch: Dispatch) => void) => (leagueIds) => (
   dispatch
 ) => {
-  console.log('fetchTeams : ', leagueIds);
+  console.log('fetchTeams leagueIds : ', leagueIds);
   if (leagueIds?.length && serviceStatistic) {
-    dispatch(fetchTeamsRequest());
     dispatch(fetchRequest());
-    const requests = leagueIds.map((leagueId) =>
-      serviceStatistic.getTeams({ leagueId })
-    );
-    Promise.allSettled<Promise<TeamResponseProps[]>[]>(requests)
+    const requests = leagueIds.map((leagueId) => {
+      if (leagueId) {
+        return serviceStatistic.getTeams({ leagueId });
+      }
+      return Promise.resolve(undefined);
+    });
+    Promise.allSettled<Promise<TeamsResponseProps | undefined>[]>(requests)
       .then((payload) => {
-        console.log('payload : ', payload);
-        const readyPayload = transformResponseFetchTeams({
+        const {
+          teams,
+          seasons,
+          mapCompetitionSeasons,
+          mapSeasonTeams,
+        } = transformResponseFetchTeams({
           payload,
-          leagueIds,
         });
-        console.log('readyPayload : ', readyPayload);
-        dispatch(fetchTeamsSuccess(readyPayload));
+        console.log(
+          'fetchTeams mapCompetitionSeasons : ',
+          mapCompetitionSeasons
+        );
+        dispatch(fetchTeamsSuccess(teams));
+        dispatch(fetchMapCompetitionSeasonsSuccess(mapCompetitionSeasons));
+        dispatch(fetchMapSeasonTeamsSuccess(mapSeasonTeams));
+        dispatch(fetchSeasonsSuccess(seasons));
         dispatch(fetchSuccess());
       })
       .catch((error) => {
+        console.log('fetchTeams error : ', error);
+        dispatch(fetchTeamsFailure(error));
+        dispatch(fetchFailure(error));
+      });
+  }
+};
+
+const fetchTeam = ({
+  serviceStatistic,
+}: {
+  serviceStatistic?: IStatisticService;
+}): (({ teamId }: { teamId: string }) => (dispatch: Dispatch) => void) => ({
+  teamId,
+}) => (dispatch) => {
+  if (serviceStatistic && teamId) {
+    serviceStatistic
+      .getTeam({ teamId })
+      .then((payload: TeamFullResponseProps) => {
+        const readyPayload = transformTeamFull(payload);
+        dispatch(fetchTeamsSuccess(readyPayload));
+        dispatch(fetchSuccess());
+      })
+      .catch((error: Error) => {
         console.log('error : ', error);
         dispatch(fetchTeamsFailure(error));
         dispatch(fetchFailure(error));

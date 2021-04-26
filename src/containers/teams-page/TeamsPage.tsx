@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import { fetchCountries } from '../../modules/actions/countries';
 import { fetchLeagues, fetchTeams } from '../../modules/actions';
@@ -19,7 +19,8 @@ import { withStatisticService } from '../../components/hoc-helpers';
 const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   serviceStatistic,
 }) => {
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
+  const history = useHistory();
   const params = useMemo(() => {
     let readyParams: string[] | undefined;
     const { leagueId: paramLeagueId } = searchString(search) || {};
@@ -31,13 +32,13 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   const [countryIds, setCountryIds] = useState([]);
   const [leagueIds, setLeagueIds] = useState(params);
   const [teamName, setTeamName] = useState('');
-  console.log('params : ', params);
-  console.log('leagueIds : ', params);
   const readyState = useSelector((state: ReducerProps): ReducerProps => state);
   const {
     teams: { items: teamItems = {} },
     countries: { items: countries = [] },
     leagues: { items: leagueItems = {} },
+    mapCompetitionSeasons: { items: mapCompetitionSeasonsItems = {} },
+    mapSeasonTeams: { items: mapSeasonTeamsItems = {} },
   } = readyState;
   const teams = useMemo(() => Object.values(teamItems), [teamItems]);
   const leagues = useMemo(() => Object.values(leagueItems), [leagueItems]);
@@ -48,7 +49,7 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
     }
   }, [countries, serviceStatistic, dispatch]);
   const onEnterSelectFieldLeagues = useCallback(() => {
-    dispatch(fetchLeagues({ serviceStatistic })());
+    dispatch(fetchLeagues({ serviceStatistic })([]));
   }, [serviceStatistic, dispatch]);
   const onChangeSelectFieldCountries = useCallback(
     (value) => {
@@ -59,8 +60,11 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   const onChangeSelectFieldLeagues = useCallback(
     (value) => {
       setLeagueIds(value);
+      history.replace({
+        pathname,
+      });
     },
-    [setLeagueIds]
+    [setLeagueIds, pathname, history]
   );
   const onChangeSearchField = useCallback(
     (event) => {
@@ -73,31 +77,43 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
     () =>
       filterTeams({
         teams,
+        mapSeasonTeamsItems,
+        mapCompetitionSeasonsItems,
         filters: {
           countryIds,
           teamName,
           leagueIds,
         },
       }),
-    [teams, countryIds, teamName, leagueIds]
+    [
+      teams,
+      countryIds,
+      teamName,
+      leagueIds,
+      mapCompetitionSeasonsItems,
+      mapSeasonTeamsItems,
+    ]
   );
   useEffect(() => {
     const neededLoadLeagues = checkNeededLoadLeagues({
       leagues: leagueItems,
       leagueIds,
     });
-    console.log('neededLoadLeagues : ', neededLoadLeagues);
+    // console.log('neededLoadLeagues : ', neededLoadLeagues);
     if (neededLoadLeagues.length) {
       dispatch(fetchLeagues({ serviceStatistic })(neededLoadLeagues));
     }
   }, [leagueItems, serviceStatistic, dispatch, leagueIds]);
   useEffect(() => {
-    const neededLoadTeams = checkNeededLoadTeams({ teams, leagueIds });
-    console.log('neededLoadTeams : ', neededLoadTeams);
+    const neededLoadTeams = checkNeededLoadTeams({
+      mapCompetitionSeasonsItems,
+      leagueIds,
+    });
+    // console.log('neededLoadTeams : ', neededLoadTeams);
     if (neededLoadTeams.length) {
       dispatch(fetchTeams({ serviceStatistic })(neededLoadTeams));
     }
-  }, [teams, serviceStatistic, dispatch, leagueIds]);
+  }, [mapCompetitionSeasonsItems, serviceStatistic, dispatch, leagueIds]);
   const memorizedSelectFieldCountries = useMemo(
     () => ({
       placeholder: 'Please select countries',

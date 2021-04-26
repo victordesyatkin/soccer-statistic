@@ -46,7 +46,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
     }
     return readyItems;
   };
-  console.log('SelectField : value', value);
+  // console.log('SelectField : value', value);
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpened, setIsOpened] = useState(false);
   const closeBody = useCallback(() => {
@@ -136,8 +136,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
     memoizedPreparedItems,
     renderItems,
   ]);
-  console.log('memoizedPreparedItems : ', memoizedPreparedItems);
-  console.log('memoizedItems : ', memoizedItems);
+  // console.log('memoizedPreparedItems : ', memoizedPreparedItems);
+  // console.log('memoizedItems : ', memoizedItems);
   const renderPlaceholder = (placeholderForRender?: string | number) => {
     if (placeholderForRender) {
       return (

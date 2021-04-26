@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
-import sorteduniq from 'lodash.sorteduniq';
+import sortedUniq from 'lodash.sorteduniq';
 import difference from 'lodash.difference';
 
 import logo1 from '../assets/images/logos/1.png';
@@ -36,6 +36,11 @@ import {
   ItemsTeamProps,
   TeamProps,
   ItemsLeagueProps,
+  TeamFullResponseProps,
+  MapCompetitionSeasonsProps,
+  MapSeasonTeamsProps,
+  ItemsSeasonProps,
+  SeasonProps,
 } from '../modules/types';
 
 import { endpoints, routes } from '../configuration';
@@ -352,40 +357,76 @@ const filterLeagues: FilterLeaguesProps = ({ leagues = [], filters = {} }) => {
   return leagues;
 };
 
-type FilterByLeagueIdsProps = (
-  leagueIds?: string[]
-) => (leagueId?: string) => boolean;
+type FilterTeamsByLeagueIds = (
+  teams?: string[]
+) => (teamId?: string) => boolean;
 
-const filterByLeagueIds: FilterByLeagueIdsProps = (leagueIds) => (leagueId) => {
-  if (leagueIds?.length && leagueId) {
-    return leagueIds.indexOf(String(leagueId)) !== -1;
+const filterTeamsByLeagueIds: FilterTeamsByLeagueIds = (teamIds) => (
+  teamId
+) => {
+  if (teamIds?.length && teamId) {
+    return teamIds.indexOf(String(teamId)) !== -1;
   }
-  return true;
+  return false;
 };
 
-const filterTeams: FilterTeamsProps = ({ teams = [], filters = {} }) => {
+const composeTeams = ({
+  leagueIds,
+  mapSeasonTeamsItems,
+  mapCompetitionSeasonsItems,
+}: {
+  leagueIds?: string[];
+  mapSeasonTeamsItems?: MapSeasonTeamsProps;
+  mapCompetitionSeasonsItems?: MapCompetitionSeasonsProps;
+}): string[] | undefined => {
+  if (leagueIds?.length) {
+    const readyTeamIds: string[] = [];
+    leagueIds.forEach((leagueId) => {
+      const seasonIds = mapCompetitionSeasonsItems?.[leagueId];
+      if (seasonIds?.length) {
+        seasonIds.forEach((seasonId) => {
+          const teamIds = mapSeasonTeamsItems?.[seasonId];
+          if (teamIds?.length) {
+            readyTeamIds.push(...teamIds);
+          }
+        });
+      }
+    });
+    if (readyTeamIds.length) {
+      return sortedUniq(readyTeamIds);
+    }
+  }
+  return undefined;
+};
+
+const filterTeams: FilterTeamsProps = ({
+  teams = [],
+  filters = {},
+  mapSeasonTeamsItems = {},
+  mapCompetitionSeasonsItems = {},
+}) => {
   const { teamName, countryIds, leagueIds } = filters;
   const readyTeamName = teamName?.trim()?.toLocaleLowerCase();
-  const hasFilter =
-    Boolean(Object.keys(filters).length) &&
-    (readyTeamName || countryIds?.length || leagueIds?.length);
-  if (hasFilter) {
-    const checkers = {
-      teamName: filterByName(readyTeamName),
-      countryIds: filterByCountryIds(countryIds),
-      leagueIds: filterByLeagueIds(leagueIds),
-    };
-    return teams.filter((team) => {
-      const { name, area, leagueId } = team;
-      const { id } = area || {};
-      return (
-        checkers.teamName(name) &&
-        checkers.countryIds(id) &&
-        checkers.leagueIds(leagueId)
-      );
-    });
-  }
-  return teams;
+  const checkers = {
+    teamName: filterByName(readyTeamName),
+    countryIds: filterByCountryIds(countryIds),
+    leagueIds: filterTeamsByLeagueIds(
+      composeTeams({
+        leagueIds,
+        mapSeasonTeamsItems,
+        mapCompetitionSeasonsItems,
+      })
+    ),
+  };
+  return teams.filter((team) => {
+    const { name, area, id: teamId } = team;
+    const { id } = area || {};
+    return (
+      checkers.teamName(name) &&
+      checkers.countryIds(id) &&
+      checkers.leagueIds(String(teamId))
+    );
+  });
 };
 
 const transformTeams = (data: TeamsResponseProps): TeamResponseProps[] => {
@@ -393,15 +434,11 @@ const transformTeams = (data: TeamsResponseProps): TeamResponseProps[] => {
   return teams;
 };
 
-const transformTeam: transformTeamProps = (leagueId) => (team) => {
-  const { id, name, shortName, area, crestUrl } = team;
+const transformTeam: transformTeamProps = (team) => {
+  const { crestUrl } = team;
   return {
-    id,
-    name,
-    shortName,
-    area,
+    ...team,
     logo: crestUrl,
-    leagueId,
   };
 };
 interface IterableIterator<T> extends Iterator<T> {
@@ -430,25 +467,22 @@ function searchString(search?: string): Record<string, string> | void {
 }
 
 function checkNeededLoadTeams({
-  teams,
+  mapCompetitionSeasonsItems,
   leagueIds,
 }: {
-  teams: TeamProps[];
+  mapCompetitionSeasonsItems: MapCompetitionSeasonsProps;
   leagueIds?: string[];
 }): string[] {
-  console.log('checkNeededLoadTeams teams : ', teams);
-  console.log('checkNeededLoadTeams leagueIds : ', leagueIds);
+  // console.log('checkNeededLoadTeams teams : ', teams);
+  // console.log('checkNeededLoadTeams leagueIds : ', leagueIds);
   if (leagueIds?.length) {
-    if (!teams.length) {
+    const mapCompetitionSeasons = Object.keys(mapCompetitionSeasonsItems);
+    if (!mapCompetitionSeasons.length) {
       return leagueIds;
     }
-    const teamLeagueIds: Record<string, boolean> = {};
-    teams.forEach((team) => {
-      teamLeagueIds[team.leagueId] = true;
-    });
-    const readyTeamLeagueIds = sorteduniq(Object.keys(teamLeagueIds));
-    const readyLeagueIds = sorteduniq(leagueIds);
-    return difference(readyTeamLeagueIds, readyLeagueIds);
+    const readyTeamLeagueIds = sortedUniq(mapCompetitionSeasons);
+    const readyLeagueIds = sortedUniq(leagueIds);
+    return difference(readyLeagueIds, readyTeamLeagueIds);
   }
   return [];
 }
@@ -456,33 +490,52 @@ function checkNeededLoadTeams({
 type TransformArrayToObjectByIdProps = { id: number };
 
 function transformArrayToObjectById<T>(
-  data: (T & TransformArrayToObjectByIdProps)[]
+  data?: (T & TransformArrayToObjectByIdProps)[]
 ) {
   const result: Record<string, T & TransformArrayToObjectByIdProps> = {};
-  data.forEach((item: T & TransformArrayToObjectByIdProps) => {
-    const { id } = item;
-    result[String(id)] = item;
-  });
+  if (data?.length) {
+    data.forEach((item: T & TransformArrayToObjectByIdProps) => {
+      const { id } = item;
+      result[String(id)] = item;
+    });
+  }
   return result;
 }
 
 function transformResponseFetchTeams({
   payload: responses,
-  leagueIds,
 }: {
-  payload: PromiseSettledResult<TeamResponseProps[]>[];
-  leagueIds: string[];
-}): ItemsTeamProps {
-  const payload: TeamProps[] = [];
+  payload: PromiseSettledResult<TeamsResponseProps | undefined>[];
+}): {
+  teams: ItemsTeamProps;
+  seasons: ItemsSeasonProps;
+  mapCompetitionSeasons: MapCompetitionSeasonsProps;
+  mapSeasonTeams: MapCompetitionSeasonsProps;
+} {
+  let readyTeams: ItemsTeamProps = {};
   let error: Error | undefined;
-  responses.forEach((response, index) => {
+  const mapCompetitionSeasons: MapCompetitionSeasonsProps = {};
+  const mapSeasonTeams: MapSeasonTeamsProps = {};
+  const readySeasons: SeasonProps[] = [];
+  responses.forEach((response) => {
     const { status } = response;
     if (status && status === 'fulfilled') {
       if ('value' in response) {
         const { value } = response;
         if (value) {
-          const teams = value.map(transformTeam(leagueIds[index]));
-          payload.push(...teams);
+          const { teams, competition, season } = value;
+          readySeasons.push(season);
+          const tempTeams = transformArrayToObjectById<TeamProps>(
+            teams.map(transformTeam)
+          );
+          const { id: competitionId } = competition;
+          const { id: seasonId } = season;
+          mapCompetitionSeasons[competitionId] = [
+            ...(mapCompetitionSeasons[competitionId] || []),
+            String(seasonId),
+          ];
+          mapSeasonTeams[seasonId] = Object.keys(tempTeams);
+          readyTeams = { ...readyTeams, ...tempTeams };
         }
       }
     } else if (status === 'rejected') {
@@ -492,10 +545,15 @@ function transformResponseFetchTeams({
       }
     }
   });
-  if (error && !payload.length) {
+  if (error && !readyTeams.length) {
     throw error;
   }
-  return transformArrayToObjectById<TeamProps>(payload);
+  return {
+    teams: readyTeams,
+    seasons: transformArrayToObjectById<SeasonProps>(readySeasons),
+    mapCompetitionSeasons,
+    mapSeasonTeams,
+  };
 }
 
 function checkNeededLoadLeagues({
@@ -507,13 +565,13 @@ function checkNeededLoadLeagues({
 }): string[] {
   const readyLeagues = Object.keys(leagues || {});
   if (readyLeagues.length) {
-    return difference(readyLeagues, leagueIds);
+    return difference(leagueIds, readyLeagues);
   }
   return leagueIds;
 }
 
 function transformResponseFetchLeagues(
-  responses: PromiseSettledResult<LeagueResponseProps[]>[]
+  responses: PromiseSettledResult<LeagueResponseProps[] | undefined>[]
 ): ItemsLeagueProps {
   const payload: LeagueProps[] = [];
   let error: Error | undefined;
@@ -522,8 +580,10 @@ function transformResponseFetchLeagues(
     if (status === 'fulfilled') {
       if ('value' in response) {
         const { value } = response;
-        const leagues = value.map(transformLeague);
-        payload.push(...leagues);
+        if (value && value?.length) {
+          const leagues = value.map(transformLeague);
+          payload.push(...leagues);
+        }
       }
     } else if (status === 'rejected') {
       if ('reason' in response) {
@@ -535,8 +595,66 @@ function transformResponseFetchLeagues(
   if (!payload.length && error) {
     throw error;
   }
-  return transformArrayToObjectById(payload);
+  return transformArrayToObjectById<LeagueProps>(payload);
 }
+
+type TransformTeamFullProps = (team: TeamFullResponseProps) => TeamProps;
+
+const transformTeamFull: TransformTeamFullProps = (team) => {
+  const { activeCompetitions, ...other } = team;
+  const readyTeam = {
+    activeLeagues: transformArrayToObjectById(activeCompetitions),
+    ...other,
+  };
+  return transformTeam(readyTeam);
+};
+
+type MakeCompetitionSeasonsItemsProps = ({
+  items,
+  payload,
+}: {
+  items: MapCompetitionSeasonsProps;
+  payload: Record<string, string[]>;
+}) => MapCompetitionSeasonsProps;
+
+const makeCompetitionSeasonsItems: MakeCompetitionSeasonsItemsProps = ({
+  items,
+  payload,
+}) => {
+  const readyItems = { ...items };
+  Object.keys(payload).forEach((index) => {
+    const nextSeasons = payload[index];
+    const previousSeasons = readyItems[index];
+    if (previousSeasons) {
+      readyItems[index] = sortedUniq([...previousSeasons, ...nextSeasons]);
+    } else {
+      readyItems[index] = nextSeasons;
+    }
+  });
+  return readyItems;
+};
+
+type MakeMapSeasonTeamItems = ({
+  items,
+  payload,
+}: {
+  items: MapCompetitionSeasonsProps;
+  payload: Record<string, string[]>;
+}) => MapCompetitionSeasonsProps;
+
+const makeMapSeasonTeamItems: MakeMapSeasonTeamItems = ({ items, payload }) => {
+  const readyItems = { ...items };
+  Object.keys(payload).forEach((index) => {
+    const nextSeasons = payload[index];
+    const previousSeasons = readyItems[index];
+    if (previousSeasons) {
+      readyItems[index] = sortedUniq([...previousSeasons, ...nextSeasons]);
+    } else {
+      readyItems[index] = nextSeasons;
+    }
+  });
+  return readyItems;
+};
 
 export {
   useOutsideClick,
@@ -568,4 +686,7 @@ export {
   transformResponseFetchTeams,
   checkNeededLoadLeagues,
   transformResponseFetchLeagues,
+  transformTeamFull,
+  makeCompetitionSeasonsItems,
+  makeMapSeasonTeamItems,
 };

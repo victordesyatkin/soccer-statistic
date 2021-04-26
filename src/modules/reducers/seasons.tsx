@@ -1,27 +1,27 @@
 import { AnyAction } from 'redux';
 
-import * as actions from '../actions/teams';
-import { TeamReducerProps } from '../types';
+import * as actions from '../actions/seasons';
+import { SeasonReducerProps } from '../types';
 
-const initialTeamState: TeamReducerProps = {
+const initialLeagueState: SeasonReducerProps = {
   items: {},
   isLoading: false,
   error: null,
 };
 
 const reducer = (
-  state = initialTeamState,
+  state = initialLeagueState,
   action: AnyAction
-): TeamReducerProps => {
+): SeasonReducerProps => {
   switch (action.type) {
-    case actions.FETCH_TEAMS_REQUEST: {
+    case actions.FETCH_SEASONS_REQUEST: {
       return {
         ...state,
         isLoading: true,
         error: null,
       };
     }
-    case actions.FETCH_TEAMS_SUCCESS: {
+    case actions.FETCH_SEASONS_SUCCESS: {
       return {
         ...state,
         items: {
@@ -32,7 +32,7 @@ const reducer = (
         isLoading: false,
       };
     }
-    case actions.FETCH_TEAMS_FAILURE: {
+    case actions.FETCH_SEASONS_FAILURE: {
       return {
         ...state,
         error: action.payload || null,

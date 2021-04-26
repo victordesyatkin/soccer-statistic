@@ -1,7 +1,7 @@
 const endpoints = {
   FETCH_LEAGUES: '/competitions',
   FETCH_COUNTRIES: '/areas',
-  TEAMS: '/teams',
+  FETCH_TEAM: '/teams',
 };
 
 // eslint-disable-next-line import/prefer-default-export

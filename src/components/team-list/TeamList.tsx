@@ -1,8 +1,10 @@
 import React, { FC, useMemo } from 'react';
 import styled from 'styled-components';
 
-import { TeamsProps, TeamProps } from '../../modules/types';
+import { getRoutes } from '../../helpers';
+import { TeamProps } from '../../modules/types';
 import Nodata from '../no-data';
+import Link from '../link';
 import TeamListItem from '../team-list-item';
 
 const Li = styled.li`
@@ -26,11 +28,14 @@ const Ul = styled.ul`
 `;
 
 const TeamList: FC<{ items?: TeamProps[] }> = ({ items }) => {
+  const routes = useMemo(() => getRoutes(), []);
   const renderItem = (props: TeamProps) => {
     const { id } = props;
     return (
       <Li key={id}>
-        <TeamListItem {...props} />
+        <Link to={`${routes.TEAMS}/${id}`}>
+          <TeamListItem {...props} />
+        </Link>
       </Li>
     );
   };

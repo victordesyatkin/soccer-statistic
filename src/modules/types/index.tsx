@@ -44,16 +44,28 @@ type ReducerProps = {
   teams: TeamReducerProps;
   common: commonReducerProps;
   countries: CountryReducerProps;
+  mapCompetitionSeasons: MapCompetitionSeasonsReducerProps;
+  mapSeasonTeams: MapSeasonTeamsReducerProps;
 };
 
 type initialStateProps = ReducerProps;
 
-type Season = {
+type SeasonProps = {
   id: number;
   startDate: string;
   endDate: string;
   currentMatchday: number;
 };
+
+type ItemsSeasonProps = Record<string, SeasonProps>;
+
+type SeasonReducerProps = {
+  items: ItemsSeasonProps;
+  isLoading: boolean;
+  error: Error | null;
+};
+
+type initialSeasonStateProps = SeasonReducerProps;
 
 type Area = {
   id: number;
@@ -64,8 +76,8 @@ type LeagueResponseProps = {
   id: number;
   name: string;
   area: Area;
-  currentSeason: Season;
-  seasons: Season[];
+  currentSeason: SeasonProps;
+  seasons: SeasonProps[];
   lastUpdated: string;
   logo: string;
 };
@@ -81,13 +93,30 @@ type LeaguesProps = Partial<{
   items: LeagueProps[] | [];
 }>;
 
+type PlayerProps = {
+  id: number;
+  name: string;
+  position: string;
+  dateOfBirth: string;
+  countryOfBirth: string;
+  nationality: string;
+  role: string;
+};
+
 type TeamProps = {
   id: number;
   name: string;
   shortName: string;
   logo: string;
   area: Area;
-  leagueId: string;
+  venue: string;
+  address: string;
+  phone: string;
+  website: string;
+  email: string;
+  founded: string;
+  clubColors: string;
+  squad?: PlayerProps[];
 };
 
 type TeamsProps = {
@@ -118,7 +147,7 @@ type StatisticServiceProps = Partial<{ apiKey: string; apiBase: string }>;
 type EndpointsType = {
   FETCH_LEAGUES: string;
   FETCH_COUNTRIES: string;
-  TEAMS: string;
+  FETCH_TEAM: string;
 };
 
 type RoutesType = {
@@ -214,6 +243,8 @@ type FilterTeamsProps = ({
 }: {
   teams: TeamProps[];
   filters: FilterTeamsObjectProps;
+  mapSeasonTeamsItems: MapSeasonTeamsProps;
+  mapCompetitionSeasonsItems: MapCompetitionSeasonsProps;
 }) => TeamProps[];
 
 type CalendarProps = Partial<{
@@ -284,6 +315,11 @@ type getTeamsProps = {
   leagueId: string;
 };
 
+type getTeamProps = {
+  params?: Record<string, string>;
+  teamId: string;
+};
+
 type getLeaguesProps = Partial<{
   params: Record<string, string>;
   leagueId: string;
@@ -295,16 +331,27 @@ type TeamResponseProps = {
   name: string;
   shortName: string;
   crestUrl: string;
+  venue: string;
+  address: string;
+  phone: string;
+  website: string;
+  email: string;
+  founded: string;
+  clubColors: string;
+  squad?: PlayerProps[];
 };
+
+type TeamFullResponseProps = {
+  activeCompetitions?: LeagueProps[];
+} & TeamResponseProps;
 
 type TeamsResponseProps = {
   competition: LeagueResponseProps;
+  season: SeasonProps;
   teams: TeamResponseProps[];
 };
 
-type transformTeamProps = (
-  leagueId: string
-) => (team: TeamResponseProps) => TeamProps;
+type transformTeamProps = (team: TeamResponseProps) => TeamProps;
 
 type BreadcrumbsProps = Partial<{
   content: string;
@@ -381,10 +428,25 @@ type useOutsideClickType = {
   isOpened?: boolean;
 };
 
+type MapCompetitionSeasonsProps = Record<string, string[]>;
+type MapSeasonTeamsProps = Record<string, string[]>;
+
+type MapCompetitionSeasonsReducerProps = {
+  items: MapCompetitionSeasonsProps;
+  isLoading: boolean;
+  error: Error | null;
+};
+
+type MapSeasonTeamsReducerProps = {
+  items: MapCompetitionSeasonsProps;
+  isLoading: boolean;
+  error: Error | null;
+};
 interface IStatisticService {
   getLeagues: (options?: getLeaguesProps) => Promise<LeagueProps[]>;
-  getTeams: (options: getTeamsProps) => Promise<TeamResponseProps[]>;
+  getTeams: (options: getTeamsProps) => Promise<TeamsResponseProps>;
   getCountries: () => Promise<CountryProps[]>;
+  getTeam: (options: getTeamProps) => Promise<TeamFullResponseProps>;
 }
 
 export type {
@@ -448,4 +510,15 @@ export type {
   ItemsTeamProps,
   ItemsLeagueProps,
   getLeaguesProps,
+  PlayerProps,
+  getTeamProps,
+  TeamFullResponseProps,
+  SeasonProps,
+  ItemsSeasonProps,
+  MapCompetitionSeasonsProps,
+  MapSeasonTeamsProps,
+  initialSeasonStateProps,
+  SeasonReducerProps,
+  MapCompetitionSeasonsReducerProps,
+  MapSeasonTeamsReducerProps,
 };

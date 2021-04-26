@@ -33,16 +33,25 @@ const fetchLeagues = ({
 }): ((leagueIds?: string[]) => (dispatch: Dispatch) => void) => (leagueIds) => (
   dispatch
 ) => {
+  // console.log('fetchLeagues leagueIds : ', leagueIds);
+  let requests = [];
   if (serviceStatistic && leagueIds) {
     dispatch(fetchRequest());
-    const requests = leagueIds.map((leagueId) =>
-      serviceStatistic.getLeagues({ leagueId })
-    );
+    if (leagueIds.length) {
+      requests = leagueIds.map((leagueId) => {
+        if (leagueId) {
+          return serviceStatistic.getLeagues({ leagueId });
+        }
+        return Promise.resolve(undefined);
+      });
+    } else {
+      requests.push(serviceStatistic.getLeagues());
+    }
     Promise.allSettled(requests)
       .then((payload) => {
-        console.log('payload : ', payload);
         const readyPayload = transformResponseFetchLeagues(payload);
-        console.log('readyPayload : ', readyPayload);
+        // console.log('payload : ', payload);
+        // console.log('readyPayload : ', readyPayload);
         dispatch(fetchSuccess());
         dispatch(fetchLeaguesSuccess(readyPayload));
       })

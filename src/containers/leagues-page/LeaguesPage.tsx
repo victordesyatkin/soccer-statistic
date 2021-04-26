@@ -17,7 +17,7 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
   const readyState = useSelector((state: ReducerProps): ReducerProps => state);
   const {
     countries: { items: countries = [] } = {},
-    leagues: { items: leagues = [] } = {},
+    leagues: { items: leagueItems = {} } = {},
   } = readyState;
   const dispatch = useDispatch();
   const onEnterSelectFieldCountries = useCallback(() => {
@@ -44,23 +44,26 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
     },
     [setLeagueName]
   );
+  const readyLeagueArray = useMemo(() => Object.values(leagueItems), [
+    leagueItems,
+  ]);
   const readyLeagues = useMemo(
     () =>
       filterLeagues({
-        leagues,
+        leagues: readyLeagueArray,
         filters: {
           countryIds,
           leagueName,
           dates,
         },
       }),
-    [leagues, countryIds, leagueName, dates]
+    [readyLeagueArray, countryIds, leagueName, dates]
   );
   useEffect(() => {
-    if (!leagues?.length) {
+    if (!readyLeagues?.length) {
       dispatch(fetchLeagues({ serviceStatistic })());
     }
-  }, [leagues, serviceStatistic, dispatch]);
+  }, [readyLeagues, serviceStatistic, dispatch]);
   const memorizedSelectField = useMemo(
     () => ({
       placeholder: 'Please select countries',

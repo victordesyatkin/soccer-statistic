@@ -10,6 +10,8 @@ import {
   getTeamsProps,
   getLeaguesProps,
   TeamsResponseProps,
+  getTeamProps,
+  TeamFullResponseProps,
 } from '../modules/types';
 
 import {
@@ -64,12 +66,23 @@ class StatisticService implements IStatisticService {
   async getTeams({
     params,
     leagueId,
-  }: getTeamsProps): Promise<TeamResponseProps[]> {
+  }: getTeamsProps): Promise<TeamsResponseProps> {
     const items = await this.getResource<TeamsResponseProps>({
       url: `${this.endpoints.FETCH_LEAGUES}/${leagueId}/teams`,
       params,
     });
-    return transformTeams(items);
+    return items;
+  }
+
+  async getTeam({
+    params,
+    teamId,
+  }: getTeamProps): Promise<TeamFullResponseProps> {
+    const item = await this.getResource<TeamResponseProps>({
+      url: `${this.endpoints.FETCH_TEAM}/${teamId}`,
+      params,
+    });
+    return item;
   }
 
   private init(options?: StatisticServiceProps) {
@@ -94,14 +107,11 @@ class StatisticService implements IStatisticService {
     }
     let readyParams = '';
     if (params) {
-      readyParams = `&${new URLSearchParams(params).toString()}`;
+      readyParams = `?${new URLSearchParams(params).toString()}`;
     }
-    const response = await fetch(
-      `${this.apiBase}${url}?api_token=${this.apiKey}${readyParams}`,
-      {
-        headers: { 'X-Auth-Token': this.apiKey },
-      }
-    );
+    const response = await fetch(`${this.apiBase}${url}${readyParams}`, {
+      headers: { 'X-Auth-Token': this.apiKey },
+    });
     if (!response.ok) {
       throw new Error(`${response.status}`);
     }

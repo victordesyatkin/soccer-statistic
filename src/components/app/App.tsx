@@ -19,9 +19,11 @@ const LeaguesPage = lazy(() => import('../../containers/leagues-page'));
 
 const TeamsPage = lazy(() => import('../../containers/teams-page'));
 
+const TeamPage = lazy(() => import('../../containers/team-page'));
+
 const App: React.FC<AppProps> = ({ header }) => {
   const routes = useMemo(() => getRoutes(), []);
-  console.log('routes : ', routes);
+  // console.log('routes : ', routes);
   return (
     <div className="app">
       <div className="app__header">
@@ -33,6 +35,9 @@ const App: React.FC<AppProps> = ({ header }) => {
             <Switch>
               <Route path={routes.LEAGUES}>
                 <LeaguesPage />
+              </Route>
+              <Route path={`${routes.TEAMS}/:id`}>
+                <TeamPage />
               </Route>
               <Route path={routes.TEAMS}>
                 <TeamsPage />
