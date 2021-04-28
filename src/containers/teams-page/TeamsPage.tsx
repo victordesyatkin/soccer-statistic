@@ -23,7 +23,7 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   const history = useHistory();
   const params = useMemo(() => {
     let readyParams: string[] | undefined;
-    const { leagueId: paramLeagueId } = searchString(search) || {};
+    const { leagueId: paramLeagueId = '2001' } = searchString(search) || {};
     if (paramLeagueId) {
       readyParams = [paramLeagueId];
     }

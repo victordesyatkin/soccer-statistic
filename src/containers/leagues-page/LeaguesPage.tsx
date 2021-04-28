@@ -60,10 +60,10 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
     [readyLeagueArray, countryIds, leagueName, dates]
   );
   useEffect(() => {
-    if (!readyLeagues?.length) {
-      dispatch(fetchLeagues({ serviceStatistic })());
+    if (readyLeagueArray?.length < 50) {
+      dispatch(fetchLeagues({ serviceStatistic })([]));
     }
-  }, [readyLeagues, serviceStatistic, dispatch]);
+  }, [readyLeagueArray, serviceStatistic, dispatch]);
   const memorizedSelectField = useMemo(
     () => ({
       placeholder: 'Please select countries',

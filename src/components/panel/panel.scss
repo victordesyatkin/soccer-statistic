@@ -18,6 +18,7 @@ $parent: 'panel';
     position: initial;
     display: flex;
     width: 100%;
+    min-width: 20.8rem;
   }
 
   &_opened {

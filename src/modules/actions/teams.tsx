@@ -1,6 +1,10 @@
 import { ActionCreator, Dispatch } from 'redux';
 
-import { transformResponseFetchTeams, transformTeamFull } from '../../helpers';
+import {
+  transformResponseFetchTeams,
+  transformTeamFull,
+  transformArrayToObjectById,
+} from '../../helpers';
 import { IStatisticService } from '../../services';
 import {
   ActionType,
@@ -8,6 +12,7 @@ import {
   TeamsResponseProps,
   TeamFullResponseProps,
   ItemsTeamProps,
+  TeamProps,
 } from '../types';
 import { fetchRequest, fetchSuccess, fetchFailure } from './common';
 
@@ -88,15 +93,17 @@ const fetchTeam = ({
   teamId,
 }) => (dispatch) => {
   if (serviceStatistic && teamId) {
+    dispatch(fetchRequest());
     serviceStatistic
       .getTeam({ teamId })
       .then((payload: TeamFullResponseProps) => {
-        const readyPayload = transformTeamFull(payload);
+        const readyPayload = transformArrayToObjectById<TeamProps>([
+          transformTeamFull(payload),
+        ]);
         dispatch(fetchTeamsSuccess(readyPayload));
         dispatch(fetchSuccess());
       })
       .catch((error: Error) => {
-        console.log('error : ', error);
         dispatch(fetchTeamsFailure(error));
         dispatch(fetchFailure(error));
       });
@@ -111,4 +118,5 @@ export {
   fetchTeamsRequest,
   fetchTeamsFailure,
   fetchTeams,
+  fetchTeam,
 };

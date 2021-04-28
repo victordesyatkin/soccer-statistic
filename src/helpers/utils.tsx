@@ -367,7 +367,7 @@ const filterTeamsByLeagueIds: FilterTeamsByLeagueIds = (teamIds) => (
   if (teamIds?.length && teamId) {
     return teamIds.indexOf(String(teamId)) !== -1;
   }
-  return false;
+  return true;
 };
 
 const composeTeams = ({
@@ -689,4 +689,6 @@ export {
   transformTeamFull,
   makeCompetitionSeasonsItems,
   makeMapSeasonTeamItems,
+  transformArrayToObjectById,
+  prepareDate,
 };
