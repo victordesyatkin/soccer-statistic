@@ -6,7 +6,7 @@ import { CountryReducerProps } from '../types';
 const initialLeagueState: CountryReducerProps = {
   items: [],
   isLoading: false,
-  error: null,
+  errors: {},
 };
 
 const reducer = (
@@ -18,7 +18,6 @@ const reducer = (
       return {
         ...state,
         isLoading: true,
-        error: null,
       };
     }
     case actions.FETCH_COUNTRIES_SUCCESS: {
@@ -26,13 +25,15 @@ const reducer = (
         ...state,
         items: action?.payload || [],
         isLoading: false,
-        error: null,
       };
     }
     case actions.FETCH_COUNTRIES_FAILURE: {
       return {
         ...state,
-        error: action?.payload || null,
+        errors: {
+          ...state.errors,
+          ...action.payload,
+        },
         isLoading: false,
       };
     }

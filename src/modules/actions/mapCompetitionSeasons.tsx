@@ -1,6 +1,6 @@
 import { ActionCreator } from 'redux';
 
-import { ActionType, ActionCreatorType } from '../types';
+import { ActionType, ActionCreatorType, ItemsErrorProps } from '../types';
 
 const FETCH_MAP_COMPETITION_SEASONS_REQUEST =
   'FETCH_MAP_COMPETITION_SEASONS_REQUEST';
@@ -20,11 +20,13 @@ const fetchMapCompetitionSeasonsSuccess: ActionCreator<
 const FETCH_MAP_COMPETITION_SEASONS_FAILURE =
   'FETCH_MAP_COMPETITION_SEASONS_FAILURE';
 const fetchMapCompetitionSeasonsFailure: ActionCreator<
-  ActionType & { payload: Error }
-> = (payload: Error) => ({
-  type: FETCH_MAP_COMPETITION_SEASONS_FAILURE,
-  payload,
-});
+  ActionType & { payload: ItemsErrorProps }
+> = (payload: ItemsErrorProps) => {
+  return {
+    type: FETCH_MAP_COMPETITION_SEASONS_FAILURE,
+    payload,
+  };
+};
 
 export {
   FETCH_MAP_COMPETITION_SEASONS_REQUEST,

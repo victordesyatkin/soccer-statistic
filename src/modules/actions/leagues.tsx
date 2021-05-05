@@ -1,8 +1,13 @@
 import { ActionCreator, Dispatch } from 'redux';
 
-import { transformResponseFetchLeagues } from '../../helpers';
+import { transformResponseFetchLeagues, transformMessage } from '../../helpers';
 import { IStatisticService } from '../../services';
-import { ActionType, ActionCreatorType, ItemsLeagueProps } from '../types';
+import {
+  ActionType,
+  ActionCreatorType,
+  ItemsLeagueProps,
+  ItemsErrorProps,
+} from '../types';
 import { fetchFailure, fetchRequest, fetchSuccess } from './common';
 
 const FETCH_LEAGUES_SUCCESS = 'FETCH_LEAGUES_SUCCESS';
@@ -19,12 +24,14 @@ const fetchLeaguesRequest: ActionCreatorType = () => ({
 });
 
 const FETCH_LEAGUES_FAILURE = 'FETCH_LEAGUES_FAILURE';
-const fetchLeaguesFailure: ActionCreator<ActionType & { payload: Error }> = (
-  payload: Error
-) => ({
-  type: FETCH_LEAGUES_FAILURE,
-  payload,
-});
+const fetchLeaguesFailure: ActionCreator<
+  ActionType & { payload: ItemsErrorProps }
+> = (payload: ItemsErrorProps) => {
+  return {
+    type: FETCH_LEAGUES_FAILURE,
+    payload,
+  };
+};
 
 const fetchLeagues = ({
   serviceStatistic,
@@ -50,13 +57,12 @@ const fetchLeagues = ({
     Promise.allSettled(requests)
       .then((payload) => {
         const readyPayload = transformResponseFetchLeagues(payload);
-        // console.log('payload : ', payload);
-        // console.log('readyPayload : ', readyPayload);
         dispatch(fetchSuccess());
         dispatch(fetchLeaguesSuccess(readyPayload));
       })
       .catch((error) => {
-        dispatch(fetchFailure(error));
+        const payload = transformMessage({ error, status: 'danger' });
+        dispatch(fetchFailure(payload));
       });
   }
 };

@@ -17,3 +17,8 @@ body {
   font-size: $font-size-body;
   font-weight: $font-weight-body;
 }
+
+#modal-root {
+  position: relative;
+  z-index: 2000;
+}

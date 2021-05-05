@@ -1,7 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
-import { initialStateProps } from '../../modules/reducers';
 import './error-indicator.scss';
 import ErrorIndicatorImageSrcDefault from './images/error-indicator.png';
 
@@ -22,14 +20,6 @@ const ErrorIndicator: React.FC<ErrorIndicator> = ({
 }) => {
   const className = 'error-indicator';
   const readySrc = src || ErrorIndicatorImageSrcDefault;
-  const error: Error | null = useSelector(
-    (state: initialStateProps): Error | null => state?.error || null
-  );
-  let stateContentBody: string | undefined;
-  if (error) {
-    stateContentBody = error.message;
-  }
-  const readyContentBody = contentBody || stateContentBody;
   return (
     <article className={className}>
       <div className={`${className}__image`}>
@@ -38,9 +28,7 @@ const ErrorIndicator: React.FC<ErrorIndicator> = ({
       {contentHeader && (
         <p className={`${className}__header`}>{contentHeader}</p>
       )}
-      {contentBody && (
-        <p className={`${className}__body`}>{readyContentBody}</p>
-      )}
+      {contentBody && <p className={`${className}__body`}>{contentBody}</p>}
     </article>
   );
 };

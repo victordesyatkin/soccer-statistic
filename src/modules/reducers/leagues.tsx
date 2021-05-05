@@ -6,7 +6,7 @@ import { LeagueReducerProps } from '../types';
 const initialLeagueState: LeagueReducerProps = {
   items: {},
   isLoading: false,
-  error: null,
+  errors: {},
 };
 
 const reducer = (
@@ -18,7 +18,6 @@ const reducer = (
       return {
         ...state,
         isLoading: true,
-        error: null,
       };
     }
     case actions.FETCH_LEAGUES_SUCCESS: {
@@ -29,13 +28,15 @@ const reducer = (
           ...action.payload,
         },
         isLoading: false,
-        error: null,
       };
     }
     case actions.FETCH_LEAGUES_FAILURE: {
       return {
         ...state,
-        error: action?.payload || null,
+        errors: {
+          ...state.errors,
+          ...action.payload,
+        },
         isLoading: false,
       };
     }

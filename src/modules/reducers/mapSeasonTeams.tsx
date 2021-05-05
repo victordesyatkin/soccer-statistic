@@ -7,7 +7,7 @@ import { MapSeasonTeamsReducerProps } from '../types';
 const initialLeagueState: MapSeasonTeamsReducerProps = {
   items: {},
   isLoading: false,
-  error: null,
+  errors: {},
 };
 
 const reducer = (
@@ -19,7 +19,6 @@ const reducer = (
       return {
         ...state,
         isLoading: true,
-        error: null,
       };
     }
     case actions.FETCH_MAP_SEASON_TEAMS_SUCCESS: {
@@ -29,14 +28,16 @@ const reducer = (
           items: state.items,
           payload: action.payload,
         }),
-        error: null,
         isLoading: false,
       };
     }
     case actions.FETCH_MAP_SEASON_TEAMS_FAILURE: {
       return {
         ...state,
-        error: action.payload || null,
+        errors: {
+          ...state.errors,
+          ...action.payload,
+        },
         isLoading: false,
       };
     }

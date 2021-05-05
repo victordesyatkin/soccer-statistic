@@ -7,6 +7,7 @@ import countryReducer from './countries';
 import seasonReducer from './seasons';
 import mapCompetitionReducer from './mapCompetitionSeasons';
 import mapSeasonTeamsReducer from './mapSeasonTeams';
+import matchReducer from './matches';
 import { initialStateProps } from '../types';
 
 const reducer = combineReducers({
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   teams: teamsReducer,
   countries: countryReducer,
   seasons: seasonReducer,
+  matches: matchReducer,
   mapCompetitionSeasons: mapCompetitionReducer,
   mapSeasonTeams: mapSeasonTeamsReducer,
 });

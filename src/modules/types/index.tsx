@@ -5,16 +5,35 @@ type ActionType = { type: string } & Record<string, unknown>;
 type ActionCreatorType = (payload?: unknown) => ActionType;
 
 type initialCommonStateProps = {
-  error: Error | null;
+  errors: ItemsErrorProps;
   isLoading: boolean;
 };
 
 type commonReducerProps = initialCommonStateProps;
 
+interface ExtendedErrorOptions {
+  id?: string;
+  message: string;
+  statusText?: string;
+  status?: string;
+  auto?: boolean;
+  time?: number;
+}
+
+interface ExtendedErrorProps extends ExtendedErrorOptions {
+  id: string;
+}
+interface IExtendedError extends Error {
+  id: string;
+  convert: () => ExtendedErrorProps;
+}
+
+type ItemsErrorProps = Record<string, ExtendedErrorProps>;
+
 type initialLeagueStateProps = {
   items: ItemsLeagueProps;
   isLoading: boolean;
-  error: Error | null;
+  errors: ItemsErrorProps;
 };
 
 type LeagueReducerProps = initialLeagueStateProps;
@@ -26,7 +45,7 @@ type ItemsLeagueProps = Record<string, LeagueProps>;
 type initialTeamStateProps = {
   items: ItemsTeamProps;
   isLoading: boolean;
-  error: Error | null;
+  errors: ItemsErrorProps;
 };
 
 type TeamReducerProps = initialTeamStateProps;
@@ -34,8 +53,100 @@ type TeamReducerProps = initialTeamStateProps;
 type initialCountryStateProps = {
   items: CountryProps[];
   isLoading: boolean;
-  error: Error | null;
+  errors: ItemsErrorProps;
 };
+
+type CoachProps = {
+  id: number;
+  name: string;
+  countryOfBirth: string;
+  nationality: string;
+};
+
+type MatchPlayer = {
+  id: number;
+  name: string;
+  shirtNumber: string;
+};
+
+type MatchTeamProps = {
+  id: number;
+  name: string;
+  coach: CoachProps;
+  captain: MatchPlayer;
+  lineup: MatchPlayer[];
+  bench: MatchPlayer[];
+};
+
+type TimeScoreProps = {
+  homeTeam?: number;
+  awayTeam?: number;
+};
+
+type ScoreProps = {
+  winner?: string;
+  duration?: string;
+  fullTime: TimeScoreProps;
+  halfTime: TimeScoreProps;
+  extraTime: TimeScoreProps;
+  penalties: TimeScoreProps;
+};
+
+type ShortObjectProps = {
+  id: number;
+  name: string;
+};
+
+type GoalProps = {
+  minute: number;
+  type: string;
+  team: ShortObjectProps;
+  scorer: ShortObjectProps;
+  assist: ShortObjectProps;
+};
+
+type BookProps = {
+  minute: number;
+  team: ShortObjectProps;
+  player: ShortObjectProps;
+  card: ShortObjectProps;
+};
+
+type SubstitutionProps = {
+  minute: string;
+  team: ShortObjectProps;
+  playerOut: ShortObjectProps;
+  playerIn: ShortObjectProps;
+};
+
+type MatchProps = {
+  id: number;
+  competition: LeagueProps;
+  season: SeasonProps;
+  utcDate: string;
+  status: string;
+  matchday: number;
+  stage: string;
+  group: string;
+  lastUpdated: string;
+  homeTeam: MatchTeamProps;
+  awayTeam: MatchTeamProps;
+  score: ScoreProps;
+  goals: GoalProps[];
+  bookings: BookProps[];
+  substitutions: SubstitutionProps[];
+  referees: ShortObjectProps[];
+};
+
+type ItemsMatchProps = Record<string, MatchProps>;
+
+type initialMatchStateProps = {
+  items: ItemsMatchProps;
+  isLoading: boolean;
+  errors: ItemsErrorProps;
+};
+
+type MatchReducerProps = initialMatchStateProps;
 
 type CountryReducerProps = initialCountryStateProps;
 
@@ -44,6 +155,7 @@ type ReducerProps = {
   teams: TeamReducerProps;
   common: commonReducerProps;
   countries: CountryReducerProps;
+  matches: MatchReducerProps;
   mapCompetitionSeasons: MapCompetitionSeasonsReducerProps;
   mapSeasonTeams: MapSeasonTeamsReducerProps;
 };
@@ -62,7 +174,7 @@ type ItemsSeasonProps = Record<string, SeasonProps>;
 type SeasonReducerProps = {
   items: ItemsSeasonProps;
   isLoading: boolean;
-  error: Error | null;
+  errors: ItemsErrorProps;
 };
 
 type initialSeasonStateProps = SeasonReducerProps;
@@ -70,6 +182,8 @@ type initialSeasonStateProps = SeasonReducerProps;
 type Area = {
   id: number;
   name: string;
+  ensignUrl?: string;
+  code: string;
 };
 
 type LeagueResponseProps = {
@@ -148,11 +262,13 @@ type EndpointsType = {
   FETCH_LEAGUES: string;
   FETCH_COUNTRIES: string;
   FETCH_TEAM: string;
+  FETCH_MATCHES: string;
 };
 
 type RoutesType = {
   LEAGUES: string;
   TEAMS: string;
+  MATCHES: string;
 };
 
 type SelectFieldOptionType = {
@@ -394,6 +510,7 @@ type LinkProps = Partial<{
   isUpperCase: boolean;
   theme: string;
   to: string;
+  className: string;
 }>;
 
 type LogoImageProps = {
@@ -434,19 +551,36 @@ type MapSeasonTeamsProps = Record<string, string[]>;
 type MapCompetitionSeasonsReducerProps = {
   items: MapCompetitionSeasonsProps;
   isLoading: boolean;
-  error: Error | null;
+  errors: ItemsErrorProps;
 };
 
 type MapSeasonTeamsReducerProps = {
   items: MapCompetitionSeasonsProps;
   isLoading: boolean;
-  error: Error | null;
+  errors: ItemsErrorProps;
+};
+
+type getMatchesProps = Partial<{
+  competitions: string;
+  dateFrom: string;
+  dateTo: string;
+}>;
+
+type MatchesFullResponseProps = {
+  counter: number;
+  filters: Record<string, string>;
+  matches: MatchProps[];
+};
+
+type MatchesPageProps = {
+  items: MatchProps[];
 };
 interface IStatisticService {
   getLeagues: (options?: getLeaguesProps) => Promise<LeagueProps[]>;
   getTeams: (options: getTeamsProps) => Promise<TeamsResponseProps>;
   getCountries: () => Promise<CountryProps[]>;
   getTeam: (options: getTeamProps) => Promise<TeamFullResponseProps>;
+  getMatches: (options: getMatchesProps) => Promise<MatchesFullResponseProps>;
 }
 
 export type {
@@ -521,4 +655,14 @@ export type {
   SeasonReducerProps,
   MapCompetitionSeasonsReducerProps,
   MapSeasonTeamsReducerProps,
+  ItemsErrorProps,
+  ExtendedErrorProps,
+  ExtendedErrorOptions,
+  IExtendedError,
+  MatchReducerProps,
+  MatchProps,
+  getMatchesProps,
+  MatchesFullResponseProps,
+  ItemsMatchProps,
+  MatchesPageProps,
 };

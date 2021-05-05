@@ -4,6 +4,7 @@ import {
   transformResponseFetchTeams,
   transformTeamFull,
   transformArrayToObjectById,
+  transformMessage,
 } from '../../helpers';
 import { IStatisticService } from '../../services';
 import {
@@ -13,6 +14,7 @@ import {
   TeamFullResponseProps,
   ItemsTeamProps,
   TeamProps,
+  ItemsErrorProps,
 } from '../types';
 import { fetchRequest, fetchSuccess, fetchFailure } from './common';
 
@@ -34,12 +36,14 @@ const fetchTeamsRequest: ActionCreatorType = () => ({
 });
 
 const FETCH_TEAMS_FAILURE = 'FETCH_TEAMS_FAILURE';
-const fetchTeamsFailure: ActionCreator<ActionType & { payload: Error }> = (
-  payload: Error
-) => ({
-  type: FETCH_TEAMS_FAILURE,
-  payload,
-});
+const fetchTeamsFailure: ActionCreator<
+  ActionType & { payload: ItemsErrorProps }
+> = (payload: ItemsErrorProps) => {
+  return {
+    type: FETCH_TEAMS_FAILURE,
+    payload,
+  };
+};
 
 const fetchTeams = ({
   serviceStatistic,
@@ -78,9 +82,9 @@ const fetchTeams = ({
         dispatch(fetchSuccess());
       })
       .catch((error) => {
-        console.log('fetchTeams error : ', error);
-        dispatch(fetchTeamsFailure(error));
-        dispatch(fetchFailure(error));
+        const payload = transformMessage({ error, status: 'danger' });
+        dispatch(fetchTeamsFailure(payload));
+        dispatch(fetchFailure(payload));
       });
   }
 };
@@ -103,9 +107,10 @@ const fetchTeam = ({
         dispatch(fetchTeamsSuccess(readyPayload));
         dispatch(fetchSuccess());
       })
-      .catch((error: Error) => {
-        dispatch(fetchTeamsFailure(error));
-        dispatch(fetchFailure(error));
+      .catch((error) => {
+        const payload = transformMessage({ error, status: 'danger' });
+        dispatch(fetchTeamsFailure(payload));
+        dispatch(fetchFailure(payload));
       });
   }
 };

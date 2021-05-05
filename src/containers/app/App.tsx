@@ -5,6 +5,7 @@ import { HashRouter } from 'react-router-dom';
 import store from '../../modules/store';
 import ErrorBoundary from '../../components/error-boundary';
 import App from '../../components/app';
+import Modal from '../modal';
 
 const header = {
   nav: {
@@ -25,24 +26,20 @@ const header = {
         id: '3',
         title: 'Matches',
         content: 'Matches',
+        to: '/matches',
       },
       {
         id: '4',
-        title: 'Matches',
-        content: 'Matches',
-      },
-      {
-        id: '5',
         title: 'Predictions',
         content: 'Predictions',
       },
       {
-        id: '6',
+        id: '5',
         title: 'Support',
         content: 'Support',
       },
       {
-        id: '7',
+        id: '6',
         title: 'Account',
         content: 'Account',
       },
@@ -62,6 +59,7 @@ const AppContainer: React.FC = () => {
       <ErrorBoundary>
         <HashRouter>
           <App header={header} />
+          <Modal />
         </HashRouter>
       </ErrorBoundary>
     </Provider>

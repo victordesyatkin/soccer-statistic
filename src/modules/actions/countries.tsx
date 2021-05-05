@@ -1,6 +1,13 @@
 import { ActionCreator, Dispatch } from 'redux';
 
-import { ActionType, CountryProps, IStatisticService } from '../types';
+import { transformMessage } from '../../helpers';
+import {
+  ActionType,
+  CountryProps,
+  IExtendedError,
+  IStatisticService,
+  ItemsErrorProps,
+} from '../types';
 import { fetchRequest, fetchSuccess, fetchFailure } from './common';
 
 const FETCH_COUNTRIES_SUCCESS = 'FETCH_COUNTRIES_SUCCESS';
@@ -19,9 +26,9 @@ const fetchCountriesSuccess: ActionCreator<
 const FETCH_COUNTRIES_FAILURE = 'FETCH_COUNTRIES_FAILURE';
 const fetchCountriesFailure: ActionCreator<
   ActionType & {
-    payload: Error;
+    payload: ItemsErrorProps;
   }
-> = (payload: Error) => {
+> = (payload: ItemsErrorProps) => {
   return {
     type: FETCH_COUNTRIES_FAILURE,
     payload,
@@ -49,9 +56,10 @@ const fetchCountries = ({
         dispatch(fetchSuccess());
         dispatch(fetchCountriesSuccess(payload));
       })
-      .catch((error: Error) => {
-        dispatch(fetchFailure(error));
-        dispatch(fetchCountriesFailure(error));
+      .catch((error: IExtendedError) => {
+        const payload = transformMessage({ error, status: 'danger' });
+        dispatch(fetchFailure(payload));
+        dispatch(fetchCountriesFailure(payload));
       });
   }
 };

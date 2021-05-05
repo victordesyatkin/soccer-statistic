@@ -15,6 +15,7 @@ import logo8 from '../assets/images/logos/8.png';
 import logo9 from '../assets/images/logos/9.png';
 import logo10 from '../assets/images/logos/10.png';
 import logo11 from '../assets/images/logos/11.svg';
+import eur from '../assets/images/flags/EUR.svg';
 
 import {
   ActionType,
@@ -41,6 +42,10 @@ import {
   MapSeasonTeamsProps,
   ItemsSeasonProps,
   SeasonProps,
+  ItemsErrorProps,
+  IExtendedError,
+  ItemsMatchProps,
+  MatchesFullResponseProps,
 } from '../modules/types';
 
 import { endpoints, routes } from '../configuration';
@@ -58,6 +63,10 @@ const logos = [
   logo10,
   logo11,
 ];
+
+const flags = {
+  eur,
+};
 
 function isString(value: unknown): boolean {
   if (
@@ -89,7 +98,12 @@ function useOutsideClick({
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const node: Node | null = (event?.target || null) as Node | null;
-      if (callback && ref?.current && !ref.current.contains(node)) {
+      if (
+        ref !== null &&
+        callback &&
+        ref?.current &&
+        !ref.current.contains(node)
+      ) {
         callback();
       }
     }
@@ -125,9 +139,9 @@ function isValidDate(date: Date): boolean {
   return date instanceof Date && !Number.isNaN(date.getTime());
 }
 
-function prepareDate(passDate?: string | number | Date) {
+function prepareDate(passDate?: string | number | Date): Date | undefined {
   let date: Date | undefined;
-  if (passDate && isString(passDate)) {
+  if (passDate && typeof passDate === 'string') {
     const [partDay, partMonth, partYear] = passDate.split('.');
     if (isValidDateByParts({ partDay, partMonth, partYear })) {
       date = new Date(`${partMonth}.${partDay}.${partYear}`);
@@ -150,22 +164,79 @@ function value2Date(value?: Date | string | number): Date | undefined {
   return date;
 }
 
-function maskedDate(passDate: Date | string): string {
-  const date = new Date(passDate);
-  let day: string | number = date.getDate();
-  let month: string | number = date.getMonth() + 1;
-  if (day < 10) {
-    day = `0${day}`;
+function separateDate(
+  date?: Date
+):
+  | { day: string; month: string; year: string; hours: string; minutes: string }
+  | undefined {
+  let parts:
+    | {
+        day: string;
+        month: string;
+        year: string;
+        hours: string;
+        minutes: string;
+      }
+    | undefined;
+  if (date && isValidDate(date)) {
+    let day: string | number = date.getDate();
+    let month: string | number = date.getMonth() + 1;
+    let hours: string | number = date.getHours();
+    let minutes: string | number = date.getMinutes();
+    if (day < 10) {
+      day = `0${day}`;
+    }
+    if (month < 10) {
+      month = `0${month}`;
+    }
+    if (hours < 10) {
+      hours = `0${hours}`;
+    }
+    if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+    const year = date.getFullYear();
+    parts = {
+      day: `${day}`,
+      month: `${month}`,
+      year: `${year}`,
+      hours: `${hours}`,
+      minutes: `${minutes}`,
+    };
   }
-  if (month < 10) {
-    month = `0${month}`;
+  return parts;
+}
+
+function date2value(value?: Date): string | undefined {
+  let date: string | undefined;
+  const parts = separateDate(value);
+  if (parts) {
+    const { day, month, year } = parts;
+    date = `${year}-${month}-${day}`;
   }
-  const readyDate = `${day}.${month}.${date.getFullYear()}`;
-  return readyDate;
+  return date;
+}
+
+function maskedDate(value: Date | string): string {
+  const date = new Date(value);
+  const parts = separateDate(date);
+  const { day, month, year } = parts || {};
+  return `${day}.${month}.${year}`;
+}
+
+function maskedTime(value: Date | string): string {
+  const date = new Date(value);
+  const parts = separateDate(date);
+  const { hours, minutes } = parts || {};
+  return `${hours}:${minutes}`;
 }
 
 function uuid(): string {
   return Math.random().toString(16).substr(2);
+}
+
+function uniq(): string {
+  return `${uuid()}-${uuid()}`;
 }
 
 function prepareDisplayNameComponent<T>(
@@ -367,7 +438,7 @@ const filterTeamsByLeagueIds: FilterTeamsByLeagueIds = (teamIds) => (
   if (teamIds?.length && teamId) {
     return teamIds.indexOf(String(teamId)) !== -1;
   }
-  return true;
+  return false;
 };
 
 const composeTeams = ({
@@ -491,7 +562,7 @@ type TransformArrayToObjectByIdProps = { id: number };
 
 function transformArrayToObjectById<T>(
   data?: (T & TransformArrayToObjectByIdProps)[]
-) {
+): Record<string, T & TransformArrayToObjectByIdProps> {
   const result: Record<string, T & TransformArrayToObjectByIdProps> = {};
   if (data?.length) {
     data.forEach((item: T & TransformArrayToObjectByIdProps) => {
@@ -656,6 +727,29 @@ const makeMapSeasonTeamItems: MakeMapSeasonTeamItems = ({ items, payload }) => {
   return readyItems;
 };
 
+const transformMessage = ({
+  error,
+  status,
+}: {
+  error: IExtendedError;
+  status?: string;
+}): ItemsErrorProps => {
+  const { id } = error;
+  return {
+    [id]: {
+      ...error.convert(),
+      status,
+    },
+  };
+};
+
+const transformMatchesFullResponse: (
+  data: MatchesFullResponseProps
+) => ItemsMatchProps = (data) => {
+  const { matches } = data;
+  return transformArrayToObjectById(matches);
+};
+
 export {
   useOutsideClick,
   value2Date,
@@ -691,4 +785,10 @@ export {
   makeMapSeasonTeamItems,
   transformArrayToObjectById,
   prepareDate,
+  uniq,
+  transformMessage,
+  date2value,
+  transformMatchesFullResponse,
+  maskedTime,
+  flags,
 };

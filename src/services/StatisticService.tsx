@@ -12,15 +12,17 @@ import {
   TeamsResponseProps,
   getTeamProps,
   TeamFullResponseProps,
+  getMatchesProps,
+  MatchesFullResponseProps,
 } from '../modules/types';
 
 import {
   transformLeagues,
   transformCountry,
   transformCountries,
-  transformTeams,
   getEndpoints,
 } from '../helpers';
+import ExtendedError from '../helpers/ExtendedError';
 
 class StatisticService implements IStatisticService {
   private apiBase = '';
@@ -29,7 +31,7 @@ class StatisticService implements IStatisticService {
 
   private endpoints: EndpointsType;
 
-  private hasErrorAuthenticationData?: Error;
+  private hasErrorAuthenticationData?: ExtendedError;
 
   constructor(options?: StatisticServiceProps) {
     this.endpoints = getEndpoints();
@@ -53,6 +55,17 @@ class StatisticService implements IStatisticService {
       params,
     });
     return transformLeagues(items);
+  }
+
+  async getMatches(
+    params?: getMatchesProps
+  ): Promise<MatchesFullResponseProps> {
+    const url = this.endpoints.FETCH_MATCHES;
+    const items = await this.getResource<MatchesFullResponseProps>({
+      url,
+      params,
+    });
+    return items;
   }
 
   async getCountries(params?: Record<string, string>): Promise<CountryProps[]> {
@@ -113,15 +126,22 @@ class StatisticService implements IStatisticService {
       headers: { 'X-Auth-Token': this.apiKey },
     });
     if (!response.ok) {
-      throw new Error(`${response.status}`);
+      throw new ExtendedError({
+        message: `${response.status}`,
+        statusText: response.statusText,
+      });
     }
     const results = await response.json();
     return results;
   }
 
-  private checkHasErrorAuthenticationData(): Error | void {
+  private checkHasErrorAuthenticationData(): ExtendedError | void {
     if (!this.apiBase || !this.apiKey) {
-      this.hasErrorAuthenticationData = new Error('Failed authentication data');
+      this.hasErrorAuthenticationData = new ExtendedError({
+        status: '401',
+        message: '401',
+        statusText: 'Failed authentication data',
+      });
     }
     return this.hasErrorAuthenticationData;
   }

@@ -4,7 +4,7 @@ import * as actions from '../actions/common';
 import { initialCommonStateProps, commonReducerProps } from '../types';
 
 const initialCommonState: initialCommonStateProps = {
-  error: null,
+  errors: {},
   isLoading: false,
 };
 
@@ -17,21 +17,30 @@ const reducer = (
       return {
         ...state,
         isLoading: true,
-        error: null,
       };
     }
     case actions.FETCH_SUCCESS: {
       return {
         ...state,
-        error: null,
         isLoading: false,
       };
     }
     case actions.FETCH_FAILURE: {
       return {
         ...state,
-        error: action?.payload || null,
+        errors: {
+          ...state.errors,
+          ...action.payload,
+        },
         isLoading: false,
+      };
+    }
+    case actions.REMOVE_ERROR: {
+      const errors = { ...state.errors };
+      delete errors[action.payload];
+      return {
+        ...state,
+        errors,
       };
     }
     default: {

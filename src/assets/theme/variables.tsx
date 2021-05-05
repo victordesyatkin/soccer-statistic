@@ -6,6 +6,9 @@ const colors = {
   lightgrey: '#dddddd',
   white: '#fff',
   black: '#000',
+  lightRed: '#ffa5a5',
+  blue: '#17a2b8',
+  green: '#28a745',
 };
 
 const sizes = {

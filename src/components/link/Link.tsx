@@ -14,8 +14,10 @@ const Link: FC<LinkProps> = ({
   content,
   isUpperCase,
   to,
+  className,
 }) => {
-  const className = 'link';
+  let readyClassName = 'link';
+  readyClassName += className ? ` ${className}` : '';
   let readyRel = rel;
   if (target === '_blank') {
     const extraRelContent = 'noopener noreferrer';
@@ -25,13 +27,13 @@ const Link: FC<LinkProps> = ({
   return (
     <NavLink
       to={readyTo}
-      className={classnames(className, {
-        [`${className}_uppercase`]: isUpperCase,
+      className={classnames(readyClassName, {
+        [`${readyClassName}_uppercase`]: isUpperCase,
       })}
       rel={readyRel}
       title={title}
       key={id}
-      activeClassName={`${className}_current`}
+      activeClassName={`${readyClassName}_current`}
     >
       {children}
       {content}

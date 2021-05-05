@@ -6,7 +6,7 @@ import { SeasonReducerProps } from '../types';
 const initialLeagueState: SeasonReducerProps = {
   items: {},
   isLoading: false,
-  error: null,
+  errors: {},
 };
 
 const reducer = (
@@ -18,7 +18,6 @@ const reducer = (
       return {
         ...state,
         isLoading: true,
-        error: null,
       };
     }
     case actions.FETCH_SEASONS_SUCCESS: {
@@ -28,14 +27,16 @@ const reducer = (
           ...state.items,
           ...action.payload,
         },
-        error: null,
         isLoading: false,
       };
     }
     case actions.FETCH_SEASONS_FAILURE: {
       return {
         ...state,
-        error: action.payload || null,
+        errors: {
+          ...state.errors,
+          ...action.payload,
+        },
         isLoading: false,
       };
     }
