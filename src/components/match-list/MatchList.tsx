@@ -2,14 +2,21 @@ import React, { FC, useMemo } from 'react';
 import styled from 'styled-components';
 
 import { colors, Scrollbars } from '../../assets/theme';
-import { MatchesPageProps } from '../../modules/types';
+import { MatchListProps } from '../../modules/types';
 import MatchListItem from '../match-list-item';
+import Nodata from '../no-data';
 
 const MatchListWrapper = styled(Scrollbars)`
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
 `;
+const MatchListTableCaption = styled.caption`
+  font-size: 0.9rem;
+  text-align: left;
+  margin-bottom: 0.5rem;
+`;
+
 const MatchListTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -33,7 +40,7 @@ const MatchListTableHeadCall = styled.th`
 `;
 const MatchListTableBody = styled.tbody``;
 
-const MatchList: FC<MatchesPageProps> = ({ items }) => {
+const MatchList: FC<MatchListProps> = ({ items }) => {
   const properties = useMemo(
     () => ({
       date: 'date',
@@ -49,30 +56,39 @@ const MatchList: FC<MatchesPageProps> = ({ items }) => {
   const memorizedPropertyKeys = useMemo(() => Object.keys(properties), [
     properties,
   ]);
+  const memorizedCaption = useMemo(
+    () => `${items?.length} matches in selection:`,
+    [items]
+  );
   return (
     <MatchListWrapper>
-      <MatchListTable>
-        <MatchListTableHead>
-          <MatchListTableRow>
-            {memorizedPropertyValues.map((property) => {
-              return (
-                <MatchListTableHeadCall key={property}>
-                  {property}
-                </MatchListTableHeadCall>
-              );
-            })}
-          </MatchListTableRow>
-        </MatchListTableHead>
-        <MatchListTableBody>
-          {items.map((item) => (
-            <MatchListItem
-              key={item.id}
-              item={item}
-              properties={memorizedPropertyKeys}
-            />
-          ))}
-        </MatchListTableBody>
-      </MatchListTable>
+      {items?.length ? (
+        <MatchListTable>
+          <MatchListTableCaption>{memorizedCaption}</MatchListTableCaption>
+          <MatchListTableHead>
+            <MatchListTableRow>
+              {memorizedPropertyValues.map((property) => {
+                return (
+                  <MatchListTableHeadCall scope="col" key={property}>
+                    {property}
+                  </MatchListTableHeadCall>
+                );
+              })}
+            </MatchListTableRow>
+          </MatchListTableHead>
+          <MatchListTableBody>
+            {items?.map((item) => (
+              <MatchListItem
+                key={item.id}
+                item={item}
+                properties={memorizedPropertyKeys}
+              />
+            ))}
+          </MatchListTableBody>
+        </MatchListTable>
+      ) : (
+        <Nodata />
+      )}
     </MatchListWrapper>
   );
 };

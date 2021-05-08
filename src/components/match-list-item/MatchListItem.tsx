@@ -29,7 +29,7 @@ const MatchListItem: FC<{
   item: MatchProps;
   properties: string[];
 }> = ({ item, properties }) => {
-  console.log('matchListItem : ', item);
+  // console.log('matchListItem : ', item);
   const renderProperty = useCallback(
     (property) => {
       const { id } = item;
@@ -55,7 +55,7 @@ const MatchListItem: FC<{
           } = item;
           content = (
             <MatchListItemScore>
-              {`${homeTeam || '-'}:${awayTeam || '-'}`}
+              {`${homeTeam ?? '-'}:${awayTeam ?? '-'}`}
             </MatchListItemScore>
           );
           break;

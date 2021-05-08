@@ -47,7 +47,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
     return readyItems;
   };
   // console.log('SelectField : value', value);
-  const [selectedValue, setSelectedValue] = useState(value);
+  let readyValue = value;
+  if (Array.isArray(readyValue) && !readyValue.length) {
+    readyValue = undefined;
+  }
+  const [selectedValue, setSelectedValue] = useState(readyValue);
   const [isOpened, setIsOpened] = useState(false);
   const closeBody = useCallback(() => {
     setIsOpened(false);

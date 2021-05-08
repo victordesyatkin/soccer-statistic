@@ -3,7 +3,10 @@ import { bindActionCreators, ActionCreatorsMapObject } from 'redux';
 import { useDispatch } from 'react-redux';
 import sortedUniq from 'lodash.sorteduniq';
 import difference from 'lodash.difference';
+import orderBy from 'lodash.orderby';
 
+import { faArrowAltCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { isArray } from 'jquery';
 import logo1 from '../assets/images/logos/1.png';
 import logo2 from '../assets/images/logos/2.png';
 import logo3 from '../assets/images/logos/3.png';
@@ -46,6 +49,8 @@ import {
   IExtendedError,
   ItemsMatchProps,
   MatchesFullResponseProps,
+  StatusProps,
+  MatchProps,
 } from '../modules/types';
 
 import { endpoints, routes } from '../configuration';
@@ -64,8 +69,19 @@ const logos = [
   logo11,
 ];
 
-const flags = {
+const flags: Record<string, string> = {
   eur,
+};
+
+const statuses: Record<string, StatusProps> = {
+  SCHEDULED: { id: 'SCHEDULED', name: 'scheduled' },
+  LIVE: { id: 'LIVE', name: 'live' },
+  IN_PLAY: { id: 'IN_PLAY', name: 'in play' },
+  PAUSED: { id: 'PAUSED', name: 'paused' },
+  FINISHED: { id: 'FINISHED', name: 'finished' },
+  POSTPONED: { id: 'POSTPONED', name: 'postponed' },
+  SUSPENDED: { id: 'SUSPENDED', name: 'suspended' },
+  CANCELED: { id: 'CANCELED', name: 'canceled' },
 };
 
 function isString(value: unknown): boolean {
@@ -217,11 +233,14 @@ function date2value(value?: Date): string | undefined {
   return date;
 }
 
-function maskedDate(value: Date | string): string {
-  const date = new Date(value);
-  const parts = separateDate(date);
-  const { day, month, year } = parts || {};
-  return `${day}.${month}.${year}`;
+function maskedDate(value?: Date | string | number): string {
+  if (value) {
+    const date = new Date(value);
+    const parts = separateDate(date);
+    const { day, month, year } = parts || {};
+    return `${day}.${month}.${year}`;
+  }
+  return '';
 }
 
 function maskedTime(value: Date | string): string {
@@ -331,6 +350,19 @@ function leagueToOption(item: LeagueProps): SelectFieldOptionType {
 
 function leaguesToOptions(items: LeagueProps[]): SelectFieldOptionType[] {
   return items.map(leagueToOption);
+}
+
+function statusToOption(item: StatusProps) {
+  const { id, name } = item;
+  return {
+    value: id,
+    content: name,
+    id,
+  };
+}
+
+function statusesToOptions(items: StatusProps[]): SelectFieldOptionType[] {
+  return items.map(statusToOption);
 }
 
 function getEndpoints(): EndpointsType {
@@ -750,6 +782,183 @@ const transformMatchesFullResponse: (
   return transformArrayToObjectById(matches);
 };
 
+const makeFilterMatchStatus: (
+  statusIds?: string[]
+) => (item?: MatchProps) => boolean = (statusIds) => {
+  let statusId: string | undefined;
+  if (statusIds?.length) {
+    statusId = statusIds?.[0];
+  }
+  return (item) => {
+    const { status } = item || {};
+    if (statusId) {
+      if (status && status === statusId) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+};
+
+const makeFilterMatchDates: (
+  dates?: (Date | string)[]
+) => (item?: MatchProps) => boolean = (dates) => {
+  const [dateFrom, dateTo] = dates || [];
+  return (item) => {
+    const { utcDate } = item || {};
+    if (dateFrom && dateTo) {
+      if (utcDate) {
+        const readyDate = new Date(utcDate);
+        const readyDateFrom = new Date(dateFrom);
+        const readyDateTo = new Date(dateTo);
+        if (readyDateFrom <= readyDate && readyDate <= readyDateTo) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return true;
+  };
+};
+
+const makeFilterMatchSearchName: (
+  searchName?: string
+) => (item: MatchProps) => boolean = (searchName) => {
+  const readySearchName = searchName?.trim().toLocaleLowerCase();
+  return (item) => {
+    if (readySearchName) {
+      const { competition, homeTeam, awayTeam } = item;
+      const { name: competitionName } = competition || {};
+      const { name: homeTeamName } = homeTeam || {};
+      const { name: awayTeamName } = awayTeam || {};
+      if (
+        competitionName?.trim().toLocaleLowerCase().indexOf(readySearchName) !==
+          -1 ||
+        homeTeamName?.trim().toLocaleLowerCase().indexOf(readySearchName) !==
+          -1 ||
+        awayTeamName?.trim().toLocaleLowerCase().indexOf(readySearchName) !== -1
+      ) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+};
+
+const makeFilterMatchLeagueIds: (
+  leagueIds?: string[]
+) => (item: MatchProps) => boolean = (leagueIds) => {
+  return (item: MatchProps) => {
+    if (leagueIds?.length) {
+      const { competition } = item || {};
+      const { id } = competition || {};
+      if (id) {
+        return leagueIds.indexOf(String(id)) !== -1;
+      }
+      return false;
+    }
+    return true;
+  };
+};
+
+const makeFilterMatches = ({
+  leagueIds,
+  searchName,
+  dates,
+  statusIds,
+}: Partial<{
+  leagueIds: string[];
+  searchName: string;
+  dates: string[];
+  statusIds: string[];
+}>) => {
+  return (item: MatchProps) => {
+    let flag = true;
+    flag = makeFilterMatchDates(dates)(item);
+    if (!flag) {
+      return flag;
+    }
+    flag = makeFilterMatchStatus(statusIds)(item);
+    if (!flag) {
+      return flag;
+    }
+    flag = makeFilterMatchSearchName(searchName)(item);
+    if (!flag) {
+      return flag;
+    }
+    flag = makeFilterMatchLeagueIds(leagueIds)(item);
+    return flag;
+  };
+};
+
+const filterMatches = ({
+  matches,
+  filters,
+}: {
+  matches: MatchProps[];
+  filters: Partial<{
+    leagueIds: string[];
+    searchName: string;
+    dates: string[];
+    statusIds: string[];
+    order: 'asc' | 'desc';
+  }>;
+}): MatchProps[] => {
+  const { order = 'asc' } = filters;
+  const filter = makeFilterMatches(filters);
+  return orderBy(matches.filter(filter), ['utcDate'], [order]);
+};
+
+const createSearch = ({
+  paramsString = '',
+  params = {},
+}: Partial<{
+  paramsString: string;
+  params: Record<string, unknown>;
+}>): URLSearchParams => {
+  const searchParams = new URLSearchParams(paramsString);
+  Object.keys(params).forEach((key) => {
+    const param = params[key];
+    if (param && !Array.isArray(param)) {
+      searchParams.set(key, JSON.stringify(param));
+    } else if (Array.isArray(param) && param.length) {
+      searchParams.set(key, JSON.stringify(param));
+    } else if (searchParams.has(key)) {
+      searchParams.delete(key);
+    }
+  });
+  return searchParams;
+};
+
+const parserParam = <T,>(param: string | undefined): T | undefined => {
+  let parseParam: T | undefined;
+  try {
+    if (param) {
+      parseParam = JSON.parse(param);
+    }
+  } catch (_) {
+    return parseParam;
+  }
+  return parseParam;
+};
+
+const extractLeagueIds = (matches?: ItemsMatchProps): string[] => {
+  let leagueIds: string[] = [];
+  if (matches) {
+    Object.values(matches).forEach((match) => {
+      const {
+        competition: { id },
+      } = match;
+      leagueIds.push(String(id));
+    });
+    leagueIds = sortedUniq(leagueIds);
+  }
+  // console.log('leagueIds : ', leagueIds);
+  return leagueIds;
+};
+
 export {
   useOutsideClick,
   value2Date,
@@ -791,4 +1000,10 @@ export {
   transformMatchesFullResponse,
   maskedTime,
   flags,
+  statuses,
+  statusesToOptions,
+  filterMatches,
+  createSearch,
+  parserParam,
+  extractLeagueIds,
 };

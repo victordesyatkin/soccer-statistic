@@ -1,20 +1,58 @@
 import React, { useCallback, useMemo, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation, useHistory } from 'react-router-dom';
 
-import { fetchCountries } from '../../modules/actions/countries';
 import { fetchLeagues } from '../../modules/actions/leagues';
 import { fetchMatches } from '../../modules/actions/matches';
 import MatchesPage from '../../components/matches-page';
 import { ReducerProps, WithStatisticServiceProps } from '../../modules/types';
-import { leaguesToOptions, filterLeagues } from '../../helpers';
+import {
+  leaguesToOptions,
+  statusesToOptions,
+  statuses,
+  filterMatches,
+  searchString,
+  createSearch,
+  parserParam,
+} from '../../helpers';
 import { withStatisticService } from '../../components/hoc-helpers';
 
 const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
   serviceStatistic,
 }) => {
-  const [leagueIds, setLeagueIds] = useState([]);
-  const [searchName, setSearchName] = useState('');
-  const [dates, setDates] = useState([]);
+  const { search } = useLocation();
+  const history = useHistory();
+  const params = useMemo(() => {
+    const readyParams: Partial<{
+      leagueIds: string[];
+      statusIds: string[];
+      dates: string[];
+      searchName: string;
+    }> = {};
+    const {
+      leagueIds: paramsLeagueIds,
+      statusIds: paramsStatusIds,
+      dates: paramsDates,
+      searchName: paramsSearchName,
+    } = searchString(search) || {};
+    if (paramsLeagueIds) {
+      readyParams.leagueIds = parserParam<string[]>(paramsLeagueIds);
+    }
+    if (paramsStatusIds) {
+      readyParams.statusIds = parserParam<string[]>(paramsStatusIds);
+    }
+    if (paramsDates) {
+      readyParams.dates = parserParam<string[]>(paramsDates);
+    }
+    if (paramsSearchName) {
+      readyParams.searchName = parserParam<string>(paramsSearchName);
+    }
+    return readyParams;
+  }, [search]);
+  const [leagueIds, setLeagueIds] = useState(params.leagueIds);
+  const [statusIds, setStatusIds] = useState(params.statusIds);
+  const [searchName, setSearchName] = useState(params.searchName);
+  const [dates, setDates] = useState(params.dates);
   const readyState = useSelector((state: ReducerProps): ReducerProps => state);
   const {
     matches: { items: matchItems = [] } = {},
@@ -25,94 +63,147 @@ const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
   const onEnterSelectFieldLeagues = useCallback(() => {
     dispatch(fetchLeagues({ serviceStatistic })());
   }, [serviceStatistic, dispatch]);
-  const onChangeSelectField = useCallback(
+  const onChangeSelectFieldLeagues = useCallback(
     (value) => {
       setLeagueIds(value);
+      history.replace({
+        search: createSearch({
+          paramsString: search,
+          params: { leagueIds: value },
+        }).toString(),
+      });
     },
-    [setLeagueIds]
+    [history, search]
+  );
+  const onChangeSelectFieldStatuses = useCallback(
+    (value) => {
+      history.replace({
+        search: createSearch({
+          paramsString: search,
+          params: { statusIds: value },
+        }).toString(),
+      });
+      setStatusIds(value);
+    },
+    [setStatusIds, history, search]
   );
   const onSelectDatePicker = useCallback(
     (value) => {
+      history.replace({
+        search: createSearch({
+          paramsString: search,
+          params: { dates: value },
+        }).toString(),
+      });
       setDates(value);
     },
-    [setDates]
+    [setDates, history, search]
   );
   const onChangeSearchField = useCallback(
     (event) => {
       const { target: { value = '' } = {} } = event;
+      history.replace({
+        search: createSearch({
+          paramsString: search,
+          params: { searchName: value },
+        }).toString(),
+      });
       setSearchName(value);
     },
-    [setSearchName]
+    [setSearchName, search, history]
   );
   const readyMatchArray = useMemo(() => Object.values(matchItems), [
     matchItems,
   ]);
-  const readyMatches = readyMatchArray;
-  // const readyMatches = useMemo(
-  //   () =>
-  //     filterMatches({
-  //       leagues: readyMatchArray,
-  //       filters: {
-  //         leagueIds,
-  //         searchName,
-  //         dates,
-  //       },
-  //     }),
-  //   [readyMatchArray, leagueIds, searchName, dates]
-  // );
+  const readyMatches = useMemo(() => {
+    return filterMatches({
+      matches: readyMatchArray,
+      filters: {
+        leagueIds,
+        searchName,
+        dates,
+        statusIds,
+      },
+    });
+  }, [readyMatchArray, leagueIds, searchName, dates, statusIds]);
   useEffect(() => {
-    dispatch(fetchMatches({ serviceStatistic })());
+    const [status] = statusIds || [];
+    dispatch(
+      fetchMatches({ serviceStatistic })({
+        leagueIds,
+        dates,
+        status,
+      })
+    );
+  }, [serviceStatistic, dispatch, statusIds, dates, leagueIds]);
+  useEffect(() => {
+    dispatch(fetchLeagues({ serviceStatistic })());
   }, [serviceStatistic, dispatch]);
-  // const memorizedSelectField = useMemo(
-  //   () => ({
-  //     placeholder: 'Please select leagues',
-  //     label: {
-  //       content: 'Leagues',
-  //     },
-  //     options: leaguesToOptions(leagues),
-  //     onEnter: onEnterSelectFieldLeagues,
-  //     onChange: onChangeSelectField,
-  //     isMultiple: true,
-  //   }),
-  //   [leagues, onEnterSelectFieldLeagues, onChangeSelectField]
-  // );
-  // const memorizedSearchField = useMemo(
-  //   () => ({
-  //     placeholder: 'Search',
-  //     label: {
-  //       content: 'Name league or team',
-  //     },
-  //     value: searchName,
-  //     onChange: onChangeSearchField,
-  //   }),
-  //   [searchName, onChangeSearchField]
-  // );
-  // const memorizedDatePicker = useMemo(
-  //   () => ({
-  //     calendar: {
-  //       options: {
-  //         range: true,
-  //       },
-  //     },
-  //     onSelect: onSelectDatePicker,
-  //     label: {
-  //       content: 'Dates',
-  //     },
-  //   }),
-  //   [onSelectDatePicker]
-  // );
-  // const memorizedPanel = useMemo(
-  //   () => ({
-  //     title: 'Filter',
-  //   }),
-  //   []
-  // );
+  const memorizedSelectFieldLeagues = useMemo(
+    () => ({
+      placeholder: 'Please select leagues',
+      label: {
+        content: 'Leagues',
+      },
+      value: leagueIds,
+      options: leaguesToOptions(leagues),
+      onEnter: onEnterSelectFieldLeagues,
+      onChange: onChangeSelectFieldLeagues,
+      isMultiple: true,
+    }),
+    [leagues, onEnterSelectFieldLeagues, onChangeSelectFieldLeagues, leagueIds]
+  );
+  const memorizedSelectFieldStatus = useMemo(() => {
+    return {
+      placeholder: 'Please select status',
+      label: {
+        content: 'Status',
+      },
+      value: statusIds,
+      options: statusesToOptions(Object.values(statuses)),
+      onChange: onChangeSelectFieldStatuses,
+    };
+  }, [onChangeSelectFieldStatuses, statusIds]);
+  const memorizedSearchField = useMemo(
+    () => ({
+      placeholder: 'Search',
+      label: {
+        content: 'Name league or team',
+      },
+      value: searchName,
+      onChange: onChangeSearchField,
+    }),
+    [searchName, onChangeSearchField]
+  );
+  const memorizedDatePicker = useMemo(
+    () => ({
+      calendar: {
+        options: {
+          range: true,
+        },
+        start: dates?.[0],
+        end: dates?.[1],
+      },
+      onSelect: onSelectDatePicker,
+      label: {
+        content: 'Dates',
+      },
+    }),
+    [onSelectDatePicker, dates]
+  );
+  const memorizedPanel = useMemo(
+    () => ({
+      title: 'Filter',
+    }),
+    []
+  );
   return (
     <MatchesPage
-      // panel={memorizedPanel}
-      // datepicker={memorizedDatePicker}
-      // searchField={memorizedSearchField}
-      // selectField={memorizedSelectField}
+      panel={memorizedPanel}
+      datepicker={memorizedDatePicker}
+      searchField={memorizedSearchField}
+      selectFieldLeagues={memorizedSelectFieldLeagues}
+      selectFieldStatus={memorizedSelectFieldStatus}
       items={readyMatches}
     />
   );

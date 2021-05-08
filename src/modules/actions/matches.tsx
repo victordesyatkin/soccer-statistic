@@ -7,6 +7,7 @@ import {
   transformMessage,
   date2value,
   transformMatchesFullResponse,
+  extractLeagueIds,
 } from '../../helpers';
 import { IStatisticService } from '../../services';
 import {
@@ -19,12 +20,14 @@ import {
   ItemsErrorProps,
   getMatchesProps,
   MatchesFullResponseProps,
+  ReducerProps,
 } from '../types';
 import { fetchRequest, fetchSuccess, fetchFailure } from './common';
 
 import { fetchSeasonsSuccess } from './seasons';
 import { fetchMapSeasonTeamsSuccess } from './mapSeasonTeams';
 import { fetchMapCompetitionSeasonsSuccess } from './mapCompetitionSeasons';
+import { fetchTeams } from './teams';
 
 const FETCH_MATCHES_SUCCESS = 'FETCH_MATCHES_SUCCESS';
 const fetchMatchesSuccess: ActionCreator<
@@ -55,33 +58,49 @@ const fetchMatches = ({
   serviceStatistic?: IStatisticService;
 }): ((options?: {
   leagueIds?: string[];
-  dateFrom?: Date;
-  dateTo?: Date;
-}) => (dispatch: Dispatch) => void) => ({
+  dates?: string[];
+  status?: string;
+}) => (dispatch: Dispatch, getState: () => ReducerProps) => void) => ({
   leagueIds,
-  dateFrom,
-  dateTo,
-} = {}) => (dispatch) => {
-  console.log('fetchMatches leagueIds : ', leagueIds);
-  console.log('fetchMatches dateFrom : ', dateFrom);
-  console.log('fetchMatches dateTo : ', dateTo);
+  dates,
+  status,
+} = {}) => (dispatch, getState) => {
   if (serviceStatistic) {
     const params: getMatchesProps = {};
     if (leagueIds?.length) {
       params.competitions = leagueIds.join(',');
     }
-    if (dateFrom) {
-      params.dateFrom = date2value(dateFrom);
+    if (dates?.length === 2) {
+      const [dateFrom, dateTo] = dates || [];
+      if (dateFrom && dateTo) {
+        params.dateFrom = date2value(new Date(dateFrom));
+        params.dateTo = date2value(new Date(dateTo));
+      }
     }
-    if (dateTo) {
-      params.dateTo = date2value(dateTo);
+    if (status) {
+      params.status = status;
+    }
+    if (dates && !Object.keys(params).length) {
+      const {
+        matches: { items },
+      } = getState();
+      const [dateFrom, dateTo] = dates || [];
+      if (!(dateFrom && dateTo) && Object.keys(items).length) {
+        return;
+      }
     }
     dispatch(fetchRequest());
     serviceStatistic
       .getMatches(params)
       .then((payload: MatchesFullResponseProps) => {
-        dispatch(fetchMatchesSuccess(transformMatchesFullResponse(payload)));
+        const matches = transformMatchesFullResponse(payload);
+        dispatch(fetchMatchesSuccess(matches));
         dispatch(fetchSuccess());
+        const competitionIds = extractLeagueIds(matches);
+        console.log('competitionIds : ', competitionIds);
+        if (competitionIds?.length) {
+          fetchTeams({ serviceStatistic })(competitionIds)(dispatch);
+        }
       })
       .catch((error) => {
         const payload = transformMessage({ error, status: 'danger' });

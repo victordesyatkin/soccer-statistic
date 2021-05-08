@@ -11,7 +11,7 @@ const TeamPageWrapper = styled.div`
   background-color: white;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 1rem;
+  margin-top: 2rem;
 `;
 
 const TeamInfoWrapper = styled.div`

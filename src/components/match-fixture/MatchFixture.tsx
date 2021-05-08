@@ -16,21 +16,19 @@ const MatchFixtureWrapper = styled.div`
 
 const MatchFixtureItem = styled.span`
   display: flex;
-  width: 11.071rem;
   align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-width: 0;
 `;
 
-const MatchFixtureTeamFlag = styled.span`
+const MatchFixtureTeamFlag = styled.span<{ src: string }>`
   width: 1.429rem;
   height: 1.071rem;
   margin-right: 0.5rem;
   display: none;
+  border-radius: 4px;
 
   @media (min-width: ${sizes.xs}) {
-    display: initial;
+    display: ${({ src }) => (src ? 'initial' : '')};
   }
 `;
 
@@ -44,6 +42,10 @@ const MatchFixtureTeamImage = styled.img`
 
 const MatchFixtureLink = styled(Link)`
   color: ${colors.black};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
 `;
 
 const MatchFixtureSeparator = styled.span`
@@ -59,28 +61,37 @@ const MatchFixture: FC<MatchProps> = (props) => {
     (state: ReducerProps): ItemsTeamProps => state.teams.items
   );
   const awayTeamFilled = teams[awayTeamId] || {};
-  const homeTeamFilled = teams[awayTeamId] || {};
-  const { area: awayTeamArea } = awayTeamFilled;
-  const { area: homeTeamArea } = homeTeamFilled;
-  const { ensignUrl: awayTeamEnsignUrl = '' } = awayTeamArea || {};
-  const { ensignUrl: homeTeamEnsignUrl = '' } = homeTeamArea || {};
+  const homeTeamFilled = teams[homeTeamId] || {};
+  const { logo: awayTeamLogo } = awayTeamFilled;
+  const { logo: homeTeamLogo } = homeTeamFilled;
   return (
     <MatchFixtureWrapper>
       <MatchFixtureItem>
-        <MatchFixtureTeamFlag>
-          <MatchFixtureTeamImage src={awayTeamEnsignUrl} alt={awayTeamName} />
-        </MatchFixtureTeamFlag>
-        <MatchFixtureLink to={`${routes.TEAMS}/${awayTeamId}`}>
-          {awayTeamName}
+        {homeTeamLogo && (
+          <MatchFixtureTeamFlag src={homeTeamLogo}>
+            <MatchFixtureTeamImage src={homeTeamLogo} alt={homeTeamName} />
+          </MatchFixtureTeamFlag>
+        )}
+
+        <MatchFixtureLink
+          to={`${routes.TEAMS}/${homeTeamId}`}
+          title={homeTeamName}
+        >
+          {homeTeamName}
         </MatchFixtureLink>
       </MatchFixtureItem>
-      <MatchFixtureSeparator>vs</MatchFixtureSeparator>
+      <MatchFixtureSeparator>-</MatchFixtureSeparator>
       <MatchFixtureItem>
-        <MatchFixtureTeamFlag>
-          <MatchFixtureTeamImage src={homeTeamEnsignUrl} alt={homeTeamName} />
-        </MatchFixtureTeamFlag>
-        <MatchFixtureLink to={`${routes.TEAMS}/${homeTeamId}`}>
-          {homeTeamName}
+        {awayTeamLogo && (
+          <MatchFixtureTeamFlag src={awayTeamLogo}>
+            <MatchFixtureTeamImage src={awayTeamLogo} alt={awayTeamName} />
+          </MatchFixtureTeamFlag>
+        )}
+        <MatchFixtureLink
+          to={`${routes.TEAMS}/${awayTeamId}`}
+          title={awayTeamName}
+        >
+          {awayTeamName}
         </MatchFixtureLink>
       </MatchFixtureItem>
     </MatchFixtureWrapper>

@@ -23,25 +23,30 @@ const Datepicker: React.FC<DatepickerProps> = ({
 }) => {
   const datepickerRef = useRef(null);
   const [isOpened, setIsOpened] = useState(false);
-  const [readyStart, setReadyStart] = useState('');
-  const [readyEnd, setReadyEnd] = useState('');
+  const [readyStart, setReadyStart] = useState(
+    maskedDate(calendar?.start || '')
+  );
+  const [readyEnd, setReadyEnd] = useState(maskedDate(calendar?.end || ''));
   const summary = `${readyStart || placeholder}${separator}${
     readyEnd || placeholder
   }`;
-  const onSelectForCalendar = (dates: Partial<Date[]> | undefined): void => {
-    let [passStart = '', passEnd = ''] = dates || [];
-    if (passStart) {
-      passStart = maskedDate(passStart);
-    }
-    if (passEnd) {
-      passEnd = maskedDate(passEnd);
-    }
-    setReadyStart(passStart);
-    setReadyEnd(passEnd);
-    if (onSelect) {
-      onSelect(dates);
-    }
-  };
+  const onSelectForCalendar = useCallback(
+    (dates: Partial<Date[]> | undefined): void => {
+      let [passStart = '', passEnd = ''] = dates || [];
+      if (passStart) {
+        passStart = maskedDate(passStart);
+      }
+      if (passEnd) {
+        passEnd = maskedDate(passEnd);
+      }
+      setReadyStart(passStart);
+      setReadyEnd(passEnd);
+      if (onSelect) {
+        onSelect(dates);
+      }
+    },
+    [onSelect]
+  );
   const memoizedOnClickButtonToggleCalendar = useCallback(() => {
     setIsOpened(!isOpened);
   }, [isOpened]);

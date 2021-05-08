@@ -9,6 +9,7 @@ const colors = {
   lightRed: '#ffa5a5',
   blue: '#17a2b8',
   green: '#28a745',
+  yellow: '#ffc107',
 };
 
 const sizes = {

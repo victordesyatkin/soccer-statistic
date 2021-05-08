@@ -122,17 +122,24 @@ class StatisticService implements IStatisticService {
     if (params) {
       readyParams = `?${new URLSearchParams(params).toString()}`;
     }
-    const response = await fetch(`${this.apiBase}${url}${readyParams}`, {
-      headers: { 'X-Auth-Token': this.apiKey },
-    });
-    if (!response.ok) {
+    try {
+      const response = await fetch(`${this.apiBase}${url}${readyParams}`, {
+        headers: { 'X-Auth-Token': this.apiKey },
+      });
+      if (!response.ok) {
+        throw new ExtendedError({
+          message: `${response.status}`,
+          statusText: response.statusText,
+        });
+      }
+      const results = await response.json();
+      return results;
+    } catch (error) {
       throw new ExtendedError({
-        message: `${response.status}`,
-        statusText: response.statusText,
+        message: `404`,
+        statusText: error.message,
       });
     }
-    const results = await response.json();
-    return results;
   }
 
   private checkHasErrorAuthenticationData(): ExtendedError | void {

@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import styled from 'styled-components';
-import { colors, sizes } from '../../assets/theme';
 
+import { colors, sizes } from '../../assets/theme';
 import { MatchProps } from '../../modules/types';
-import { maskedDate, maskedTime } from '../../helpers';
+import { maskedDate, maskedTime, statuses } from '../../helpers';
 
 const MatchDateWrapper = styled.div`
   width: 100%;
@@ -34,8 +34,11 @@ const MatchDateStatus = styled.span<{ status: string }>`
       case 'SCHEDULED': {
         return colors.blue;
       }
-      case 'IN_PLAY ': {
+      case 'IN_PLAY': {
         return colors.green;
+      }
+      case 'HALF_TIME': {
+        return colors.yellow;
       }
       default: {
         return colors.grey;
@@ -53,11 +56,14 @@ const MatchDateStatus = styled.span<{ status: string }>`
 
 const MatchDate: FC<MatchProps> = (props) => {
   const { status, utcDate } = props;
+  const readyStatus = useMemo(() => {
+    return statuses?.[status]?.name || '-';
+  }, [status]);
   return (
     <MatchDateWrapper>
       <MatchDateDate>{maskedDate(utcDate)}</MatchDateDate>
       <MatchDateTime>{maskedTime(utcDate)}</MatchDateTime>
-      <MatchDateStatus status={status}>scheduled</MatchDateStatus>
+      <MatchDateStatus status={status}>{readyStatus}</MatchDateStatus>
     </MatchDateWrapper>
   );
 };

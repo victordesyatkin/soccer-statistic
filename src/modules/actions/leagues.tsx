@@ -42,9 +42,9 @@ const fetchLeagues = ({
 ) => {
   // console.log('fetchLeagues leagueIds : ', leagueIds);
   let requests = [];
-  if (serviceStatistic && leagueIds) {
+  if (serviceStatistic) {
     dispatch(fetchRequest());
-    if (leagueIds.length) {
+    if (leagueIds?.length) {
       requests = leagueIds.map((leagueId) => {
         if (leagueId) {
           return serviceStatistic.getLeagues({ leagueId });

@@ -564,6 +564,7 @@ type getMatchesProps = Partial<{
   competitions: string;
   dateFrom: string;
   dateTo: string;
+  status: string;
 }>;
 
 type MatchesFullResponseProps = {
@@ -572,8 +573,23 @@ type MatchesFullResponseProps = {
   matches: MatchProps[];
 };
 
-type MatchesPageProps = {
+type MatchesPageProps = Partial<{
+  panel: PanelProps;
+  filter: FilterProps;
+  searchField: SearchFieldProps;
+  selectFieldLeagues: SelectFieldProps;
+  selectFieldStatus: SelectFieldProps;
+  datepicker: DatepickerProps;
   items: MatchProps[];
+}>;
+
+type MatchListProps = {
+  items?: MatchProps[];
+};
+
+type StatusProps = {
+  id: string;
+  name: string;
 };
 interface IStatisticService {
   getLeagues: (options?: getLeaguesProps) => Promise<LeagueProps[]>;
@@ -665,4 +681,6 @@ export type {
   MatchesFullResponseProps,
   ItemsMatchProps,
   MatchesPageProps,
+  MatchListProps,
+  StatusProps,
 };

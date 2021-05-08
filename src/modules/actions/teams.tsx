@@ -52,7 +52,7 @@ const fetchTeams = ({
 }): ((leagueIds?: string[]) => (dispatch: Dispatch) => void) => (leagueIds) => (
   dispatch
 ) => {
-  console.log('fetchTeams leagueIds : ', leagueIds);
+  // console.log('fetchTeams leagueIds : ', leagueIds);
   if (leagueIds?.length && serviceStatistic) {
     dispatch(fetchRequest());
     const requests = leagueIds.map((leagueId) => {
@@ -71,10 +71,10 @@ const fetchTeams = ({
         } = transformResponseFetchTeams({
           payload,
         });
-        console.log(
-          'fetchTeams mapCompetitionSeasons : ',
-          mapCompetitionSeasons
-        );
+        // console.log(
+        //   'fetchTeams mapCompetitionSeasons : ',
+        //   mapCompetitionSeasons
+        // );
         dispatch(fetchTeamsSuccess(teams));
         dispatch(fetchMapCompetitionSeasonsSuccess(mapCompetitionSeasons));
         dispatch(fetchMapSeasonTeamsSuccess(mapSeasonTeams));

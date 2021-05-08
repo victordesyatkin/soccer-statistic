@@ -58,7 +58,7 @@ const ModalHeaderContent = styled.div<{ status?: string }>`
   text-overflow: ellipsis;
   white-space: nowrap;
   color: ${({ status }) => {
-    console.log('status : ', status);
+    // console.log('status : ', status);
     switch (status) {
       case 'danger':
       case 'info':

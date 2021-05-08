@@ -99,7 +99,6 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
       leagues: leagueItems,
       leagueIds,
     });
-    // console.log('neededLoadLeagues : ', neededLoadLeagues);
     if (neededLoadLeagues.length) {
       dispatch(fetchLeagues({ serviceStatistic })(neededLoadLeagues));
     }
