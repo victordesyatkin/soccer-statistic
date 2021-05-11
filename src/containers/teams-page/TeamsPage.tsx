@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
+import { useIntl } from 'react-intl';
+import upperFirst from 'lodash.upperfirst';
 
 import { fetchCountries } from '../../modules/actions/countries';
 import { fetchLeagues, fetchTeams } from '../../modules/actions';
@@ -19,6 +21,7 @@ import { withStatisticService } from '../../components/hoc-helpers';
 const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   serviceStatistic,
 }) => {
+  const { formatMessage } = useIntl();
   const { search, pathname } = useLocation();
   const history = useHistory();
   const params = useMemo(() => {
@@ -115,22 +118,27 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   }, [mapCompetitionSeasonsItems, serviceStatistic, dispatch, leagueIds]);
   const memorizedSelectFieldCountries = useMemo(
     () => ({
-      placeholder: 'Please select countries',
+      placeholder: upperFirst(formatMessage({ id: 'please_select_countries' })),
       label: {
-        content: 'Countries',
+        content: formatMessage({ id: 'countries' }),
       },
       options: countriesToOptions(countries),
       onEnter: onEnterSelectFieldCountries,
       onChange: onChangeSelectFieldCountries,
       isMultiple: true,
     }),
-    [countries, onEnterSelectFieldCountries, onChangeSelectFieldCountries]
+    [
+      countries,
+      onEnterSelectFieldCountries,
+      onChangeSelectFieldCountries,
+      formatMessage,
+    ]
   );
   const memorizedSelectFieldLeagues = useMemo(
     () => ({
-      placeholder: 'Please select leagues',
+      placeholder: upperFirst(formatMessage({ id: 'Please select leagues' })),
       label: {
-        content: 'Leagues',
+        content: formatMessage({ id: 'leagues' }),
       },
       options: leaguesToOptions(leagues),
       onEnter: onEnterSelectFieldLeagues,
@@ -138,25 +146,31 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
       value: leagueIds,
       isMultiple: false,
     }),
-    [leagues, onEnterSelectFieldLeagues, onChangeSelectFieldLeagues, leagueIds]
+    [
+      leagues,
+      onEnterSelectFieldLeagues,
+      onChangeSelectFieldLeagues,
+      leagueIds,
+      formatMessage,
+    ]
   );
 
   const memorizedSearchField = useMemo(
     () => ({
-      placeholder: 'Search',
+      placeholder: upperFirst(formatMessage({ id: 'Search' })),
       label: {
-        content: 'Name',
+        content: formatMessage({ id: 'Name' }),
       },
       value: teamName,
       onChange: onChangeSearchField,
     }),
-    [teamName, onChangeSearchField]
+    [teamName, onChangeSearchField, formatMessage]
   );
   const memorizedPanel = useMemo(
     () => ({
-      title: 'Filter',
+      title: formatMessage({ id: 'filter' }),
     }),
-    []
+    [formatMessage]
   );
   return (
     <TeamsPage

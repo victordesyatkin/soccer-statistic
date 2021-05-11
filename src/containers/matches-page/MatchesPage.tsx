@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
+import { useIntl } from 'react-intl';
+import upperFirst from 'lodash.upperfirst';
 
 import { fetchLeagues } from '../../modules/actions/leagues';
 import { fetchMatches } from '../../modules/actions/matches';
@@ -20,6 +22,7 @@ import { withStatisticService } from '../../components/hoc-helpers';
 const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
   serviceStatistic,
 }) => {
+  const { formatMessage } = useIntl();
   const { search } = useLocation();
   const history = useHistory();
   const params = useMemo(() => {
@@ -141,9 +144,9 @@ const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
   }, [serviceStatistic, dispatch]);
   const memorizedSelectFieldLeagues = useMemo(
     () => ({
-      placeholder: 'Please select leagues',
+      placeholder: upperFirst(formatMessage({ id: 'please_select_leagues' })),
       label: {
-        content: 'Leagues',
+        content: formatMessage({ id: 'leagues' }),
       },
       value: leagueIds,
       options: leaguesToOptions(leagues),
@@ -151,29 +154,35 @@ const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
       onChange: onChangeSelectFieldLeagues,
       isMultiple: true,
     }),
-    [leagues, onEnterSelectFieldLeagues, onChangeSelectFieldLeagues, leagueIds]
+    [
+      leagues,
+      onEnterSelectFieldLeagues,
+      onChangeSelectFieldLeagues,
+      leagueIds,
+      formatMessage,
+    ]
   );
   const memorizedSelectFieldStatus = useMemo(() => {
     return {
-      placeholder: 'Please select status',
+      placeholder: upperFirst(formatMessage({ id: 'please_select_status' })),
       label: {
-        content: 'Status',
+        content: formatMessage({ id: 'status' }),
       },
       value: statusIds,
       options: statusesToOptions(Object.values(statuses)),
       onChange: onChangeSelectFieldStatuses,
     };
-  }, [onChangeSelectFieldStatuses, statusIds]);
+  }, [onChangeSelectFieldStatuses, statusIds, formatMessage]);
   const memorizedSearchField = useMemo(
     () => ({
-      placeholder: 'Search',
+      placeholder: upperFirst(formatMessage({ id: 'search' })),
       label: {
-        content: 'Name league or team',
+        content: formatMessage({ id: 'name_league_or_team' }),
       },
       value: searchName,
       onChange: onChangeSearchField,
     }),
-    [searchName, onChangeSearchField]
+    [searchName, onChangeSearchField, formatMessage]
   );
   const memorizedDatePicker = useMemo(
     () => ({
@@ -184,18 +193,19 @@ const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
         start: dates?.[0],
         end: dates?.[1],
       },
+      placeholder: formatMessage({ id: 'dd_mm_yy' }),
       onSelect: onSelectDatePicker,
       label: {
-        content: 'Dates',
+        content: formatMessage({ id: 'dates' }),
       },
     }),
-    [onSelectDatePicker, dates]
+    [onSelectDatePicker, dates, formatMessage]
   );
   const memorizedPanel = useMemo(
     () => ({
-      title: 'Filter',
+      title: formatMessage({ id: 'filter' }),
     }),
-    []
+    [formatMessage]
   );
   return (
     <MatchesPage

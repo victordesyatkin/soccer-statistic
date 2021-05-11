@@ -17,6 +17,13 @@ $parent: 'link';
     text-transform: uppercase;
   }
 
+  &_uppercase_first {
+    display: inline-block;
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
   &:hover {
     color: $link-text-color-hover;
   }

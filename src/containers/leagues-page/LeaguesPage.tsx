@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
+import upperFirst from 'lodash.upperfirst';
 
 import { fetchCountries } from '../../modules/actions/countries';
 import { fetchLeagues } from '../../modules/actions/leagues';
@@ -11,6 +13,7 @@ import { withStatisticService } from '../../components/hoc-helpers';
 const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
   serviceStatistic,
 }) => {
+  const { formatMessage } = useIntl();
   const [countryIds, setCountryIds] = useState([]);
   const [leagueName, setLeagueName] = useState('');
   const [dates, setDates] = useState([]);
@@ -66,27 +69,27 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
   }, [readyLeagueArray, serviceStatistic, dispatch]);
   const memorizedSelectField = useMemo(
     () => ({
-      placeholder: 'Please select countries',
+      placeholder: upperFirst(formatMessage({ id: 'please_select_countries' })),
       label: {
-        content: 'Countries',
+        content: formatMessage({ id: 'countries' }),
       },
       options: countriesToOptions(countries),
       onEnter: onEnterSelectFieldCountries,
       onChange: onChangeSelectField,
       isMultiple: true,
     }),
-    [countries, onEnterSelectFieldCountries, onChangeSelectField]
+    [countries, onEnterSelectFieldCountries, onChangeSelectField, formatMessage]
   );
   const memorizedSearchField = useMemo(
     () => ({
-      placeholder: 'Search',
+      placeholder: upperFirst(formatMessage({ id: 'search' })),
       label: {
-        content: 'Name',
+        content: formatMessage({ id: 'name' }),
       },
       value: leagueName,
       onChange: onChangeSearchField,
     }),
-    [leagueName, onChangeSearchField]
+    [leagueName, onChangeSearchField, formatMessage]
   );
   const memorizedDatePicker = useMemo(
     () => ({
@@ -96,17 +99,18 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
         },
       },
       onSelect: onSelectDatePicker,
+      placeholder: formatMessage({ id: 'dd_mm_yy' }),
       label: {
-        content: 'Dates',
+        content: formatMessage({ id: 'dates' }),
       },
     }),
-    [onSelectDatePicker]
+    [onSelectDatePicker, formatMessage]
   );
   const memorizedPanel = useMemo(
     () => ({
-      title: 'Filter',
+      title: formatMessage({ id: 'filter' }),
     }),
-    []
+    [formatMessage]
   );
   return (
     <LeaguesPage

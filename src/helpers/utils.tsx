@@ -5,8 +5,7 @@ import sortedUniq from 'lodash.sorteduniq';
 import difference from 'lodash.difference';
 import orderBy from 'lodash.orderby';
 
-import { faArrowAltCircleDown } from '@fortawesome/free-solid-svg-icons';
-import { isArray } from 'jquery';
+import { messages } from '../lang';
 import logo1 from '../assets/images/logos/1.png';
 import logo2 from '../assets/images/logos/2.png';
 import logo3 from '../assets/images/logos/3.png';
@@ -51,6 +50,7 @@ import {
   MatchesFullResponseProps,
   StatusProps,
   MatchProps,
+  defaultMessageProps,
 } from '../modules/types';
 
 import { endpoints, routes } from '../configuration';
@@ -959,6 +959,20 @@ const extractLeagueIds = (matches?: ItemsMatchProps): string[] => {
   return leagueIds;
 };
 
+const extractDefaultMessage = (
+  id?: string
+): defaultMessageProps | undefined => {
+  const readyId = id?.trim().toLocaleLowerCase() as keyof typeof messages;
+  const message = messages[readyId];
+  if (message) {
+    return {
+      id: readyId,
+      ...message,
+    };
+  }
+  return undefined;
+};
+
 export {
   useOutsideClick,
   value2Date,
@@ -1006,4 +1020,5 @@ export {
   createSearch,
   parserParam,
   extractLeagueIds,
+  extractDefaultMessage,
 };

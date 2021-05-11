@@ -1,10 +1,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
+import { IntlProvider } from 'react-intl';
 
 import store from '../../modules/store';
 import ErrorBoundary from '../../components/error-boundary';
 import App from '../../components/app';
+import German from '../../lang/de.json';
 import Modal from '../modal';
 
 const header = {
@@ -12,56 +14,58 @@ const header = {
     links: [
       {
         id: '1',
-        title: 'Leagues',
-        content: 'Leagues',
+        title: 'leagues',
+        content: 'leagues',
         to: '/leagues',
       },
       {
         id: '2',
-        title: 'Teams',
-        content: 'Teams',
+        title: 'teams',
+        content: 'teams',
         to: '/teams',
       },
       {
         id: '3',
-        title: 'Matches',
-        content: 'Matches',
+        title: 'matches',
+        content: 'matches',
         to: '/matches',
       },
       {
         id: '4',
-        title: 'Predictions',
-        content: 'Predictions',
+        title: 'predictions',
+        content: 'predictions',
       },
       {
         id: '5',
-        title: 'Support',
-        content: 'Support',
+        title: 'support',
+        content: 'support',
       },
       {
         id: '6',
-        title: 'Account',
-        content: 'Account',
+        title: 'account',
+        content: 'account',
       },
     ],
   },
   searchButton: {
-    title: 'Search',
+    title: 'search',
   },
   searchField: {
-    placeholder: 'Search',
+    placeholder: 'search',
   },
 };
 
 const AppContainer: React.FC = () => {
   return (
     <Provider store={store}>
-      <ErrorBoundary>
-        <HashRouter>
-          <App header={header} />
-          <Modal />
-        </HashRouter>
-      </ErrorBoundary>
+      <IntlProvider locale="en" messages={German}>
+        <ErrorBoundary>
+          <HashRouter>
+            <App header={header} />
+            <Modal />
+          </HashRouter>
+        </ErrorBoundary>
+      </IntlProvider>
     </Provider>
   );
 };

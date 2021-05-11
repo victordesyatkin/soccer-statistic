@@ -13,6 +13,7 @@ const Link: FC<LinkProps> = ({
   children,
   content,
   isUpperCase,
+  isUpperFirst = true,
   to,
   className,
 }) => {
@@ -29,11 +30,12 @@ const Link: FC<LinkProps> = ({
       to={readyTo}
       className={classnames(readyClassName, {
         [`${readyClassName}_uppercase`]: isUpperCase,
+        [`${readyClassName}_uppercase_first`]: isUpperFirst,
       })}
       rel={readyRel}
-      title={title}
       key={id}
       activeClassName={`${readyClassName}_current`}
+      title={title}
     >
       {children}
       {content}

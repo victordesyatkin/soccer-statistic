@@ -282,6 +282,7 @@ type LabelProps = Partial<{
   content: string;
   htmlFor: string;
   theme: string;
+  isUpperCaseFirst: boolean;
 }>;
 
 type WithLabelProps = Partial<{
@@ -511,6 +512,7 @@ type LinkProps = Partial<{
   theme: string;
   to: string;
   className: string;
+  isUpperFirst: boolean;
 }>;
 
 type LogoImageProps = {
@@ -590,6 +592,12 @@ type MatchListProps = {
 type StatusProps = {
   id: string;
   name: string;
+};
+
+type defaultMessageProps = {
+  id: string;
+  defaultMessage?: string;
+  description: string;
 };
 interface IStatisticService {
   getLeagues: (options?: getLeaguesProps) => Promise<LeagueProps[]>;
@@ -683,4 +691,5 @@ export type {
   MatchesPageProps,
   MatchListProps,
   StatusProps,
+  defaultMessageProps,
 };

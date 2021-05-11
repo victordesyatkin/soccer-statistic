@@ -31,8 +31,8 @@ const ModalContainer: FC = () => {
       readyError.errorId = id;
       readyError.errorMessage = message;
       readyError.errorStatus = status;
-      readyError.errorAuto = true;
-      readyError.errorTime = 3000;
+      readyError.errorAuto = auto;
+      readyError.errorTime = time;
     }
     return readyError;
   }, [errors]);
