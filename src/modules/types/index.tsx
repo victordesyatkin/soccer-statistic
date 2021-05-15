@@ -300,14 +300,18 @@ type SelectFieldProps = Partial<{
   placeholder: string | number;
   onChange: (value?: readonly string[]) => void;
   id: string;
+  withControl: boolean;
   onEnter: () => void;
   onLeave: () => void;
+  customRenderItem: (
+    option: Record<string, string | number | undefined | boolean | null>
+  ) => string | undefined | JSX.Element | number;
   customRenderOption: (
     option: Record<string, string | number | undefined | boolean | null>
   ) => string | undefined | JSX.Element | number;
+  theme: string;
 }> &
   WithLabelProps;
-
 type NodataProps = Partial<{
   content: string;
 }>;
@@ -599,6 +603,11 @@ type defaultMessageProps = {
   defaultMessage?: string;
   description: string;
 };
+
+type IntlContextProps = Partial<{
+  locale: string;
+  selectLanguage: (language?: string) => void;
+}>;
 interface IStatisticService {
   getLeagues: (options?: getLeaguesProps) => Promise<LeagueProps[]>;
   getTeams: (options: getTeamsProps) => Promise<TeamsResponseProps>;
@@ -692,4 +701,5 @@ export type {
   MatchListProps,
   StatusProps,
   defaultMessageProps,
+  IntlContextProps,
 };

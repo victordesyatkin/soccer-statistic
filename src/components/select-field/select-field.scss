@@ -39,6 +39,16 @@ $parent: 'select-field';
     }
   }
 
+  &_theme_small {
+    .#{$parent}__items {
+      padding: 0.3rem 0 0.3rem 0.3rem;
+    }
+
+    .#{$parent}__control {
+      padding: 0.3rem;
+    }
+  }
+
   &__head {
     display: flex;
     flex: 1 1 100%;
@@ -69,7 +79,7 @@ $parent: 'select-field';
   }
 
   &__item {
-    padding: 0.3rem 1.5rem 0.3rem 0.3rem;
+    padding: 0.3rem;
     background-color: $select-field-item-background-color;
     color: $select-field-item-text-color-default;
     border-radius: 4px;
@@ -77,6 +87,10 @@ $parent: 'select-field';
     display: flex;
     margin-right: 0.7rem;
     white-space: nowrap;
+
+    &_with_control {
+      padding-left: 1.5rem;
+    }
   }
 
   &__item:last-child {
@@ -126,12 +140,15 @@ $parent: 'select-field';
     border: 1px solid $select-field-border-color-default;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    z-index: 10;
-    min-height: 14.286rem;
+    z-index: 12;
     max-height: 14.286rem;
     overflow-y: auto;
     background-color: $select-field-body-background-color;
-    height: 100%;
+  }
+
+  &__no-data {
+    width: 100%;
+    height: 7rem;
   }
 
   &__option {

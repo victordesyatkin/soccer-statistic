@@ -73,7 +73,7 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
 
   return {
     mode: isDevelopment ? 'development' : 'production',
-    devtool: isDevelopment ? 'inline-source-map' : undefined,
+    devtool: undefined, // isDevelopment ? 'inline-source-map' : undefined
     entry: {
       main: './src/index.tsx',
     },

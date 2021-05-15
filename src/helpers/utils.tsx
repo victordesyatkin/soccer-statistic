@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import sortedUniq from 'lodash.sorteduniq';
 import difference from 'lodash.difference';
 import orderBy from 'lodash.orderby';
+import { MessageDescriptor } from 'react-intl';
 
 import { messages } from '../lang';
 import logo1 from '../assets/images/logos/1.png';
@@ -50,7 +51,6 @@ import {
   MatchesFullResponseProps,
   StatusProps,
   MatchProps,
-  defaultMessageProps,
 } from '../modules/types';
 
 import { endpoints, routes } from '../configuration';
@@ -959,16 +959,13 @@ const extractLeagueIds = (matches?: ItemsMatchProps): string[] => {
   return leagueIds;
 };
 
-const extractDefaultMessage = (
-  id?: string
-): defaultMessageProps | undefined => {
-  const readyId = id?.trim().toLocaleLowerCase() as keyof typeof messages;
-  const message = messages[readyId];
-  if (message) {
-    return {
-      id: readyId,
-      ...message,
-    };
+const extractDefaultMessage = (id?: string): MessageDescriptor | undefined => {
+  if (id) {
+    const readyId = id?.trim().toLocaleLowerCase() as keyof typeof messages;
+    const message = messages[readyId];
+    if (message) {
+      return message;
+    }
   }
   return undefined;
 };

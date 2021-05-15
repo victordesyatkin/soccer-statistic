@@ -103,4 +103,15 @@ $parent: 'header';
       padding-right: 15rem;
     }
   }
+
+  &__switcher-language {
+    position: absolute;
+    right: 1rem;
+
+    @media screen and (min-width: $md) {
+      padding-left: 1rem;
+      position: initial;
+      width: 11rem;
+    }
+  }
 }

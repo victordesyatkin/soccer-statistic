@@ -1,5 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import { colors, Scrollbars } from '../../assets/theme';
 import { MatchListProps } from '../../modules/types';
@@ -41,14 +42,15 @@ const MatchListTableHeadCall = styled.th`
 const MatchListTableBody = styled.tbody``;
 
 const MatchList: FC<MatchListProps> = ({ items }) => {
+  const { formatMessage } = useIntl();
   const properties = useMemo(
     () => ({
-      date: 'date',
-      matchday: 'matchday',
-      fixture: 'fixture',
-      score: 'score',
+      date: formatMessage({ id: 'date' }),
+      matchday: formatMessage({ id: 'matchday' }),
+      fixture: formatMessage({ id: 'fixture' }),
+      score: formatMessage({ id: 'score' }),
     }),
-    []
+    [formatMessage]
   );
   const memorizedPropertyValues = useMemo(() => Object.values(properties), [
     properties,
@@ -57,8 +59,8 @@ const MatchList: FC<MatchListProps> = ({ items }) => {
     properties,
   ]);
   const memorizedCaption = useMemo(
-    () => `${items?.length} matches in selection:`,
-    [items]
+    () => `${items?.length} ${formatMessage({ id: 'matches_in_selection' })}:`,
+    [items, formatMessage]
   );
   return (
     <MatchListWrapper>

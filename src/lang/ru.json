@@ -1,8 +1,8 @@
 {
-  "leagues": "leagues",
-  "teams": "teams",
-  "matches": "matches",
-  "match": "match",
+  "leagues": "Лиги",
+  "teams": "Команды",
+  "matches": "Матчи",
+  "match": "Матч",
   "predictions": "predictions",
   "support": "support",
   "account": "account",
@@ -44,5 +44,12 @@
   "position": "position",
   "date_of_birth": "date of birth",
   "country of birth": "country of birth",
-  "nationality": "nationality"
+  "nationality": "nationality",
+  "search": "search",
+  "filter": "filter",
+  "please_select_language": "please select language",
+  "english": "english",
+  "german": "Немецкий",
+  "russian": "Русский",
+  "unknown": "unknown"
 }

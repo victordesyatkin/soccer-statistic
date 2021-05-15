@@ -5,9 +5,12 @@ import {
   StatisticServiceProvider,
   StatisticServiceConsumer,
 } from './withStatisticService';
+import { withIntl, IntlProviderWrapper } from './withIntl';
 
 export {
   withLabel,
+  withIntl,
+  IntlProviderWrapper,
   PanelProvider,
   PanelConsumer,
   withPanelConsumer,

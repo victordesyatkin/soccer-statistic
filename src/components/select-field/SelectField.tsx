@@ -25,7 +25,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
   id,
   onEnter,
   onLeave,
+  customRenderItem,
   customRenderOption,
+  withControl = true,
+  theme,
 }) => {
   let isReadyMultiple = isMultiple;
   const selectFieldRef = useRef(null);
@@ -100,32 +103,45 @@ const SelectField: React.FC<SelectFieldProps> = ({
       onEnter();
     }
   };
+  const className = 'select-field';
+  let classNames = `${className}`;
+  const themes: Record<string, string> = {
+    small: 'small',
+  };
+  classNames +=
+    theme && themes[theme] ? ` ${className}_theme_${themes[theme]}` : '';
   const renderItem = useCallback(
     (passId: string, index: number) => {
       const item = options?.find(
         (passItem) => String(passItem?.id) === String(passId)
       );
+      console.log('item : ', item);
       if (item) {
+        if (customRenderItem) {
+          return customRenderItem(item);
+        }
         const { content } = item;
+        const itemClassName = `${className}__item`;
+        let itemClassNames = `${className}__item`;
+        itemClassNames += withControl ? ` ${itemClassName}_with-control` : '';
         return (
-          <li
-            className="select-field__item"
-            key={`select-field__item_${index}`}
-          >
+          <li className={itemClassNames} key={`select-field__item_${index}`}>
             <span className="select-field__item-content">{content}</span>
-            <button
-              className="select-field__item-control"
-              type="button"
-              onClick={() => onClickItemControl(index)}
-            >
-              <FontAwesomeIcon icon={faTimesCircle} />
-            </button>
+            {withControl ? (
+              <button
+                className="select-field__item-control"
+                type="button"
+                onClick={() => onClickItemControl(index)}
+              >
+                <FontAwesomeIcon icon={faTimesCircle} />
+              </button>
+            ) : null}
           </li>
         );
       }
       return undefined;
     },
-    [options, onClickItemControl]
+    [options, onClickItemControl, withControl, customRenderItem]
   );
   const renderItems = useCallback(
     (items?: readonly string[]) => {
@@ -183,9 +199,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
         value: valueOption,
         content,
         isDisabled: isDisableOption,
-        id: isOption,
+        id: idOption,
       } = optionForRender;
-      const className = 'select-field__option';
+      const optionClassName = `${className}__option`;
       const isSelected = memoizedPreparedItems?.some(
         (item) => String(item) === String(valueOption)
       );
@@ -198,11 +214,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
           tabIndex={0}
           role="button"
           aria-pressed="mixed"
-          className={classnames(className, {
-            [`${className}_selected`]: isSelected,
-            [`${className}_disabled`]: isDisableOption,
+          className={classnames(optionClassName, {
+            [`${optionClassName}_selected`]: isSelected,
+            [`${optionClassName}_disabled`]: isDisableOption,
           })}
-          key={isOption}
+          key={idOption}
           onClick={() => onClickOption(optionForRender)}
           onKeyPress={onKeyPressOption}
         >
@@ -224,17 +240,20 @@ const SelectField: React.FC<SelectFieldProps> = ({
     options,
   ]);
   if (!memoizedOptionsBody || !memoizedOptionsBody.length) {
-    memoizedOptionsBody = <Nodata />;
+    memoizedOptionsBody = (
+      <div className={`${className}__no-data`}>
+        <Nodata />
+      </div>
+    );
   }
   const handleWaypointLeave = () => {
     if (onLeave) {
       onLeave();
     }
   };
-  const className = 'select-field';
   return (
     <article
-      className={classnames(className, { [`${className}_opened`]: isOpened })}
+      className={classnames(classNames, { [`${className}_opened`]: isOpened })}
       ref={selectFieldRef}
     >
       <div className="select-field__head">

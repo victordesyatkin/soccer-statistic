@@ -46,5 +46,4 @@ const LeaguesPage: React.FC<LeaguesPageProps> = ({
   );
 };
 
-export type { LeaguesPageProps };
 export default LeaguesPage;

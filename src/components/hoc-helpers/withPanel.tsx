@@ -1,23 +1,21 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, FC, createContext } from 'react';
 
 import { prepareDisplayNameComponent } from '../../helpers/utils';
 
-interface PanelContextDefaultValue {
+type PanelContextProps = Partial<{
   isOpened: boolean;
   setIsOpened: (isOpened?: boolean) => void;
-}
+}>;
 
-type PanelContextProps = Partial<PanelContextDefaultValue>;
-
-const DEFAULT_VALUE: Partial<PanelContextDefaultValue> = {
+const panelContextDefaultValue: PanelContextProps = {
   isOpened: false,
 };
 
-const { Provider, Consumer: PanelConsumer } = React.createContext(
-  DEFAULT_VALUE
+const { Provider, Consumer: PanelConsumer } = createContext(
+  panelContextDefaultValue
 );
 
-const PanelProvider: React.FC = ({ children }) => {
+const PanelProvider: FC = ({ children }) => {
   const [isOpened, setIsOpened] = useState(false);
 
   const memoizedSetIsOpened = useCallback(

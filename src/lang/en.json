@@ -44,5 +44,12 @@
   "position": "position",
   "date_of_birth": "date of birth",
   "country of birth": "country of birth",
-  "nationality": "nationality"
+  "nationality": "nationality",
+  "search": "search",
+  "filter": "filter",
+  "please_select_language": "please select language",
+  "english": "english",
+  "german": "german",
+  "russian": "russian",
+  "unknown": "unknown"
 }
