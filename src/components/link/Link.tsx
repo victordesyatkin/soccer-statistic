@@ -16,6 +16,7 @@ const Link: FC<LinkProps> = ({
   isUpperFirst = true,
   to,
   className,
+  isNarrow = true,
 }) => {
   let readyClassName = 'link';
   readyClassName += className ? ` ${className}` : '';
@@ -31,6 +32,7 @@ const Link: FC<LinkProps> = ({
       className={classnames(readyClassName, {
         [`${readyClassName}_uppercase`]: isUpperCase,
         [`${readyClassName}_uppercase_first`]: isUpperFirst,
+        [`${readyClassName}_narrow`]: isNarrow,
       })}
       rel={readyRel}
       key={id}

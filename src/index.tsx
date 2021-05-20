@@ -2,11 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './containers/app';
-import { IntlProviderWrapper } from './components/hoc-helpers';
+import {
+  IntlProviderWrapper,
+  StatisticServiceProvider,
+} from './components/hoc-helpers';
 
 ReactDOM.render(
   <IntlProviderWrapper>
-    <App />
+    <StatisticServiceProvider>
+      <App />
+    </StatisticServiceProvider>
   </IntlProviderWrapper>,
   document.getElementById('root')
 );

@@ -1,8 +1,10 @@
 import React, { FC, useMemo } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import { colors } from '../../assets/theme/variables';
 import { PlayerProps } from '../../modules/types';
+import { extractFormatMessage } from '../../helpers';
 import PlayerListItem from '../player-list-item';
 
 const PlayersTable = styled.table`
@@ -15,6 +17,11 @@ const PlayersCaption = styled.caption`
   color: ${colors.grey};
   text-align: left;
   font-size: 0.9rem;
+
+  &:first-letter {
+    display: inline-block;
+    text-transform: capitalize;
+  }
 `;
 const PlayersTableHead = styled.thead`
   background-color: ${colors.lightgrey};
@@ -35,6 +42,7 @@ const PlayersCellHeader = styled.th`
 `;
 
 const PlayerList: FC<{ items?: PlayerProps[] }> = ({ items }) => {
+  const { formatMessage } = useIntl();
   const properties = useMemo(
     () => ({
       name: 'name',
@@ -51,9 +59,13 @@ const PlayerList: FC<{ items?: PlayerProps[] }> = ({ items }) => {
   const memorizedPropertyKeys = useMemo(() => Object.keys(properties), [
     properties,
   ]);
+  const playersCaptionContent = extractFormatMessage({
+    id: 'players',
+    formatMessage,
+  });
   return (
     <PlayersTable>
-      <PlayersCaption>Players</PlayersCaption>
+      <PlayersCaption>{playersCaptionContent}</PlayersCaption>
       <PlayersTableHead>
         <PlayersTableRow>
           {memorizedPropertyValues.map((property) => (

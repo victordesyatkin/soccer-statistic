@@ -1,4 +1,6 @@
 import StatisticService from './StatisticService';
+import ClientRequestAxios from './ClientRequestAxios';
+import ClientRequestFetch from './ClientRequestFetch';
 
-export type { IStatisticService } from './StatisticService';
+export { ClientRequestAxios, ClientRequestFetch };
 export default StatisticService;

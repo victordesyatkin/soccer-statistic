@@ -5,6 +5,14 @@ import sortedUniq from 'lodash.sorteduniq';
 import difference from 'lodash.difference';
 import orderBy from 'lodash.orderby';
 import { MessageDescriptor } from 'react-intl';
+import {
+  IntlMessageFormat,
+  Formats,
+  PrimitiveType,
+  FormatXMLElementFn,
+  FormatError,
+  Options as IntlMessageFormatOptions,
+} from 'intl-messageformat';
 
 import { messages } from '../lang';
 import logo1 from '../assets/images/logos/1.png';
@@ -970,6 +978,30 @@ const extractDefaultMessage = (id?: string): MessageDescriptor | undefined => {
   return undefined;
 };
 
+type FormatMessageProps = (
+  descriptor: MessageDescriptor,
+  values?: Record<string, PrimitiveType | FormatXMLElementFn<string, string>>,
+  opts?: IntlMessageFormatOptions
+) => string;
+
+const extractFormatMessage = ({
+  id,
+  formatMessage,
+}: {
+  id?: string;
+  formatMessage?: FormatMessageProps;
+}): string => {
+  let message = id || '';
+  if (id && formatMessage) {
+    const defaultMessage = extractDefaultMessage(id);
+    if (defaultMessage) {
+      message = formatMessage(defaultMessage);
+    }
+  }
+
+  return message;
+};
+
 export {
   useOutsideClick,
   value2Date,
@@ -1018,4 +1050,5 @@ export {
   parserParam,
   extractLeagueIds,
   extractDefaultMessage,
+  extractFormatMessage,
 };

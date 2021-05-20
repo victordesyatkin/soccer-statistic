@@ -73,6 +73,7 @@ const SwitcherLanguage: FC<IntlContextProps> = ({ selectLanguage }) => {
       customRenderItem,
       customRenderOption,
       theme: 'small',
+      isManagement: true,
     }),
     [
       languages,

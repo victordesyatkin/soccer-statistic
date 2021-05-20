@@ -39,12 +39,27 @@ $parent: 'select-field';
     }
   }
 
+  &__item_with-control {
+    .#{$parent}__item-content {
+      padding-right: 1.429rem;
+    }
+  }
+
   &_theme_small {
     .#{$parent}__items {
       padding: 0.3rem 0 0.3rem 0.3rem;
     }
 
+    .#{$parent}__item {
+      padding: 0;
+      background-color: initial;
+    }
+
     .#{$parent}__control {
+      padding: 0.3rem;
+    }
+
+    .#{$parent}__placeholder {
       padding: 0.3rem;
     }
   }

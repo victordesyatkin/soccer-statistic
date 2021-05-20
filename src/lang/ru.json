@@ -51,5 +51,7 @@
   "english": "english",
   "german": "Немецкий",
   "russian": "Русский",
-  "unknown": "unknown"
+  "unknown": "unknown",
+  "home_page": "главная",
+  "n/a": "n/a"
 }

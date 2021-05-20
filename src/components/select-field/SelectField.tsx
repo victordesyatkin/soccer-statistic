@@ -29,6 +29,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   customRenderOption,
   withControl = true,
   theme,
+  isManagement = false,
 }) => {
   let isReadyMultiple = isMultiple;
   const selectFieldRef = useRef(null);
@@ -54,7 +55,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
   if (Array.isArray(readyValue) && !readyValue.length) {
     readyValue = undefined;
   }
-  const [selectedValue, setSelectedValue] = useState(readyValue);
+  let selectedValue = readyValue;
+  const [stateSelectedValue, setSelectedValue] = useState(readyValue);
+  if (!isManagement) {
+    selectedValue = stateSelectedValue;
+  }
   const [isOpened, setIsOpened] = useState(false);
   const closeBody = useCallback(() => {
     setIsOpened(false);
@@ -91,12 +96,15 @@ const SelectField: React.FC<SelectFieldProps> = ({
       } else {
         copySelectedValue = undefined;
       }
-      setSelectedValue(copySelectedValue);
+      // console.log('onClickItemControl : ', copySelectedValue);
+      if (!isManagement) {
+        setSelectedValue(copySelectedValue);
+      }
       if (onChange) {
         onChange(copySelectedValue);
       }
     },
-    [selectedValue, onChange]
+    [selectedValue, onChange, isManagement]
   );
   const handleWaypointEnter = () => {
     if (onEnter) {
@@ -115,7 +123,6 @@ const SelectField: React.FC<SelectFieldProps> = ({
       const item = options?.find(
         (passItem) => String(passItem?.id) === String(passId)
       );
-      console.log('item : ', item);
       if (item) {
         if (customRenderItem) {
           return customRenderItem(item);
@@ -174,7 +181,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const onClickOption = (optionForRender: SelectFieldOptionType) => {
     const { isDisabled: isDisableOption, value: valueOption } = optionForRender;
     if (!isDisableOption && valueOption) {
-      let readyItems = memoizedPreparedItems?.slice() || [];
+      let readyItems: string[] | undefined =
+        memoizedPreparedItems?.slice() || [];
       const index = readyItems.indexOf(String(valueOption));
       if (index !== -1) {
         readyItems.splice(index, 1);
@@ -184,7 +192,12 @@ const SelectField: React.FC<SelectFieldProps> = ({
         }
         readyItems.push(String(valueOption));
       }
-      setSelectedValue(readyItems);
+      if (Array.isArray(readyItems) && !readyItems.length) {
+        readyItems = undefined;
+      }
+      if (!isManagement) {
+        setSelectedValue(readyItems);
+      }
       if (onChange) {
         onChange(readyItems);
       }

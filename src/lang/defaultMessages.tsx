@@ -263,6 +263,16 @@ const messages = defineMessages({
     defaultMessage: 'russian',
     description: 'russian',
   },
+  home_page: {
+    id: 'home_page',
+    defaultMessage: 'home page',
+    description: 'home_page',
+  },
+  please_select_service: {
+    id: 'please_select_service',
+    defaultMessage: 'please select service',
+    description: 'please_select_service',
+  },
 });
 
 // eslint-disable-next-line import/prefer-default-export

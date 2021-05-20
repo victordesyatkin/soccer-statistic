@@ -17,7 +17,7 @@ const Section = styled.section`
   width: 100%;
   flex-direction: column;
 `;
-const StyledBreadcrumbs = styled(Breadcrumbs)`
+const BreadcrumbsWrapper = styled.div`
   padding: 1rem 0;
 `;
 const Control = styled.div`
@@ -59,7 +59,9 @@ const TeamsPage: FC<TeamsPageProps> = ({
 }) => {
   return (
     <Section>
-      <StyledBreadcrumbs content="Breadcrumbs" />
+      <BreadcrumbsWrapper>
+        <Breadcrumbs />
+      </BreadcrumbsWrapper>
       <Control>
         <FilterButton {...filter} />
       </Control>

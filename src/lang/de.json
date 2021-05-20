@@ -51,5 +51,8 @@
   "english": "english",
   "german": "german",
   "russian": "russian",
-  "unknown": "unknown"
+  "unknown": "unknown",
+  "home_page": "home page",
+  "n/a": "н/д",
+  "please_select_service": "please_select_service"
 }

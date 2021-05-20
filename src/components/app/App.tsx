@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useMemo } from 'react';
+import React, { Suspense, lazy, useMemo, FC } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import 'normalize.css';
@@ -23,9 +23,8 @@ const TeamPage = lazy(() => import('../../containers/team-page'));
 
 const MatchesPage = lazy(() => import('../../containers/matches-page'));
 
-const App: React.FC<AppProps> = ({ header }) => {
+const App: FC<AppProps> = ({ header }) => {
   const routes = useMemo(() => getRoutes(), []);
-  // console.log('routes : ', routes);
   return (
     <div className="app">
       <div className="app__header">

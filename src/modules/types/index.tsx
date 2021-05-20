@@ -256,7 +256,10 @@ type CountriesProps = {
   items: CountryProps[];
 };
 
-type StatisticServiceProps = Partial<{ apiKey: string; apiBase: string }>;
+type StatisticServiceProps = Partial<{
+  apiKey: string;
+  apiBase: string;
+}> & { client: IClientHttpRequest };
 
 type EndpointsType = {
   FETCH_LEAGUES: string;
@@ -310,6 +313,7 @@ type SelectFieldProps = Partial<{
     option: Record<string, string | number | undefined | boolean | null>
   ) => string | undefined | JSX.Element | number;
   theme: string;
+  isManagement: boolean;
 }> &
   WithLabelProps;
 type NodataProps = Partial<{
@@ -318,6 +322,8 @@ type NodataProps = Partial<{
 
 type WithStatisticServiceProps = Partial<{
   serviceStatistic: IStatisticService;
+  serviceStatisticName: string;
+  selectServiceStatisticName: (serviceStatisticName?: string) => void;
 }>;
 
 type WithStatisticServicePropsFill<T> = (
@@ -475,8 +481,7 @@ type TeamsResponseProps = {
 type transformTeamProps = (team: TeamResponseProps) => TeamProps;
 
 type BreadcrumbsProps = Partial<{
-  content: string;
-  className: string;
+  options: Record<string, string>;
 }>;
 
 type MenuButtonProps = {
@@ -517,6 +522,7 @@ type LinkProps = Partial<{
   to: string;
   className: string;
   isUpperFirst: boolean;
+  isNarrow: boolean;
 }>;
 
 type LogoImageProps = {
@@ -608,12 +614,30 @@ type IntlContextProps = Partial<{
   locale: string;
   selectLanguage: (language?: string) => void;
 }>;
+
+type StatisticServiceContextProps = {
+  serviceStatisticInstance: IStatisticService;
+  serviceStatisticName: string;
+  selectServiceStatisticName: (serviceStatisticName?: string) => void;
+};
+
+type IClientHttpRequestProps = {
+  url: string;
+  params: string;
+  apiKey: string;
+  apiBase: string;
+};
 interface IStatisticService {
   getLeagues: (options?: getLeaguesProps) => Promise<LeagueProps[]>;
   getTeams: (options: getTeamsProps) => Promise<TeamsResponseProps>;
   getCountries: () => Promise<CountryProps[]>;
   getTeam: (options: getTeamProps) => Promise<TeamFullResponseProps>;
   getMatches: (options: getMatchesProps) => Promise<MatchesFullResponseProps>;
+}
+
+interface IClientHttpRequest {
+  getResourceFetch<T>(options?: IClientHttpRequestProps): Promise<T>;
+  abort(message?: string): void;
 }
 
 export type {
@@ -702,4 +726,6 @@ export type {
   StatusProps,
   defaultMessageProps,
   IntlContextProps,
+  StatisticServiceContextProps,
+  IClientHttpRequest,
 };

@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import { colors } from '../../assets/theme/variables';
-import { maskedDate } from '../../helpers';
+import { extractFormatMessage, maskedDate } from '../../helpers';
 import { PlayerProps } from '../../modules/types';
 
 const PlayersRow = styled.tr`
@@ -22,6 +23,7 @@ const PlayerListItem: FC<{
 }> = ({ item, properties }) => {
   const { id: itemId } = item;
   const readyProperties = properties as (keyof PlayerProps)[];
+  const { formatMessage } = useIntl();
   return (
     <PlayersRow key={`tr-${itemId}`}>
       {readyProperties.map((property) => {
@@ -29,7 +31,9 @@ const PlayerListItem: FC<{
         if (property in item) {
           readyProperty = String(item[property]);
           if (readyProperty && property === 'dateOfBirth') {
-            readyProperty = maskedDate(readyProperty) || 'n/a';
+            readyProperty =
+              maskedDate(readyProperty) ||
+              extractFormatMessage({ id: 'n/a', formatMessage });
           }
         }
         return readyProperty ? (

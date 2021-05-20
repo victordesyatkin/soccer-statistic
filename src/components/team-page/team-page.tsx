@@ -5,13 +5,23 @@ import { Scrollbars, sizes } from '../../assets/theme';
 import { TeamProps } from '../../modules/types';
 import TeamInfo from '../team-info';
 import PlayerList from '../player-list';
+import Breadcrumbs from '../breadcrumbs';
 
 const TeamPageWrapper = styled.div`
   width: 100%;
   background-color: white;
   display: flex;
+  flex-direction: column;
+`;
+
+const Header = styled.div`
+  padding: 1rem 0;
+`;
+
+const Body = styled.div`
+  width: 100%;
+  display: flex;
   flex-wrap: wrap;
-  margin-top: 2rem;
 `;
 
 const TeamInfoWrapper = styled.div`
@@ -33,12 +43,17 @@ const TeamPage: FC<{ team: TeamProps }> = ({ team }) => {
   const { squad } = team;
   return (
     <TeamPageWrapper>
-      <TeamInfoWrapper>
-        <TeamInfo {...team} />
-      </TeamInfoWrapper>
-      <PlayerListWrapper>
-        <PlayerList items={squad} />
-      </PlayerListWrapper>
+      <Header>
+        <Breadcrumbs />
+      </Header>
+      <Body>
+        <TeamInfoWrapper>
+          <TeamInfo {...team} />
+        </TeamInfoWrapper>
+        <PlayerListWrapper>
+          <PlayerList items={squad} />
+        </PlayerListWrapper>
+      </Body>
     </TeamPageWrapper>
   );
 };

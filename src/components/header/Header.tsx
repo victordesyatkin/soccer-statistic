@@ -8,6 +8,7 @@ import Button from '../button';
 import MenuButton from '../menu-button';
 import SearchField from '../search-field';
 import SwitcherLanguage from '../switcher-language';
+import SwitcherService from '../switcher-service';
 import './header.scss';
 
 const Header: FC<HeaderProps> = ({
@@ -60,8 +61,13 @@ const Header: FC<HeaderProps> = ({
         <Button {...iconButton} onClick={onClickSearchButton} />
       </div>
       <div className="header__search">{formSearch}</div>
-      <div className="header__switcher-language">
-        <SwitcherLanguage />
+      <div className="header__switchers">
+        <div className="header__switcher-language">
+          <SwitcherLanguage />
+        </div>
+        <div className="header__switcher-service">
+          <SwitcherService />
+        </div>
       </div>
     </header>
   );

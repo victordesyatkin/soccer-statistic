@@ -14,6 +14,7 @@ import {
   TeamFullResponseProps,
   getMatchesProps,
   MatchesFullResponseProps,
+  IClientHttpRequest,
 } from '../modules/types';
 
 import {
@@ -29,12 +30,16 @@ class StatisticService implements IStatisticService {
 
   private apiKey = '';
 
+  private client: IClientHttpRequest;
+
   private endpoints: EndpointsType;
 
   private hasErrorAuthenticationData?: ExtendedError;
 
-  constructor(options?: StatisticServiceProps) {
+  constructor(options: StatisticServiceProps) {
     this.endpoints = getEndpoints();
+    const { client } = options;
+    this.client = client;
     this.init(options);
   }
 
@@ -99,9 +104,10 @@ class StatisticService implements IStatisticService {
   }
 
   private init(options?: StatisticServiceProps) {
-    const { apiBase = '', apiKey = '' } = options || {
+    const { apiBase = '', apiKey = '' } = {
       apiKey: process.env.API_KEY,
       apiBase: process.env.API_BASE,
+      ...options,
     };
     this.apiBase = apiBase;
     this.apiKey = apiKey;
@@ -122,24 +128,12 @@ class StatisticService implements IStatisticService {
     if (params) {
       readyParams = `?${new URLSearchParams(params).toString()}`;
     }
-    try {
-      const response = await fetch(`${this.apiBase}${url}${readyParams}`, {
-        headers: { 'X-Auth-Token': this.apiKey },
-      });
-      if (!response.ok) {
-        throw new ExtendedError({
-          message: `${response.status}`,
-          statusText: response.statusText,
-        });
-      }
-      const results = await response.json();
-      return results;
-    } catch (error) {
-      throw new ExtendedError({
-        message: `404`,
-        statusText: error.message,
-      });
-    }
+    return this.client.getResourceFetch<T>({
+      url,
+      params: readyParams,
+      apiKey: this.apiKey,
+      apiBase: this.apiBase,
+    });
   }
 
   private checkHasErrorAuthenticationData(): ExtendedError | void {
@@ -158,5 +152,4 @@ class StatisticService implements IStatisticService {
   }
 }
 
-export type { IStatisticService };
 export default StatisticService;

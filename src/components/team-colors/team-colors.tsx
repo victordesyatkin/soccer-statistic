@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled, { CSSObject } from 'styled-components';
+import toHex from 'colornames';
 
 import { colors as themeColors } from '../../assets/theme/variables';
 
@@ -20,15 +21,14 @@ const TeamColors: FC<{ colors?: string; id: number }> = ({ colors, id }) => {
   if (colors?.trim()) {
     parts = colors.toLocaleLowerCase().split('/');
   }
-
   return (
     <TeamColorWrapper>
       {parts
         ? parts.map((backgroundColor) => (
             // eslint-disable-next-line react/jsx-indent
             <TeamColorItem
-              key={`${id}-background-color-${backgroundColor}}`}
-              background-color={backgroundColor}
+              key={`${id}-background-color-${backgroundColor.trim()}}`}
+              background-color={toHex(backgroundColor.trim())}
             />
           ))
         : 'n/a'}

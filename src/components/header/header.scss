@@ -9,6 +9,7 @@ $parent: 'header';
   align-items: center;
   position: relative;
   padding-left: 3.571rem;
+  padding-right: 3.571rem;
 
   @media (min-width: $md) {
     justify-content: space-between;
@@ -104,14 +105,39 @@ $parent: 'header';
     }
   }
 
-  &__switcher-language {
+  &__switchers {
     position: absolute;
     right: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 
     @media screen and (min-width: $md) {
       padding-left: 1rem;
       position: initial;
-      width: 11rem;
+      flex-direction: initial;
+      align-items: initial;
+    }
+  }
+
+  &__switcher-language {
+    max-width: 3.5rem;
+
+    @media screen and (min-width: $md) {
+      width: 100%;
+      max-width: 10rem;
+      min-width: 10rem;
+    }
+  }
+
+  &__switcher-service {
+    margin-top: 0.3rem;
+    @media screen and (min-width: $md) {
+      padding-left: 1rem;
+      width: 100%;
+      max-width: 6.7rem;
+      min-width: 6.7rem;
+      margin-top: initial;
     }
   }
 }

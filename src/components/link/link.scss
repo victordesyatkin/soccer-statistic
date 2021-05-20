@@ -24,6 +24,10 @@ $parent: 'link';
     }
   }
 
+  &_narrow {
+    width: initial;
+  }
+
   &:hover {
     color: $link-text-color-hover;
   }

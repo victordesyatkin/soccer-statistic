@@ -5,7 +5,6 @@ import { useIntl } from 'react-intl';
 
 import store from '../../modules/store';
 import ErrorBoundary from '../../components/error-boundary';
-import { IntlProviderWrapper } from '../../components/hoc-helpers';
 import App from '../../components/app';
 import Modal from '../modal';
 import { extractDefaultMessage } from '../../helpers';

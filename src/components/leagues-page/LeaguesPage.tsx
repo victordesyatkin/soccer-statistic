@@ -23,7 +23,7 @@ const LeaguesPage: React.FC<LeaguesPageProps> = ({
   return (
     <section className={className}>
       <div className={`${className}__header`}>
-        <Breadcrumbs content="Breadcrumbs" />
+        <Breadcrumbs />
       </div>
       <div className={`${className}__control`}>
         <FilterButton {...filter} />

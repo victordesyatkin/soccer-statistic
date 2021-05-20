@@ -51,7 +51,6 @@ const IntlProviderWrapper: FC = ({ children }) => {
     },
     [setLocale, setMessages, locale]
   );
-  console.log('intlContextDefaultValue : ', locale);
   return (
     <Provider value={{ locale, selectLanguage }}>
       <IntlProvider locale={locale} messages={messages}>

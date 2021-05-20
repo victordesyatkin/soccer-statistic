@@ -15,6 +15,7 @@ import {
   searchString,
   checkNeededLoadTeams,
   checkNeededLoadLeagues,
+  extractFormatMessage,
 } from '../../helpers';
 import { withStatisticService } from '../../components/hoc-helpers';
 
@@ -118,9 +119,11 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   }, [mapCompetitionSeasonsItems, serviceStatistic, dispatch, leagueIds]);
   const memorizedSelectFieldCountries = useMemo(
     () => ({
-      placeholder: upperFirst(formatMessage({ id: 'please_select_countries' })),
+      placeholder: upperFirst(
+        extractFormatMessage({ id: 'please_select_countries', formatMessage })
+      ),
       label: {
-        content: formatMessage({ id: 'countries' }),
+        content: extractFormatMessage({ id: 'countries', formatMessage }),
       },
       options: countriesToOptions(countries),
       onEnter: onEnterSelectFieldCountries,
@@ -136,9 +139,11 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   );
   const memorizedSelectFieldLeagues = useMemo(
     () => ({
-      placeholder: upperFirst(formatMessage({ id: 'Please select leagues' })),
+      placeholder: upperFirst(
+        extractFormatMessage({ id: 'please_select_leagues', formatMessage })
+      ),
       label: {
-        content: formatMessage({ id: 'leagues' }),
+        content: extractFormatMessage({ id: 'leagues', formatMessage }),
       },
       options: leaguesToOptions(leagues),
       onEnter: onEnterSelectFieldLeagues,
@@ -157,9 +162,11 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
 
   const memorizedSearchField = useMemo(
     () => ({
-      placeholder: upperFirst(formatMessage({ id: 'Search' })),
+      placeholder: upperFirst(
+        extractFormatMessage({ id: 'search', formatMessage })
+      ),
       label: {
-        content: formatMessage({ id: 'Name' }),
+        content: extractFormatMessage({ id: 'name', formatMessage }),
       },
       value: teamName,
       onChange: onChangeSearchField,
@@ -168,7 +175,7 @@ const TeamsPageContainer: FC<WithStatisticServiceProps> = ({
   );
   const memorizedPanel = useMemo(
     () => ({
-      title: formatMessage({ id: 'filter' }),
+      title: upperFirst(extractFormatMessage({ id: 'filter', formatMessage })),
     }),
     [formatMessage]
   );
