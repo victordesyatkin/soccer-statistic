@@ -65,7 +65,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
     setIsOpened(false);
   }, []);
   useOutsideClick({
-    ref: selectFieldRef,
+    refs: [selectFieldRef],
     callback: closeBody,
     isOpened,
   });

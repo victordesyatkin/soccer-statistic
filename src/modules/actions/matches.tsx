@@ -1,56 +1,40 @@
-import { ActionCreator, Dispatch } from 'redux';
+import { Dispatch } from 'redux';
+import { createActions } from 'redux-actions';
 
 import {
-  transformResponseFetchTeams,
-  transformTeamFull,
-  transformArrayToObjectById,
   transformMessage,
   date2value,
   transformMatchesFullResponse,
   extractLeagueIds,
 } from '../../helpers';
-import { IStatisticService } from '../../services';
 import {
-  ActionType,
-  ActionCreatorType,
-  TeamsResponseProps,
-  TeamFullResponseProps,
-  ItemsTeamProps,
-  MatchProps,
+  ItemsMatchProps,
   ItemsErrorProps,
   getMatchesProps,
   MatchesFullResponseProps,
   ReducerProps,
+  IStatisticService,
 } from '../types';
 import { fetchRequest, fetchSuccess, fetchFailure } from './common';
-
-import { fetchSeasonsSuccess } from './seasons';
-import { fetchMapSeasonTeamsSuccess } from './mapSeasonTeams';
-import { fetchMapCompetitionSeasonsSuccess } from './mapCompetitionSeasons';
 import { fetchTeams } from './teams';
 
-const FETCH_MATCHES_SUCCESS = 'FETCH_MATCHES_SUCCESS';
-const fetchMatchesSuccess: ActionCreator<
-  ActionType & { payload: ItemsTeamProps }
-> = (payload: ItemsTeamProps) => ({
-  type: FETCH_MATCHES_SUCCESS,
-  payload,
-});
-
-const FETCH_MATCHES_REQUEST = 'FETCH_MATCHES_REQUEST';
-const fetchMatchesRequest: ActionCreatorType = () => ({
-  type: FETCH_MATCHES_REQUEST,
-});
-
-const FETCH_MATCHES_FAILURE = 'FETCH_MATCHES_FAILURE';
-const fetchMatchesFailure: ActionCreator<
-  ActionType & { payload: ItemsErrorProps }
-> = (payload: ItemsErrorProps) => {
-  return {
-    type: FETCH_MATCHES_FAILURE,
-    payload,
-  };
-};
+const {
+  fetchMatchesSuccess,
+  fetchMatchesFailure,
+  fetchMatchesRequest,
+} = createActions(
+  {
+    FETCH_MATCHES_SUCCESS: (
+      payload: ItemsMatchProps
+    ): { payload: ItemsMatchProps } => ({
+      payload,
+    }),
+    FETCH_MATCHES_FAILURE: (payload: ItemsErrorProps) => ({
+      payload,
+    }),
+  },
+  'FETCH_MATCHES_REQUEST'
+);
 
 const fetchMatches = ({
   serviceStatistic,
@@ -97,7 +81,6 @@ const fetchMatches = ({
         dispatch(fetchMatchesSuccess(matches));
         dispatch(fetchSuccess());
         const competitionIds = extractLeagueIds(matches);
-        console.log('competitionIds : ', competitionIds);
         if (competitionIds?.length) {
           fetchTeams({ serviceStatistic })(competitionIds)(dispatch);
         }
@@ -109,39 +92,9 @@ const fetchMatches = ({
   }
 };
 
-// const fetchMatch = ({
-//   serviceStatistic,
-// }: {
-//   serviceStatistic?: IStatisticService;
-// }): (({ teamId }: { teamId: string }) => (dispatch: Dispatch) => void) => ({
-//   teamId,
-// }) => (dispatch) => {
-//   if (serviceStatistic && teamId) {
-//     dispatch(fetchRequest());
-//     serviceStatistic
-//       .getTeam({ teamId })
-//       .then((payload: TeamFullResponseProps) => {
-//         const readyPayload = transformArrayToObjectById<MatchProps>([
-//           transformTeamFull(payload),
-//         ]);
-//         dispatch(fetchMatchesSuccess(readyPayload));
-//         dispatch(fetchSuccess());
-//       })
-//       .catch((error) => {
-//         const payload = transformMessage({ error, status: 'danger' });
-//         dispatch(fetchMatchesFailure(payload));
-//         dispatch(fetchFailure(payload));
-//       });
-//   }
-// };
-
 export {
-  FETCH_MATCHES_SUCCESS,
-  FETCH_MATCHES_REQUEST,
-  FETCH_MATCHES_FAILURE,
   fetchMatchesSuccess,
   fetchMatchesRequest,
   fetchMatchesFailure,
   fetchMatches,
-  // fetchMatch,
 };

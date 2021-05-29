@@ -1,49 +1,60 @@
-import { AnyAction } from 'redux';
+// import {  } from 'redux-actions';
+import { handleActions, Action } from 'redux-actions';
 
-import * as actions from '../actions/matches';
-import { MatchReducerProps } from '../types';
+import { MatchReducerProps, ItemsMatchProps, ItemsErrorProps } from '../types';
 
-const initialTeamState: MatchReducerProps = {
+import {
+  fetchMatchesFailure,
+  fetchMatchesRequest,
+  fetchMatchesSuccess,
+} from '../actions/matches';
+
+const initialMatchesState: MatchReducerProps = {
   items: {},
   isLoading: false,
   errors: {},
 };
 
-const reducer = (
-  state = initialTeamState,
-  action: AnyAction
-): MatchReducerProps => {
-  switch (action.type) {
-    case actions.FETCH_MATCHES_REQUEST: {
-      return {
-        ...state,
-        isLoading: true,
-      };
-    }
-    case actions.FETCH_MATCHES_SUCCESS: {
+const reducer = handleActions(
+  {
+    [fetchMatchesRequest.toString()]: (state) => ({
+      ...state,
+      isLoading: true,
+    }),
+    [fetchMatchesSuccess.toString()]: (
+      state,
+      action: Action<{ payload: ItemsMatchProps }>
+    ) => {
+      const {
+        payload: { payload },
+      } = action;
       return {
         ...state,
         items: {
           ...state.items,
-          ...action.payload,
+          ...payload,
         },
         isLoading: false,
       };
-    }
-    case actions.FETCH_MATCHES_FAILURE: {
+    },
+    [fetchMatchesFailure.toString()]: (
+      state,
+      action: Action<{ payload: unknown }>
+    ) => {
+      const {
+        payload: { payload },
+      } = action;
       return {
         ...state,
         errors: {
           ...state.errors,
-          ...action.payload,
+          ...(payload as ItemsErrorProps),
         },
         isLoading: false,
       };
-    }
-    default: {
-      return state;
-    }
-  }
-};
+    },
+  },
+  initialMatchesState
+);
 
 export default reducer;

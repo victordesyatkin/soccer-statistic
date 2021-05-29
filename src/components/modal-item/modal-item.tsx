@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { rgba } from 'polished';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useIntl } from 'react-intl';
 
 import { colors, sizes, Scrollbars } from '../../assets/theme';
-import { useOutsideClick } from '../../helpers';
+import { extractFormatMessage, useOutsideClick } from '../../helpers';
 import logo from './images/logo.png';
 
 const ModalRoot = styled.div`
@@ -58,7 +59,6 @@ const ModalHeaderContent = styled.div<{ status?: string }>`
   text-overflow: ellipsis;
   white-space: nowrap;
   color: ${({ status }) => {
-    // console.log('status : ', status);
     switch (status) {
       case 'danger':
       case 'info':
@@ -67,6 +67,9 @@ const ModalHeaderContent = styled.div<{ status?: string }>`
       }
     }
   }};
+  &::first-letter {
+    text-transform: uppercase;
+  }
 `;
 const ModalHeaderButtonClose = styled.button`
   background: none;
@@ -97,6 +100,11 @@ const ModalImage = styled.img`
   opacity: 0.1;
   transform: translate(-50%, -50%);
 `;
+const ModalContent = styled.span`
+  &::first-letter {
+    text-transform: uppercase;
+  }
+`;
 
 const ModalItem: FC<{
   contentBody?: string | FC;
@@ -104,18 +112,25 @@ const ModalItem: FC<{
   status?: string;
   onClose?: () => void;
 }> = ({ contentBody = '', contentHeader = '', status = 'info', onClose }) => {
+  const { formatMessage } = useIntl();
   const modalRef = useRef(null);
   let readyContentHeader = contentHeader;
   if (!readyContentHeader || typeof readyContentHeader === 'string') {
     readyContentHeader = readyContentHeader?.trim();
     switch (status) {
       case 'danger': {
-        readyContentHeader = 'Error';
+        readyContentHeader = extractFormatMessage({
+          id: 'error',
+          formatMessage,
+        });
         break;
       }
       case 'info':
       default: {
-        readyContentHeader = 'Info';
+        readyContentHeader = extractFormatMessage({
+          id: 'info',
+          formatMessage,
+        });
       }
     }
   }
@@ -133,7 +148,7 @@ const ModalItem: FC<{
         </ModalHeader>
         <ModalBody>
           <ModalImage src={logo} />
-          {contentBody}
+          <ModalContent>{contentBody}</ModalContent>
         </ModalBody>
       </Modal>
     </ModalRoot>

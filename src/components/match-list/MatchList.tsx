@@ -59,7 +59,15 @@ const MatchList: FC<MatchListProps> = ({ items }) => {
     properties,
   ]);
   const memorizedCaption = useMemo(
-    () => `${items?.length} ${formatMessage({ id: 'matches_in_selection' })}:`,
+    () =>
+      `${formatMessage(
+        {
+          id: 'matches_in_selection',
+        },
+        {
+          count: items?.length || 0,
+        }
+      )}:`,
     [items, formatMessage]
   );
   return (

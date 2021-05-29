@@ -7,35 +7,29 @@ import store from '../../modules/store';
 import ErrorBoundary from '../../components/error-boundary';
 import App from '../../components/app';
 import Modal from '../modal';
-import { extractDefaultMessage } from '../../helpers';
+import { extractDefaultMessage, extractFormatMessage } from '../../helpers';
 
 const AppContainer: FC = () => {
   const { formatMessage } = useIntl();
   const header = useMemo(() => {
-    const titleDefaultMessage = extractDefaultMessage('leagues');
-    const titleMessage = titleDefaultMessage
-      ? formatMessage(titleDefaultMessage)
-      : '';
-    const teamsDefaultMessage = extractDefaultMessage('teams');
-    const teamsMessage = teamsDefaultMessage
-      ? formatMessage(teamsDefaultMessage)
-      : '';
-    const matchesDefaultMessage = extractDefaultMessage('matches');
-    const matchesMessage = matchesDefaultMessage
-      ? formatMessage(matchesDefaultMessage)
-      : '';
-    const predictionsDefaultMessage = extractDefaultMessage('predictions');
-    const predictionsMessage = predictionsDefaultMessage
-      ? formatMessage(predictionsDefaultMessage)
-      : '';
-    const supportDefaultMessage = extractDefaultMessage('support');
-    const supportMessage = supportDefaultMessage
-      ? formatMessage(supportDefaultMessage)
-      : '';
-    const accountDefaultMessage = extractDefaultMessage('account');
-    const accountMessage = accountDefaultMessage
-      ? formatMessage(accountDefaultMessage)
-      : '';
+    const titleMessage = extractFormatMessage({ id: 'leagues', formatMessage });
+    const teamsMessage = extractFormatMessage({ id: 'teams', formatMessage });
+    const matchesMessage = extractFormatMessage({
+      id: 'matches',
+      formatMessage,
+    });
+    const predictionsMessage = extractFormatMessage({
+      id: 'predictions',
+      formatMessage,
+    });
+    const supportMessage = extractFormatMessage({
+      id: 'support',
+      formatMessage,
+    });
+    const accountMessage = extractFormatMessage({
+      id: 'account',
+      formatMessage,
+    });
     return {
       nav: {
         links: [
@@ -78,7 +72,10 @@ const AppContainer: FC = () => {
         title: 'search',
       },
       searchField: {
-        placeholder: 'search',
+        placeholder: extractFormatMessage({
+          id: 'search',
+          formatMessage,
+        }),
       },
     };
   }, [formatMessage]);

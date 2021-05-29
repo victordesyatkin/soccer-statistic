@@ -33,7 +33,7 @@
   "postponed": "postponed",
   "suspended": "suspended",
   "canceled": "suspended",
-  "short name": "short name",
+  "short_name": "short name",
   "address": "address",
   "phone": "phone",
   "website": "website",
@@ -54,5 +54,10 @@
   "unknown": "unknown",
   "home_page": "home page",
   "n/a": "n/a",
-  "please_select_service": "please select service"
+  "please_select_service": "please select service",
+  "404": "page not found",
+  "403": "server is not available",
+  "401": "failed authentication data",
+  "error": "error",
+  "info": "info"
 }

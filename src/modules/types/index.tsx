@@ -552,7 +552,7 @@ type HeaderProps = {
 };
 
 type useOutsideClickType = {
-  ref?: React.MutableRefObject<null>;
+  refs?: React.MutableRefObject<null>[];
   callback?: () => void;
   isOpened?: boolean;
 };

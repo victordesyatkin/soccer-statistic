@@ -273,6 +273,31 @@ const messages = defineMessages({
     defaultMessage: 'please select service',
     description: 'please_select_service',
   },
+  404: {
+    id: '404',
+    defaultMessage: 'page not found',
+    description: 'page not found',
+  },
+  403: {
+    id: '403',
+    defaultMessage: 'server is not available',
+    description: 'server is not available',
+  },
+  401: {
+    id: '401',
+    defaultMessage: 'failed authentication data',
+    description: 'failed authentication data',
+  },
+  error: {
+    id: 'error',
+    defaultMessage: 'error',
+    description: 'error',
+  },
+  info: {
+    id: 'info',
+    defaultMessage: 'info',
+    description: 'info',
+  },
 });
 
 // eslint-disable-next-line import/prefer-default-export

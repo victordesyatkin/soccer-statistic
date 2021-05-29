@@ -38,6 +38,7 @@
     "react-router-dom": "^5.2.0",
     "react-waypoint": "^9.0.3",
     "redux": "^4.0.5",
+    "redux-actions": "^2.6.5",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.2.3"
@@ -70,6 +71,7 @@
     "@types/react-dom": "^17.0.2",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",
+    "@types/redux-actions": "^2.6.1",
     "@types/styled-components": "^5.1.9",
     "@types/webpack": "^4.41.26",
     "@types/webpack-dev-server": "^3.11.2",

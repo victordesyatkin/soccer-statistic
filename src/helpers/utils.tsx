@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import sortedUniq from 'lodash.sorteduniq';
 import difference from 'lodash.difference';
 import orderBy from 'lodash.orderby';
+
 import { MessageDescriptor } from 'react-intl';
 import {
   IntlMessageFormat,
@@ -114,20 +115,34 @@ function isFunction(value: unknown): boolean {
   return false;
 }
 
+function isObject(value: unknown): boolean {
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
 function useOutsideClick({
-  ref,
+  refs,
   callback,
   isOpened,
 }: useOutsideClickType): void {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const node: Node | null = (event?.target || null) as Node | null;
-      if (
-        ref !== null &&
-        callback &&
-        ref?.current &&
-        !ref.current.contains(node)
-      ) {
+      let isRunCallback = 0;
+      refs?.forEach((ref: React.MutableRefObject<null> | undefined) => {
+        const readyRef = ref as
+          | React.MutableRefObject<HTMLInputElement>
+          | undefined;
+        if (
+          isObject(readyRef) &&
+          readyRef?.current &&
+          !readyRef.current.contains(node)
+        ) {
+          isRunCallback += 1;
+        } else {
+          isRunCallback -= 1;
+        }
+      });
+      if (callback && isRunCallback === refs?.length) {
         callback();
       }
     }
@@ -144,7 +159,7 @@ function useOutsideClick({
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [ref, callback, isOpened]);
+  }, [refs, callback, isOpened]);
 }
 
 function isValidDateByParts({
@@ -1051,4 +1066,6 @@ export {
   extractLeagueIds,
   extractDefaultMessage,
   extractFormatMessage,
+  isString,
+  isObject,
 };

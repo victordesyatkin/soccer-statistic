@@ -1,15 +1,18 @@
-import React, { FC, useCallback, useMemo, useEffect, useState } from 'react';
+import React, { FC, useCallback, useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import Modal from '../../components/modal';
 import ModalItem from '../../components/modal-item';
 import { removeError } from '../../modules/actions';
 import { ReducerProps, ItemsErrorProps } from '../../modules/types';
+import { extractFormatMessage } from '../../helpers';
 
 const ModalContainer: FC = () => {
   const errors = useSelector<ReducerProps, ItemsErrorProps>(
     (state) => state.common.errors
   );
+  const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const {
     errorId,
@@ -51,7 +54,7 @@ const ModalContainer: FC = () => {
   return errorId ? (
     <Modal>
       <ModalItem
-        contentBody={errorMessage}
+        contentBody={extractFormatMessage({ id: errorMessage, formatMessage })}
         onClose={onClose}
         status={errorStatus}
       />

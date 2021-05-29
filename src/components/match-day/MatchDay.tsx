@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import { sizes } from '../../assets/theme';
 import { MatchProps } from '../../modules/types';
-import { flags } from '../../helpers';
+import { flags, extractFormatMessage } from '../../helpers';
 
 const MatchDayWrapper = styled.div`
   width: 100%;
@@ -31,6 +32,7 @@ const MatchDayCountryFlagImage = styled.img`
 `;
 
 const MatchDay: FC<MatchProps> = (props) => {
+  const { formatMessage } = useIntl();
   const { matchday = '-', competition } = props;
   const { area } = competition;
   const { ensignUrl, name, code = '' } = area || {};
@@ -42,7 +44,9 @@ const MatchDay: FC<MatchProps> = (props) => {
   const flag = src ? <MatchDayCountryFlagImage src={src} alt={name} /> : null;
   return (
     <MatchDayWrapper>
-      <MatchDayNumber>{matchday}</MatchDayNumber>
+      <MatchDayNumber>
+        {matchday || extractFormatMessage({ id: 'n/a', formatMessage })}
+      </MatchDayNumber>
       <MatchDayCountryFlag>{flag}</MatchDayCountryFlag>
     </MatchDayWrapper>
   );

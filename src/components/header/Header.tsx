@@ -1,7 +1,8 @@
-import React, { useState, FC } from 'react';
+import React, { useState, FC, useRef } from 'react';
 import classnames from 'classnames';
 
 import { HeaderProps } from '../../modules/types';
+import { useOutsideClick } from '../../helpers';
 import LogoLink from '../logo-link';
 import Nav from '../nav';
 import Button from '../button';
@@ -20,6 +21,8 @@ const Header: FC<HeaderProps> = ({
   action,
   method,
 }) => {
+  const menuButtonRef = useRef(null);
+  const navRef = useRef(null);
   const [isOpenedSearch, setIsOpenedSearch] = useState(false);
   const [isOpenedMenu, setIsOpenedMenu] = useState(false);
   const className = 'header';
@@ -36,6 +39,11 @@ const Header: FC<HeaderProps> = ({
       </div>
     </form>
   );
+  useOutsideClick({
+    refs: [menuButtonRef, menuButtonRef, navRef],
+    callback: onClickMenuButton,
+    isOpened: isOpenedMenu,
+  });
   return (
     <header
       className={classnames(className, {
@@ -43,7 +51,7 @@ const Header: FC<HeaderProps> = ({
         [`${className}_opened-menu`]: isOpenedMenu,
       })}
     >
-      <div className="header__menu-button">
+      <div className="header__menu-button" ref={menuButtonRef}>
         <MenuButton
           {...menuButton}
           onClick={onClickMenuButton}
@@ -53,7 +61,7 @@ const Header: FC<HeaderProps> = ({
       <div className="header__logo-link">
         <LogoLink {...logoLink} />
       </div>
-      <div className="header__nav">
+      <div className="header__nav" ref={navRef}>
         <div className="header__nav-search">{formSearch}</div>
         <Nav {...nav} />
       </div>
