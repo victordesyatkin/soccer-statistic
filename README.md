@@ -20,6 +20,8 @@ Football-statistic - приложение для просмотра спорти
 - [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API);
 - [React-Actions](https://github.com/redux-utilities/redux-actions);
 - [GitHub Flavored Markdown](https://github.github.com/gfm/);
+- [Webpack](https://webpack.js.org/);
+- [ESLint](https://eslint.org/);
 
 ### Список страниц:
 
