@@ -15,7 +15,6 @@
     "air-datepicker": "^2.2.3",
     "axios": "^0.21.1",
     "bind-decorator": "^1.0.11",
-    "bootstrap": "^4.6.0",
     "classnames": "^2.2.6",
     "colornames": "^1.1.1",
     "intl-messageformat": "^9.6.13",
@@ -130,7 +129,8 @@
     "build:dev": "webpack --mode=development",
     "lint": "eslint src/",
     "eslint": "eslint --ext .tsx src/",
-    "eslint:fix": "eslint --fix --ext .tsx src/"
+    "eslint:fix": "eslint --fix --ext .tsx src/",
+    "deploy": "gh-pages -d dist"
   },
   "author": "",
   "license": "ISC",
