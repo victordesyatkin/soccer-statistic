@@ -2,12 +2,13 @@ import React, { FC, useMemo } from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import upperFirst from 'lodash.upperfirst';
 
 import store from '../../modules/store';
 import ErrorBoundary from '../../components/error-boundary';
 import App from '../../components/app';
 import Modal from '../modal';
-import { extractDefaultMessage, extractFormatMessage } from '../../helpers';
+import { extractFormatMessage } from '../../helpers';
 
 const AppContainer: FC = () => {
   const { formatMessage } = useIntl();
@@ -69,13 +70,20 @@ const AppContainer: FC = () => {
         ],
       },
       searchButton: {
-        title: 'search',
+        title: upperFirst(
+          extractFormatMessage({
+            id: 'search',
+            formatMessage,
+          })
+        ),
       },
       searchField: {
-        placeholder: extractFormatMessage({
-          id: 'search',
-          formatMessage,
-        }),
+        placeholder: upperFirst(
+          extractFormatMessage({
+            id: 'search',
+            formatMessage,
+          })
+        ),
       },
     };
   }, [formatMessage]);

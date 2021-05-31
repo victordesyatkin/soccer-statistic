@@ -1,4 +1,4 @@
-import React, { useState, FC, useRef } from 'react';
+import React, { useState, FC, useRef, useCallback } from 'react';
 import classnames from 'classnames';
 
 import { HeaderProps } from '../../modules/types';
@@ -32,6 +32,9 @@ const Header: FC<HeaderProps> = ({
   const onClickMenuButton = () => {
     setIsOpenedMenu(!isOpenedMenu);
   };
+  const closeMenu = useCallback(() => {
+    setIsOpenedMenu(false);
+  }, [setIsOpenedMenu]);
   const formSearch = (
     <form action={action} method={method} className="header__search-form">
       <div className="header__search-field">
@@ -41,7 +44,7 @@ const Header: FC<HeaderProps> = ({
   );
   useOutsideClick({
     refs: [menuButtonRef, menuButtonRef, navRef],
-    callback: onClickMenuButton,
+    callback: closeMenu,
     isOpened: isOpenedMenu,
   });
   return (

@@ -166,7 +166,7 @@ const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
     return {
       placeholder: upperFirst(formatMessage({ id: 'please_select_status' })),
       label: {
-        content: formatMessage({ id: 'status' }),
+        content: upperFirst(formatMessage({ id: 'status' })),
       },
       value: statusIds,
       options: statusesToOptions(Object.values(statuses)),
@@ -177,7 +177,7 @@ const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
     () => ({
       placeholder: upperFirst(formatMessage({ id: 'search' })),
       label: {
-        content: formatMessage({ id: 'name_league_or_team' }),
+        content: upperFirst(formatMessage({ id: 'name_league_or_team' })),
       },
       value: searchName,
       onChange: onChangeSearchField,
@@ -196,14 +196,14 @@ const MatchesPageContainer: FC<WithStatisticServiceProps> = ({
       placeholder: formatMessage({ id: 'dd_mm_yy' }),
       onSelect: onSelectDatePicker,
       label: {
-        content: formatMessage({ id: 'dates' }),
+        content: upperFirst(formatMessage({ id: 'dates' })),
       },
     }),
     [onSelectDatePicker, dates, formatMessage]
   );
   const memorizedPanel = useMemo(
     () => ({
-      title: formatMessage({ id: 'filter' }),
+      title: upperFirst(formatMessage({ id: 'filter' })),
     }),
     [formatMessage]
   );

@@ -1,6 +1,8 @@
 import React, { FC, useMemo } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
+import { extractFormatMessage } from '../../helpers';
 import { colors } from '../../assets/theme/variables';
 import { TeamProps } from '../../modules/types';
 import TeamColors from '../team-colors';
@@ -65,17 +67,18 @@ const TeamInfoName = styled.p`
 `;
 
 const TeamInfo: FC<TeamProps> = (props) => {
+  const { formatMessage } = useIntl();
   const properties: Record<string, string> = useMemo(
     () => ({
-      shortName: 'short name',
-      address: 'address',
-      phone: 'phone',
-      website: 'website',
-      email: 'email',
-      founded: 'founded',
-      clubColors: 'club colors',
+      shortName: extractFormatMessage({ id: 'short_name', formatMessage }),
+      address: extractFormatMessage({ id: 'address', formatMessage }),
+      phone: extractFormatMessage({ id: 'phone', formatMessage }),
+      website: extractFormatMessage({ id: 'website', formatMessage }),
+      email: extractFormatMessage({ id: 'email', formatMessage }),
+      founded: extractFormatMessage({ id: 'founded', formatMessage }),
+      clubColors: extractFormatMessage({ id: 'club_colors', formatMessage }),
     }),
-    []
+    [formatMessage]
   );
   const memorizedPropertiesKeys = useMemo(() => Object.keys(properties), [
     properties,
@@ -93,7 +96,7 @@ const TeamInfo: FC<TeamProps> = (props) => {
         {memorizedPropertiesKeys.map((propertyKey) => {
           const property = properties[propertyKey];
           const readyPropertyKey = propertyKey as keyof TeamProps;
-          let value = 'n/a';
+          let value = 'n_a';
           if (readyPropertyKey in props) {
             value = String(props[readyPropertyKey]);
           }

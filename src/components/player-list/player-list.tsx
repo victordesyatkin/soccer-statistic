@@ -45,13 +45,28 @@ const PlayerList: FC<{ items?: PlayerProps[] }> = ({ items }) => {
   const { formatMessage } = useIntl();
   const properties = useMemo(
     () => ({
-      name: 'name',
-      position: 'position',
-      dateOfBirth: 'date of birth',
-      countryOfBirth: 'country of birth',
-      nationality: 'nationality',
+      name: extractFormatMessage({
+        id: 'name',
+        formatMessage,
+      }),
+      position: extractFormatMessage({
+        id: 'position',
+        formatMessage,
+      }),
+      dateOfBirth: extractFormatMessage({
+        id: 'date of birth',
+        formatMessage,
+      }),
+      countryOfBirth: extractFormatMessage({
+        id: 'country of birth',
+        formatMessage,
+      }),
+      nationality: extractFormatMessage({
+        id: 'nationality',
+        formatMessage,
+      }),
     }),
-    []
+    [formatMessage]
   );
   const memorizedPropertyValues = useMemo(() => Object.values(properties), [
     properties,

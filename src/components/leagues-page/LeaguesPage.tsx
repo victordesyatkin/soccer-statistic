@@ -1,4 +1,6 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
+import upperFirst from 'lodash.upperfirst';
 
 import { LeaguesPageProps } from '../../modules/types';
 import Panel from '../panel';
@@ -9,7 +11,9 @@ import SelectField from '../select-field';
 import Datepicker from '../datepicker';
 import Breadcrumbs from '../breadcrumbs';
 import LeagueList from '../league-list';
+import Title from '../title';
 import './leagues-page.scss';
+import { extractFormatMessage } from '../../helpers';
 
 const LeaguesPage: React.FC<LeaguesPageProps> = ({
   panel,
@@ -20,6 +24,13 @@ const LeaguesPage: React.FC<LeaguesPageProps> = ({
   items,
 }) => {
   const className = 'leagues-page';
+  const { formatMessage } = useIntl();
+  const title = upperFirst(
+    extractFormatMessage({
+      id: 'leagues',
+      formatMessage,
+    })
+  );
   return (
     <section className={className}>
       <div className={`${className}__header`}>
@@ -42,6 +53,7 @@ const LeaguesPage: React.FC<LeaguesPageProps> = ({
           <LeagueList items={items} />
         </div>
       </div>
+      <Title title={title} />
     </section>
   );
 };

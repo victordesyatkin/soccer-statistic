@@ -31,7 +31,7 @@ const TeamColors: FC<{ colors?: string; id: number }> = ({ colors, id }) => {
               background-color={toHex(backgroundColor.trim())}
             />
           ))
-        : 'n/a'}
+        : 'n_a'}
     </TeamColorWrapper>
   );
 };

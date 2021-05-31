@@ -92,7 +92,7 @@ $parent: 'header';
     padding: 0.5rem;
     background-color: $header-background-color;
     display: none;
-    z-index: 10;
+    z-index: 13;
 
     @media (min-width: $md) {
       padding-left: 3rem;
@@ -111,6 +111,7 @@ $parent: 'header';
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    z-index: 15;
 
     @media screen and (min-width: $md) {
       padding-left: 1rem;

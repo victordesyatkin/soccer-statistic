@@ -45,7 +45,7 @@ const MatchDay: FC<MatchProps> = (props) => {
   return (
     <MatchDayWrapper>
       <MatchDayNumber>
-        {matchday || extractFormatMessage({ id: 'n/a', formatMessage })}
+        {matchday || extractFormatMessage({ id: 'n_a', formatMessage })}
       </MatchDayNumber>
       <MatchDayCountryFlag>{flag}</MatchDayCountryFlag>
     </MatchDayWrapper>

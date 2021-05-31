@@ -53,7 +53,7 @@ const Datepicker: React.FC<DatepickerProps> = ({
   const closeBody = useCallback(() => {
     setIsOpened(false);
   }, []);
-  useOutsideClick({ ref: datepickerRef, callback: closeBody, isOpened });
+  useOutsideClick({ refs: [datepickerRef], callback: closeBody, isOpened });
   const isFilled = readyStart || readyEnd;
   const className = 'date-picker';
   return (

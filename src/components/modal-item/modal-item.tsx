@@ -134,7 +134,7 @@ const ModalItem: FC<{
       }
     }
   }
-  useOutsideClick({ ref: modalRef, isOpened: true, callback: onClose });
+  useOutsideClick({ refs: [modalRef], isOpened: true, callback: onClose });
   return (
     <ModalRoot>
       <Modal ref={modalRef} status={status}>

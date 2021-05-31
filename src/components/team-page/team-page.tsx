@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
 import { Scrollbars, sizes } from '../../assets/theme';
 import { TeamProps } from '../../modules/types';
+import { extractFormatMessage } from '../../helpers';
 import TeamInfo from '../team-info';
 import PlayerList from '../player-list';
 import Breadcrumbs from '../breadcrumbs';
+import Title from '../title';
 
 const TeamPageWrapper = styled.div`
   width: 100%;
@@ -40,7 +43,10 @@ const PlayerListWrapper = styled(Scrollbars)`
 `;
 
 const TeamPage: FC<{ team: TeamProps }> = ({ team }) => {
-  const { squad } = team;
+  const { squad, name } = team;
+  const { formatMessage } = useIntl();
+  const title = extractFormatMessage({ id: 'teams', formatMessage });
+  const readyTitle = `${title} - ${name}`;
   return (
     <TeamPageWrapper>
       <Header>
@@ -54,6 +60,7 @@ const TeamPage: FC<{ team: TeamProps }> = ({ team }) => {
           <PlayerList items={squad} />
         </PlayerListWrapper>
       </Body>
+      <Title title={readyTitle} />
     </TeamPageWrapper>
   );
 };

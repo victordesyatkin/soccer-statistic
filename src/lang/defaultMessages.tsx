@@ -183,6 +183,11 @@ const messages = defineMessages({
     defaultMessage: 'address',
     description: 'address',
   },
+  short_name: {
+    id: 'short_name',
+    defaultMessage: 'short name',
+    description: 'short name',
+  },
   phone: {
     id: 'phone',
     defaultMessage: 'phone',
@@ -297,6 +302,11 @@ const messages = defineMessages({
     id: 'info',
     defaultMessage: 'info',
     description: 'info',
+  },
+  n_a: {
+    id: 'n_a',
+    defaultMessage: 'n/a',
+    description: 'n/a',
   },
 });
 

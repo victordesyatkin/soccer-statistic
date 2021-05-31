@@ -386,7 +386,8 @@ type CalendarProps = Partial<{
   start: Date | number | string;
   end: Date | number | string;
   onSelect: (dates?: Partial<Date[]>) => void;
-}>;
+}> &
+  IntlContextProps;
 
 type DatepickerProps = Partial<{
   placeholder: string;

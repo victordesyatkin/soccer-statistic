@@ -71,7 +71,7 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
     () => ({
       placeholder: upperFirst(formatMessage({ id: 'please_select_countries' })),
       label: {
-        content: formatMessage({ id: 'countries' }),
+        content: upperFirst(formatMessage({ id: 'countries' })),
       },
       options: countriesToOptions(countries),
       onEnter: onEnterSelectFieldCountries,
@@ -82,9 +82,9 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
   );
   const memorizedSearchField = useMemo(
     () => ({
-      placeholder: upperFirst(formatMessage({ id: 'search' })),
+      placeholder: upperFirst(upperFirst(formatMessage({ id: 'search' }))),
       label: {
-        content: formatMessage({ id: 'name' }),
+        content: upperFirst(formatMessage({ id: 'name' })),
       },
       value: leagueName,
       onChange: onChangeSearchField,
@@ -101,14 +101,14 @@ const LeaguesPageContainer: FC<WithStatisticServiceProps> = ({
       onSelect: onSelectDatePicker,
       placeholder: formatMessage({ id: 'dd_mm_yy' }),
       label: {
-        content: formatMessage({ id: 'dates' }),
+        content: upperFirst(formatMessage({ id: 'dates' })),
       },
     }),
     [onSelectDatePicker, formatMessage]
   );
   const memorizedPanel = useMemo(
     () => ({
-      title: formatMessage({ id: 'filter' }),
+      title: upperFirst(formatMessage({ id: 'filter' })),
     }),
     [formatMessage]
   );

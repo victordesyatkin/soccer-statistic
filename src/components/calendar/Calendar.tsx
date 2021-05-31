@@ -7,10 +7,11 @@ import React, {
   useState,
 } from 'react';
 
-import '../air-datepicker';
-import Card from '../card';
+import { withIntl } from '../hoc-helpers';
 import { value2Date } from '../../helpers';
 import { CalendarProps } from '../../modules/types';
+import Card from '../card';
+import '../air-datepicker';
 import './calendar.scss';
 
 const DEFAULT_OPTIONS = {
@@ -35,6 +36,7 @@ const Calendar: FC<CalendarProps> = ({
   start,
   end,
   onSelect,
+  locale,
 }) => {
   const [isMount, setIsMount] = useState(false);
   const SELECTED_TYPE_START = useMemo(() => 'start', []);
@@ -190,6 +192,7 @@ const Calendar: FC<CalendarProps> = ({
     if (options && refCalendarTextField?.current) {
       $(refCalendarTextField.current).datepicker({
         ...DEFAULT_OPTIONS,
+        language: locale,
         ...options,
         onRenderCell,
         onSelect: onSelectForOption,
@@ -197,6 +200,7 @@ const Calendar: FC<CalendarProps> = ({
       datePicker.current = $(refCalendarTextField.current).data('datepicker');
     }
   }, [
+    locale,
     options,
     refCalendarTextField,
     datePicker,
@@ -237,4 +241,4 @@ Calendar.defaultProps = {
   options: DEFAULT_OPTIONS,
 };
 
-export default Calendar;
+export default withIntl<CalendarProps>()(Calendar);

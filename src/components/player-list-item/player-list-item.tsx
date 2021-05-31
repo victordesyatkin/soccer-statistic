@@ -33,7 +33,7 @@ const PlayerListItem: FC<{
           if (readyProperty && property === 'dateOfBirth') {
             readyProperty =
               maskedDate(readyProperty) ||
-              extractFormatMessage({ id: 'n/a', formatMessage });
+              extractFormatMessage({ id: 'n_a', formatMessage });
           }
         }
         return readyProperty ? (
@@ -41,7 +41,7 @@ const PlayerListItem: FC<{
             {readyProperty}
           </PlayersCell>
         ) : (
-          'n/a'
+          'n_a'
         );
       })}
     </PlayersRow>
