@@ -1,8 +1,8 @@
-# Демо-проект Football-statistic
+# Демо-проект Football-Statistic
 
 [Online demo](https://victordesyatkin.github.io/soccer-statistic/dist/index.html)
 
-Football-statistic - приложение для просмотра спортивной статистики ведущих европейских турниров по футболу. В качестве публичного API для получения данных использовался [football-data.org](https://www.football-data.org/).
+Football-Statistic - приложение для просмотра спортивной статистики ведущих европейских турниров по футболу. В качестве публичного API для получения данных использовался [football-data.org](https://www.football-data.org/).
 
 ### Проект выполнялся для получения базовых навыков работы с:
 
