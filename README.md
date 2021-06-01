@@ -30,8 +30,10 @@ Football-statistic - приложение для просмотра спорти
 - Список матчей со статистикой;
 - Иформация по конкретной команде;
 
-На страницах реализовано поле со списком (любой дизайн пунктов списка) как фильтр.
+На страницах реализовано поле фильтр с выпадающим списком (возможен любой необходимый дизайн пунктов списка).
+
 На страницах реализован календарь и можно указать фильтр по дате (с, по)
+
 На страницах реализован поиск и можно найти сущность по текстовому поиску.
 
 ### Особенности приложения:
@@ -56,4 +58,4 @@ Football-statistic - приложение для просмотра спорти
 
 Для обработки ошибок приложения используется класс ErrorBoundary c componentDidCatch.
 
-Для приобритения опыта связи между react, typescript и jQuery используется [air-datepicker](https://github.com/t1m0n/air-datepicker) и [air-datepicker.d.ts](https://github.com/victordesyatkin/air-datepicker.d.ts).
+Для приобритения опыта интеграции jQuery приложения в react с typescript используется [air-datepicker](https://github.com/t1m0n/air-datepicker) и [air-datepicker.d.ts](https://github.com/victordesyatkin/air-datepicker.d.ts).
