@@ -1,0 +1,18 @@
+$parent: 'menu-button';
+
+.#{$parent} {
+  color: $primary-color-opacity-75;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
+  padding: 1rem;
+
+  &:hover {
+    color: $primary-color-opacity-50;
+  }
+
+  &_opened {
+    transform: rotate(90deg);
+  }
+}

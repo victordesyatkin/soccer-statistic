@@ -1,0 +1,13 @@
+$parent: 'error-indicator';
+
+.#{$parent} {
+  color: $primary-color-opacity-75;
+
+  &__image,
+  &__header,
+  &__body {
+    font-size: 1.5rem;
+    padding: 0.7rem;
+    text-align: center;
+  }
+}

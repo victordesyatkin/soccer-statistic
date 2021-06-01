@@ -1,0 +1,75 @@
+$parent: 'date-picker';
+
+.#{$parent} {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+
+  &:hover,
+  &_opened {
+    .#{$parent}__header {
+      border-color: $primary-color-opacity-50;
+    }
+
+    .#{$parent}__button-toggle-calendar {
+      color: $primary-color-opacity-75;
+    }
+  }
+
+  &_opened {
+    .#{$parent}__body {
+      display: flex;
+    }
+  }
+
+  &_filled {
+    .#{$parent}__header {
+      color: $primary-color-opacity-50;
+    }
+  }
+
+  &__header,
+  &__summary-wrapper {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__header {
+    border: 1px solid $primary-color-opacity-25;
+    border-radius: 4px;
+    background-color: $color-white;
+    padding: 0.7rem;
+    color: $primary-color-opacity-25;
+  }
+
+  &__summary {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__button-toggle-calendar {
+    outline: none;
+    border: none;
+    margin-left: 0.7rem;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: $primary-color-opacity-50;
+    cursor: pointer;
+  }
+
+  &__body {
+    display: none;
+    position: absolute;
+    padding-top: 0.7rem;
+    top: 100%;
+    right: 0;
+    z-index: 10;
+  }
+}

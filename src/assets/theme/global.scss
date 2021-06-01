@@ -1,0 +1,24 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html,
+body {
+  color: $primary-color;
+  font-family: $font-family-body;
+  font-size: $font-size-body;
+  font-weight: $font-weight-body;
+}
+
+#modal-root {
+  position: relative;
+  z-index: 2000;
+}

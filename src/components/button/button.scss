@@ -1,0 +1,21 @@
+$parent: 'button';
+
+.#{$parent} {
+  color: $primary-color-opacity-75;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
+
+  &:hover {
+    color: $primary-color-opacity-50;
+  }
+
+  &_theme_bold {
+    font-weight: bold;
+  }
+
+  &__content {
+    padding-left: 0.6rem;
+  }
+}

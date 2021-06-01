@@ -1,0 +1,45 @@
+$parent: 'search-field';
+
+.#{$parent} {
+  width: 100%;
+  display: flex;
+  min-width: 0;
+  color: $primary-color-opacity-25;
+  position: relative;
+  background-color: $color-grey-medium;
+
+  &__text-field {
+    width: 100%;
+    border: 1px solid $primary-color-opacity-25;
+    padding: 0.7rem 0.7rem 0.7rem 2.1rem;
+    outline: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 4px;
+    color: $primary-color-opacity-75;
+  }
+
+  &__text-field::placeholder {
+    color: $primary-color-opacity-25;
+  }
+
+  &__text-field:hover {
+    border-color: $primary-color-opacity-50;
+    color: $primary-color-opacity-75;
+  }
+  &__text-field:focus {
+    border-color: $primary-color-opacity-50;
+    color: $primary-color-opacity-75;
+  }
+
+  &__icon {
+    position: absolute;
+    height: 100%;
+    vertical-align: middle;
+    left: 0.7rem;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+  }
+}

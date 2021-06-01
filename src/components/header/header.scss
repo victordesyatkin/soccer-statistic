@@ -1,0 +1,144 @@
+$parent: 'header';
+
+.#{$parent} {
+  display: flex;
+  width: 100%;
+  background-color: $color-grey-medium-light;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding-left: 3.571rem;
+  padding-right: 3.571rem;
+
+  @media (min-width: $md) {
+    justify-content: space-between;
+    padding: 1rem 3rem;
+  }
+
+  @media (min-width: $lg) {
+    padding: 1rem 6rem;
+  }
+
+  &_opened-search {
+    .#{$parent}__search {
+      @media (min-width: $md) {
+        display: initial;
+      }
+    }
+  }
+
+  &_opened-menu {
+    .#{$parent}__nav {
+      display: flex;
+    }
+  }
+
+  &__menu-button {
+    position: absolute;
+    left: 0;
+    @media (min-width: $md) {
+      display: none;
+    }
+  }
+
+  &__nav {
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 0.5rem;
+    background-color: $color-grey-medium;
+    display: none;
+    flex-direction: column;
+
+    @media (min-width: $md) {
+      display: flex;
+      padding: initial;
+      position: initial;
+      flex-direction: initial;
+      background-color: initial;
+    }
+  }
+
+  &__nav-search {
+    display: flex;
+    width: 100%;
+    @media (min-width: $md) {
+      display: none;
+    }
+  }
+
+  &__search-button {
+    display: none;
+    @media (min-width: $md) {
+      display: initial;
+    }
+  }
+
+  &__search-form,
+  &__search-field {
+    display: flex;
+    width: 100%;
+  }
+
+  &__search {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 0.5rem;
+    background-color: $color-grey-medium-light;
+    display: none;
+    z-index: 13;
+
+    @media (min-width: $md) {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+
+    @media (min-width: $lg) {
+      padding-left: 15rem;
+      padding-right: 15rem;
+    }
+  }
+
+  &__switchers {
+    position: absolute;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 15;
+
+    @media screen and (min-width: $md) {
+      padding-left: 1rem;
+      position: initial;
+      flex-direction: initial;
+      align-items: initial;
+    }
+  }
+
+  &__switcher-language {
+    max-width: 3.5rem;
+
+    @media screen and (min-width: $md) {
+      width: 100%;
+      max-width: 10rem;
+      min-width: 10rem;
+    }
+  }
+
+  &__switcher-service {
+    margin-top: 0.3rem;
+    @media screen and (min-width: $md) {
+      padding-left: 1rem;
+      width: 100%;
+      max-width: 6.7rem;
+      min-width: 6.7rem;
+      margin-top: initial;
+    }
+  }
+}

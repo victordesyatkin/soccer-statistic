@@ -1,0 +1,16 @@
+$parent: 'league-list';
+
+.#{$parent} {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
+
+  &__item {
+    padding: 1em;
+    cursor: pointer;
+  }
+}

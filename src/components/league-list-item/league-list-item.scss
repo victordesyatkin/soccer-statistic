@@ -1,0 +1,47 @@
+$parent: 'league-list-item';
+
+.#{$parent} {
+  width: 15rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid $color-grey-cool;
+  text-align: center;
+  border-radius: 4px;
+  border-bottom: 3px solid;
+  background-color: $color-white;
+  transition: all 0.25s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &__logo {
+    width: 7.143rem;
+    height: 7.143rem;
+    display: flex;
+    align-items: center;
+  }
+
+  &__image {
+    width: 100%;
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  &__name {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.929rem;
+    color: $color-grey;
+    margin-top: 3rem;
+  }
+
+  &__country {
+    color: $color-grey;
+    margin-top: 1rem;
+    font-size: 0.786rem;
+    text-transform: capitalize;
+  }
+}

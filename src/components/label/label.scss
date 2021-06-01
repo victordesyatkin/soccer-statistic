@@ -1,0 +1,20 @@
+$parent: 'label';
+
+.#{$parent} {
+  font-weight: bold;
+  cursor: pointer;
+
+  &_theme_default {
+    display: flex;
+    width: 100%;
+    margin-bottom: 0.4rem;
+  }
+
+  &_uppercase_first {
+    display: inline-block;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+}

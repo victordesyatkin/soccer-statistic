@@ -1,0 +1,40 @@
+$parent: 'leagues-page';
+
+.#{$parent} {
+  display: flex;
+  flex: 1 1 100%;
+  width: 100%;
+  flex-direction: column;
+
+  &__control,
+  &__header {
+    padding: 1rem 0;
+  }
+
+  &__control {
+    display: flex;
+
+    @media (min-width: $md) {
+      display: none;
+    }
+  }
+
+  &__panel {
+    max-width: 21.428rem;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+
+  &__body {
+    display: flex;
+    width: 100%;
+  }
+
+  &__list {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    padding: 1rem;
+  }
+}
