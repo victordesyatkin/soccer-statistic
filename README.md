@@ -59,3 +59,14 @@ Football-Statistic - приложение для просмотра спорти
 Для обработки ошибок приложения используется класс ErrorBoundary c componentDidCatch.
 
 Для приобритения опыта интеграции jQuery приложения в react с typescript используется [air-datepicker](https://github.com/t1m0n/air-datepicker) и [air-datepicker.d.ts](https://github.com/victordesyatkin/air-datepicker.d.ts).
+
+### Установка
+
+1. Установить совместимую версию Node.js v14.x (например v14.17.0 LTS)
+2. Клонированить репозиторий
+   <git clone git@github.com:victordesyatkin/toxin.git>
+3. Установить зависимости
+   <npm i>
+4. Запуск приложения
+   <npm run start>
+5. В барузере открыть страницу по адресу http://localhost:8080/

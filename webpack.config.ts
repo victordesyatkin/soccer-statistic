@@ -55,8 +55,8 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
       }),
       isProduction &&
         new MiniCssExtractPlugin({
-          filename: '[name].css?version=[contenthash]',
-          chunkFilename: '[id].css?version=[contenthash]',
+          filename: 'css/[name].css?version=[contenthash]',
+          chunkFilename: 'css/[id].css?version=[contenthash]',
         }),
       isProduction &&
         new ForkTsCheckerWebpackPlugin({
@@ -73,15 +73,14 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
 
   return {
     mode: isDevelopment ? 'development' : 'production',
-    devtool: undefined, // isDevelopment ? 'inline-source-map' : undefined
+    devtool: isDevelopment ? 'inline-source-map' : undefined,
     entry: {
       main: './src/index.tsx',
     },
     output: {
-      filename: '[name].js?version=[contenthash]',
-      chunkFilename: '[id].[contenthash].js?version=[contenthash]',
+      filename: 'js/[name].js?version=[contenthash]',
+      chunkFilename: 'js/[id].[contenthash].js?version=[contenthash]',
       path: path.resolve(__dirname, 'dist'),
-      publicPath: '/',
     },
     performance: {
       hints: 'warning',
@@ -104,6 +103,20 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
               ].filter(Boolean),
             },
           },
+        },
+        {
+          test: /\.(ttf|otf|eot|woff|woff2|svg)$/,
+          include: /fonts/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                outputPath: 'assets/fonts/',
+                publicPath: '../assets/fonts/',
+                name: '[name].[ext]?version=[contenthash]',
+              },
+            },
+          ],
         },
         {
           test: /\.(css)$/,
@@ -136,26 +149,13 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
           ],
         },
         {
-          test: /\.(ttf|otf|eot|woff|woff2|svg)$/,
-          include: /fonts/,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                outputPath: './assets/fonts/',
-                name: '[name].[ext]?version=[contenthash]',
-              },
-            },
-          ],
-        },
-        {
           test: /\.(png|jpg|jpeg|gif|ico|svg)$/,
           exclude: /(fonts|favicon)/,
           use: [
             {
               loader: 'file-loader',
               options: {
-                outputPath: './assets/images/',
+                outputPath: 'assets/images',
                 name: '[name].[ext]?version=[contenthash]',
               },
             },
