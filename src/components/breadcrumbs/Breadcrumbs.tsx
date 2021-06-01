@@ -11,7 +11,6 @@ import {
 } from '../../modules/types';
 import { extractFormatMessage } from '../../helpers';
 import Link from '../link';
-import './breadcrumbs.scss';
 
 const BreadcrumbsWrapper = styled.div`
   width: 100%;

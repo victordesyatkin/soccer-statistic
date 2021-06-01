@@ -83,6 +83,9 @@ module.exports = (env: unknown, args: { mode?: string } = {}) => {
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/',
     },
+    performance: {
+      hints: 'warning',
+    },
     module: {
       rules: [
         {
