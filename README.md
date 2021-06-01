@@ -60,6 +60,12 @@ Football-Statistic - приложение для просмотра спорти
 
 Для приобритения опыта интеграции jQuery приложения в react с typescript используется [air-datepicker](https://github.com/t1m0n/air-datepicker) и [air-datepicker.d.ts](https://github.com/victordesyatkin/air-datepicker.d.ts).
 
+### Переменные окружения
+
+Переменные окружения храняться в отдельном файле .env (dotenv-webpack) в корне проекта:
+API_BASE=https://api.football-data.org/v2
+API_KEY=...
+
 ### Установка
 
 1. Установить совместимую версию Node.js v14.x (например v14.17.0 LTS)
@@ -70,3 +76,7 @@ Football-Statistic - приложение для просмотра спорти
 4. Запуск приложения
    <npm run start>
 5. В барузере открыть страницу по адресу http://localhost:8080/
+6. Запуск сборки приложения
+   <npm run build>
+7. Развертывание приложения
+   <npm run deploy>
