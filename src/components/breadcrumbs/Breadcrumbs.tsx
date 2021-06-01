@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';

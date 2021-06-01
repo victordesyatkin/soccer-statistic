@@ -10,7 +10,7 @@ $parent: 'panel';
   min-width: 0;
   max-width: 21.428rem;
   z-index: 15;
-  background-color: $panel-background-color;
+  background-color: $color-white;
   display: none;
   flex-direction: column;
 
@@ -48,7 +48,7 @@ $parent: 'panel';
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    border-bottom: 1px solid $panel-header-border-color;
+    border-bottom: 1px solid $color-grey-medium-light;
     position: relative;
 
     @media (min-width: $md) {

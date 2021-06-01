@@ -4,33 +4,33 @@ $parent: 'search-field';
   width: 100%;
   display: flex;
   min-width: 0;
-  color: $input-text-color-default;
+  color: $primary-color-opacity-25;
   position: relative;
-  background-color: $body-background-color;
+  background-color: $color-grey-medium;
 
   &__text-field {
     width: 100%;
-    border: 1px solid $input-border-color-default;
+    border: 1px solid $primary-color-opacity-25;
     padding: 0.7rem 0.7rem 0.7rem 2.1rem;
     outline: none;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     border-radius: 4px;
-    color: $input-text-color-focus;
+    color: $primary-color-opacity-75;
   }
 
   &__text-field::placeholder {
-    color: $input-text-color-default;
+    color: $primary-color-opacity-25;
   }
 
   &__text-field:hover {
-    border-color: $input-border-color-hover;
-    color: $input-text-color-hover;
+    border-color: $primary-color-opacity-50;
+    color: $primary-color-opacity-75;
   }
   &__text-field:focus {
-    border-color: $input-border-color-focus;
-    color: $input-text-color-focus;
+    border-color: $primary-color-opacity-50;
+    color: $primary-color-opacity-75;
   }
 
   &__icon {

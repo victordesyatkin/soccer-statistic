@@ -1,7 +1,7 @@
 $parent: 'error-indicator';
 
 .#{$parent} {
-  color: $error-indicator-text-color;
+  color: $primary-color-opacity-75;
 
   &__image,
   &__header,

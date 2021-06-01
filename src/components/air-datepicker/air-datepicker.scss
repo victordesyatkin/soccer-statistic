@@ -8,7 +8,7 @@
   .-in-range- {
     @include h3-lite;
 
-    color: $calendar-text-color-default;
+    color: $primary-color-opacity-50;
   }
 
   .datepicker--nav {
@@ -20,7 +20,7 @@
   /* stylelint-disable selector-max-compound-selectors */
   .datepicker--nav-action {
     span {
-      color: $calendar-text-color-nav;
+      color: $color-purple;
       font-size: 1.28rem;
     }
   }
@@ -66,7 +66,7 @@
   .datepicker--day-name {
     @include h3;
 
-    color: $calendar-text-color-day-name;
+    color: $color-purple;
     text-transform: initial;
   }
 
@@ -86,7 +86,7 @@
   .-other-month-.-selected- {
     @include h3;
 
-    color: $calendar-text-color-hover;
+    color: $color-white;
   }
 
   .-current-,
@@ -98,7 +98,7 @@
   }
 
   .datepicker--cell.-focus-.-disabled-::after {
-    background: $calendar-background-color-disabled;
+    background: $primary-color-opacity-25;
   }
 
   .-range-from-.-focus-::after,
@@ -108,7 +108,11 @@
   .-range-to-::after,
   .-selected-::after,
   .-current-::after {
-    background: $calendar-background-color-current;
+    background: linear-gradient(
+      180deg,
+      $color-green 0%,
+      $color-green-light 100%
+    );
     border-radius: 100%;
     content: '';
     height: 2.85rem;
@@ -126,7 +130,11 @@
   .-selected-::after,
   .-range-from-::after,
   .-range-to-::after {
-    background: $calendar-background-color-selected;
+    background: linear-gradient(
+      180deg,
+      $color-purple 0%,
+      $color-purple-light 100%
+    );
   }
 
   .-range-from-,
@@ -148,12 +156,12 @@
   .-other-month-.-focus-.-in-range-,
   .-other-month-.-selected-.-in-range-,
   .datepicker--cell.-in-range- {
-    @include background-calendar-period;
+    @include linear-gradient(180deg, $color-purple, $color-purple-light, 0.5);
   }
 
   .datepicker--cell-day.-range-to-::before,
   .datepicker--cell-day.-range-from-::before {
-    @include background-calendar-period;
+    @include linear-gradient(180deg, $color-purple, $color-purple-light, 0.5);
 
     content: '';
     height: 100%;

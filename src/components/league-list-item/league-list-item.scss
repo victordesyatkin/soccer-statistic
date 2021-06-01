@@ -6,11 +6,11 @@ $parent: 'league-list-item';
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  border: 1px solid $league-border-color-item;
+  border: 1px solid $color-grey-cool;
   text-align: center;
   border-radius: 4px;
   border-bottom: 3px solid;
-  background-color: $league-item-background-color;
+  background-color: $color-white;
   transition: all 0.25s ease-in-out;
 
   &:hover {
@@ -34,12 +34,12 @@ $parent: 'league-list-item';
     text-transform: uppercase;
     font-weight: bold;
     font-size: 0.929rem;
-    color: $league-name-color;
+    color: $color-grey;
     margin-top: 3rem;
   }
 
   &__country {
-    color: $league-name-color;
+    color: $color-grey;
     margin-top: 1rem;
     font-size: 0.786rem;
     text-transform: capitalize;

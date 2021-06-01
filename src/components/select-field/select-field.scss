@@ -3,38 +3,38 @@ $parent: 'select-field';
 .#{$parent} {
   display: flex;
   width: 100%;
-  color: $select-field-text-color;
+  color: $primary-color-opacity-75;
   outline: none;
-  border: 1px solid $select-field-border-color-default;
+  border: 1px solid $primary-color-opacity-25;
   border-radius: 4px;
   min-width: 0;
   flex-direction: column;
   position: relative;
-  background-color: $select-field-body-background-color;
+  background-color: $color-white;
 
   &:hover {
-    border-color: $select-field-border-color-opened;
+    border-color: $primary-color-opacity-50;
 
     .#{$parent}__control {
-      color: $select-field-item-control-text-color-hover;
+      color: $primary-color-opacity-75;
     }
 
     .#{$parent}__body {
-      border-color: $select-field-border-color-opened;
+      border-color: $primary-color-opacity-50;
     }
   }
 
   &_opened {
-    border-color: $select-field-border-color-opened;
+    border-color: $primary-color-opacity-50;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 
     .#{$parent}__control {
-      color: $select-field-item-control-text-color-hover;
+      color: $primary-color-opacity-75;
     }
 
     .#{$parent}__body {
-      border-color: $select-field-border-color-opened;
+      border-color: $primary-color-opacity-50;
       display: flex;
     }
   }
@@ -89,14 +89,14 @@ $parent: 'select-field';
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: $select-field-placeholder-text-color-default;
+    color: $primary-color-opacity-25;
     padding: 0.7rem 0 0.7rem 0.7rem;
   }
 
   &__item {
     padding: 0.3rem;
-    background-color: $select-field-item-background-color;
-    color: $select-field-item-text-color-default;
+    background-color: $color-grey-medium-light;
+    color: $primary-color-opacity-75;
     border-radius: 4px;
     position: relative;
     display: flex;
@@ -120,7 +120,7 @@ $parent: 'select-field';
     top: 50%;
     right: 0;
     transform: translate(0, -50%);
-    color: $select-field-item-control-text-color-default;
+    color: $color-grey-medium-dark;
     background: none;
     border-radius: 50%;
     width: 1.429rem;
@@ -132,14 +132,14 @@ $parent: 'select-field';
 
   &__control:hover,
   &__item-control:hover {
-    color: $select-field-item-control-text-color-hover;
+    color: $primary-color-opacity-75;
   }
 
   &__control {
     outline: none;
     border: none;
     background: none;
-    color: $select-field-item-control-text-color-default;
+    color: $color-grey-medium-dark;
     padding: 0.7rem;
     cursor: pointer;
     margin-left: auto;
@@ -152,13 +152,13 @@ $parent: 'select-field';
     top: 100%;
     left: -1px;
     right: -1px;
-    border: 1px solid $select-field-border-color-default;
+    border: 1px solid $primary-color-opacity-25;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     z-index: 12;
     max-height: 14.286rem;
     overflow-y: auto;
-    background-color: $select-field-body-background-color;
+    background-color: $color-white;
   }
 
   &__no-data {
@@ -178,6 +178,6 @@ $parent: 'select-field';
 
   &__option_selected,
   &__option:hover {
-    background-color: $select-field-item-background-color;
+    background-color: $color-grey-medium-light;
   }
 }

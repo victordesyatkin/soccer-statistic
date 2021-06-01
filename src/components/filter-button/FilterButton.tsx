@@ -2,7 +2,6 @@ import React, { HtmlHTMLAttributes, useCallback } from 'react';
 
 import { withPanelConsumer } from '../hoc-helpers';
 import Button from '../button';
-import type { PanelProps } from '../panel';
 
 interface FilterButtonProps extends HtmlHTMLAttributes<HTMLButtonElement> {
   isOpened: boolean;

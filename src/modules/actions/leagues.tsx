@@ -1,12 +1,12 @@
 import { ActionCreator, Dispatch } from 'redux';
 
 import { transformResponseFetchLeagues, transformMessage } from '../../helpers';
-import { IStatisticService } from '../../services';
 import {
   ActionType,
   ActionCreatorType,
   ItemsLeagueProps,
   ItemsErrorProps,
+  IStatisticService,
 } from '../types';
 import { fetchFailure, fetchRequest, fetchSuccess } from './common';
 

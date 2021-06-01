@@ -7,11 +7,8 @@ import orderBy from 'lodash.orderby';
 
 import { MessageDescriptor } from 'react-intl';
 import {
-  IntlMessageFormat,
-  Formats,
   PrimitiveType,
   FormatXMLElementFn,
-  FormatError,
   Options as IntlMessageFormatOptions,
 } from 'intl-messageformat';
 

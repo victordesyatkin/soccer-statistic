@@ -23,7 +23,7 @@ $parent: 'nav';
   &__item {
     padding: 1rem;
     &:not(:last-child) {
-      border-bottom: 1px solid $nav-border-color-default;
+      border-bottom: 1px solid $primary-color-opacity-25;
     }
     width: 100%;
 

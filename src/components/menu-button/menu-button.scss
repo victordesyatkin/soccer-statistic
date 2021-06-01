@@ -1,7 +1,7 @@
 $parent: 'menu-button';
 
 .#{$parent} {
-  color: $link-text-color-default;
+  color: $primary-color-opacity-75;
   cursor: pointer;
   outline: none;
   border: none;
@@ -9,7 +9,7 @@ $parent: 'menu-button';
   padding: 1rem;
 
   &:hover {
-    color: $link-text-color-hover;
+    color: $primary-color-opacity-50;
   }
 
   &_opened {

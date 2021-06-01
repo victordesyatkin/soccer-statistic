@@ -3,7 +3,7 @@ $parent: 'header';
 .#{$parent} {
   display: flex;
   width: 100%;
-  background-color: $header-background-color;
+  background-color: $color-grey-medium-light;
   padding: 1rem;
   justify-content: center;
   align-items: center;
@@ -50,7 +50,7 @@ $parent: 'header';
     right: 0;
     z-index: 10;
     padding: 0.5rem;
-    background-color: $body-background-color;
+    background-color: $color-grey-medium;
     display: none;
     flex-direction: column;
 
@@ -90,7 +90,7 @@ $parent: 'header';
     left: 0;
     right: 0;
     padding: 0.5rem;
-    background-color: $header-background-color;
+    background-color: $color-grey-medium-light;
     display: none;
     z-index: 13;
 

@@ -3,13 +3,13 @@ $parent: 'link';
 .#{$parent} {
   display: flex;
   width: 100%;
-  color: $link-text-color-default;
+  color: $primary-color-opacity-75;
   cursor: pointer;
   text-decoration: none;
   text-transform: none;
 
   &_current {
-    color: $link-text-color-current;
+    color: $primary-color-opacity-75;
     font-weight: bold;
   }
 
@@ -29,6 +29,6 @@ $parent: 'link';
   }
 
   &:hover {
-    color: $link-text-color-hover;
+    color: $primary-color-opacity-25;
   }
 }

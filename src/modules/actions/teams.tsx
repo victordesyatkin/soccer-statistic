@@ -6,7 +6,6 @@ import {
   transformArrayToObjectById,
   transformMessage,
 } from '../../helpers';
-import { IStatisticService } from '../../services';
 import {
   ActionType,
   ActionCreatorType,
@@ -15,6 +14,7 @@ import {
   ItemsTeamProps,
   TeamProps,
   ItemsErrorProps,
+  IStatisticService,
 } from '../types';
 import { fetchRequest, fetchSuccess, fetchFailure } from './common';
 
