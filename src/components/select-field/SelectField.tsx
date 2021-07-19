@@ -118,6 +118,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
   };
   classNames +=
     theme && themes[theme] ? ` ${className}_theme_${themes[theme]}` : '';
+  const onClickButtonControl = useCallback(() => {
+    setIsOpened(!isOpened);
+  }, [isOpened]);
   const renderItem = useCallback(
     (passId: string, index: number) => {
       const item = options?.find(
@@ -125,15 +128,27 @@ const SelectField: React.FC<SelectFieldProps> = ({
       );
       if (item) {
         if (customRenderItem) {
-          return customRenderItem(item);
+          return customRenderItem(item, onClickButtonControl);
         }
         const { content } = item;
         const itemClassName = `${className}__item`;
+        const isSimple = !isMultiple && !withControl;
         let itemClassNames = `${className}__item`;
         itemClassNames += withControl ? ` ${itemClassName}_with-control` : '';
+        itemClassNames += isSimple ? ` ${itemClassName}_simple` : '';
+        const onClick = isSimple ? onClickButtonControl : undefined;
+        const onKeyDown = undefined;
         return (
           <li className={itemClassNames} key={`select-field__item_${index}`}>
-            <span className="select-field__item-content">{content}</span>
+            <span
+              className="select-field__item-content"
+              role="button"
+              onClick={onClick}
+              tabIndex={0}
+              onKeyDown={onKeyDown}
+            >
+              {content}
+            </span>
             {withControl ? (
               <button
                 className="select-field__item-control"
@@ -148,7 +163,13 @@ const SelectField: React.FC<SelectFieldProps> = ({
       }
       return undefined;
     },
-    [options, onClickItemControl, withControl, customRenderItem]
+    [
+      options,
+      onClickItemControl,
+      withControl,
+      customRenderItem,
+      onClickButtonControl,
+    ]
   );
   const renderItems = useCallback(
     (items?: readonly string[]) => {
@@ -174,9 +195,6 @@ const SelectField: React.FC<SelectFieldProps> = ({
       );
     }
     return placeholderForRender;
-  };
-  const onClickButtonControl = () => {
-    setIsOpened(!isOpened);
   };
   const onClickOption = (optionForRender: SelectFieldOptionType) => {
     const { isDisabled: isDisableOption, value: valueOption } = optionForRender;

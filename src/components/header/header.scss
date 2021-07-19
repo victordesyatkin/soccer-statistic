@@ -89,10 +89,10 @@ $parent: 'header';
     top: 100%;
     left: 0;
     right: 0;
-    padding: 0.5rem;
+    padding: 0.6rem;
     background-color: $color-grey-medium-light;
     display: none;
-    z-index: 13;
+    z-index: 20;
 
     @media (min-width: $md) {
       padding-left: 3rem;

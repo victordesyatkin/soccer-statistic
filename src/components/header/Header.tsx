@@ -10,6 +10,7 @@ import MenuButton from '../menu-button';
 import SearchField from '../search-field';
 import SwitcherLanguage from '../switcher-language';
 import SwitcherService from '../switcher-service';
+import image from '../switcher-language-flag/images/gb.svg';
 import './header.scss';
 
 const Header: FC<HeaderProps> = ({

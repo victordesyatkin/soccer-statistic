@@ -1,4 +1,3 @@
-// import {  } from 'redux-actions';
 import { handleActions, Action } from 'redux-actions';
 
 import { MatchReducerProps, ItemsMatchProps, ItemsErrorProps } from '../types';

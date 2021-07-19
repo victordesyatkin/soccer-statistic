@@ -12,11 +12,12 @@ const SwitcherLanguageItemWrapper = styled.li`
   align-items: center;
   height: 100%;
   min-width: 0;
+  cursor: pointer;
 `;
 const SwitcherLanguageItemFlagWrapper = styled.span`
   display: flex;
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 18px;
+  height: 18px;
   overflow: hidden;
   border-radius: 50%;
 `;
@@ -31,9 +32,11 @@ const SwitcherLanguageItemCaption = styled.span`
   }
 `;
 
-const SwitcherLanguageItem: FC<SelectFieldOptionType> = (option) => {
+const SwitcherLanguageItem: FC<
+  SelectFieldOptionType & { onClickButtonControl: () => void }
+> = (option) => {
   const { formatMessage } = useIntl();
-  const { value } = option;
+  const { value, onClickButtonControl } = option;
   let caption = formatMessage({ id: 'english' });
   switch (value) {
     case 'en': {
@@ -53,7 +56,7 @@ const SwitcherLanguageItem: FC<SelectFieldOptionType> = (option) => {
     }
   }
   return (
-    <SwitcherLanguageItemWrapper>
+    <SwitcherLanguageItemWrapper role="button" onClick={onClickButtonControl}>
       <SwitcherLanguageItemFlagWrapper>
         <SwitcherLanguageItemFlag locale={String(value)} alt={caption} />
       </SwitcherLanguageItemFlagWrapper>

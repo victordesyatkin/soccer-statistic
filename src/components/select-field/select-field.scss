@@ -106,6 +106,12 @@ $parent: 'select-field';
     &_with_control {
       padding-left: 1.5rem;
     }
+
+    &_simple {
+      .#{$parent}__item-content {
+        cursor: pointer;
+      }
+    }
   }
 
   &__item:last-child {

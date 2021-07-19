@@ -44,9 +44,10 @@ const SwitcherLanguage: FC<IntlContextProps> = ({ selectLanguage }) => {
     [selectLanguage]
   );
   const customRenderItem = useCallback(
-    (item) => (
+    (item, onClickButtonControl) => (
       <SwitcherLanguageItem
         {...item}
+        onClickButtonControl={onClickButtonControl}
         key={`switcher-language-item-${item.id}-${item.value}`}
       />
     ),

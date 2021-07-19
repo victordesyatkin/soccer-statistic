@@ -49,5 +49,4 @@ const reducer = (
   }
 };
 
-export type { initialCommonState };
 export default reducer;

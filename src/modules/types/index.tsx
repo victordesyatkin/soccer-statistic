@@ -307,7 +307,8 @@ type SelectFieldProps = Partial<{
   onEnter: () => void;
   onLeave: () => void;
   customRenderItem: (
-    option: Record<string, string | number | undefined | boolean | null>
+    option: Record<string, string | number | undefined | boolean | null>,
+    onClickButtonControl: () => void
   ) => string | undefined | JSX.Element | number;
   customRenderOption: (
     option: Record<string, string | number | undefined | boolean | null>
@@ -527,7 +528,6 @@ type LinkProps = Partial<{
 }>;
 
 type LogoImageProps = {
-  src?: string;
   alt?: string;
   title?: string;
 };
