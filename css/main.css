@@ -1130,6 +1130,10 @@ body {
   padding-left: 1.5rem;
 }
 
+.select-field__item_simple .select-field__item-content {
+  cursor: pointer;
+}
+
 .select-field__item:last-child {
   margin-right: initial;
 }
@@ -1337,10 +1341,10 @@ body {
   top: 100%;
   left: 0;
   right: 0;
-  padding: 0.5rem;
+  padding: 0.6rem;
   background-color: #f3f3f3;
   display: none;
-  z-index: 13;
+  z-index: 20;
 }
 
 @media (min-width: 992px) {
